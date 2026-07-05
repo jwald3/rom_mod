@@ -31,6 +31,9 @@ export interface AnchorMap {
   /** Region-map section name pointers; map header mapsec − 0x58 indexes this. */
   mapNames: number
   mapNameCount: number
+  /** In-game NPC trades: fixed 60-byte struct IngameTrade per entry. */
+  trades: number
+  tradeCount: number
 }
 
 export const SPECIES_NAME_LEN = 11
@@ -70,4 +73,6 @@ export const VANILLA_BPRE: AnchorMap = {
   mapBanks: 0x3526a8,
   mapNames: 0x3f1cac,
   mapNameCount: 109,
+  trades: 0x26cf8c,
+  tradeCount: 9,
 }

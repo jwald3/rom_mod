@@ -5,12 +5,14 @@ import {
   computeCompatDirtySet,
   computeWildDirtyKeys,
   computeEvoDirtySet,
+  computeTradeDirtySet,
 } from '../state/editStore'
 import { applyRomEdits, type RomEdits } from '../rom/writer'
 import { loadRom } from '../rom/loadRom'
 import type { LearnsetEntry } from '../rom/tables/learnsets'
 import type { WildGroupEdit } from '../rom/tables/wild'
 import type { Evolution } from '../rom/tables/evolutions'
+import type { Trade } from '../rom/tables/trades'
 import { stashBackup, latestBackup } from './backup'
 
 function setSaveState(saveState: SaveState) {
@@ -19,12 +21,14 @@ function setSaveState(saveState: SaveState) {
 
 function buildEdits(): { edits: RomEdits; count: number } {
   const { loaded } = useRomStore.getState()
-  const { drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts } = useEditStore.getState()
+  const { drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, tradeDrafts } =
+    useEditStore.getState()
   const learnsets = new Map<number, LearnsetEntry[]>()
   const tmCompat = new Map<number, boolean[]>()
   const tutorCompat = new Map<number, boolean[]>()
   const wild = new Map<string, WildGroupEdit>()
   const evolutions = new Map<number, Evolution[]>()
+  const trades = new Map<number, Trade>()
   if (loaded) {
     for (const s of computeDirtySet(drafts, loaded.learnsets)) learnsets.set(s, drafts[s])
     for (const s of computeCompatDirtySet(tmDrafts, loaded.tmCompat)) tmCompat.set(s, tmDrafts[s])
@@ -33,10 +37,12 @@ function buildEdits(): { edits: RomEdits; count: number } {
     }
     for (const key of computeWildDirtyKeys(wildDrafts, loaded)) wild.set(key, wildDrafts[key])
     for (const s of computeEvoDirtySet(evoDrafts, loaded)) evolutions.set(s, evoDrafts[s])
+    for (const i of computeTradeDirtySet(tradeDrafts, loaded)) trades.set(i, tradeDrafts[i])
   }
   return {
-    edits: { learnsets, tmCompat, tutorCompat, wild, evolutions },
-    count: learnsets.size + tmCompat.size + tutorCompat.size + wild.size + evolutions.size,
+    edits: { learnsets, tmCompat, tutorCompat, wild, evolutions, trades },
+    count:
+      learnsets.size + tmCompat.size + tutorCompat.size + wild.size + evolutions.size + trades.size,
   }
 }
 
@@ -110,20 +116,23 @@ export async function saveInPlace(): Promise<void> {
       tutorDrafts: {},
       wildDrafts: {},
       evoDrafts: {},
+      tradeDrafts: {},
     })
 
     const inPlace = ops.filter((o) => o.kind === 'in-place').length
     const repointed = ops.filter((o) => o.kind === 'repointed').length
     const wildOps = ops.filter((o) => o.kind === 'wild').length
     const evoOps = ops.filter((o) => o.kind === 'evolution').length
+    const tradeOps = ops.filter((o) => o.kind === 'trade').length
     const learnsetOps = inPlace + repointed
-    const compat = ops.length - learnsetOps - wildOps - evoOps
+    const compat = ops.length - learnsetOps - wildOps - evoOps - tradeOps
     const parts = [
       learnsetOps > 0 ? `Saved ${learnsetOps} learnset${learnsetOps === 1 ? '' : 's'}` : null,
       repointed > 0 ? `${repointed} repointed to free space` : null,
       compat > 0 ? `${compat} compatibility row${compat === 1 ? '' : 's'}` : null,
       wildOps > 0 ? `${wildOps} wild group${wildOps === 1 ? '' : 's'}` : null,
       evoOps > 0 ? `${evoOps} evolution set${evoOps === 1 ? '' : 's'}` : null,
+      tradeOps > 0 ? `${tradeOps} trade${tradeOps === 1 ? '' : 's'}` : null,
       backupOk ? 'backup kept' : '⚠ backup failed',
     ].filter(Boolean)
     setSaveState({ status: 'saved', message: parts.join(' · ') })

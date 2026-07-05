@@ -10,6 +10,7 @@ import {
   type WildKind,
 } from '../rom/tables/wild'
 import { evosEqual, type Evolution } from '../rom/tables/evolutions'
+import { tradesEqual, type Trade } from '../rom/tables/trades'
 import type { LoadedRom } from '../rom/loadRom'
 import { useRomStore } from './romStore'
 
@@ -29,6 +30,8 @@ export type EditRecord =
   | { field: 'evo'; species: number; prev: Evolution[]; next: Evolution[] }
   /** species carries the wild area index so undo can jump to it. */
   | { field: 'wild'; species: number; key: string; prev: WildGroupEdit; next: WildGroupEdit }
+  /** species carries the trade index so undo can jump to it. */
+  | { field: 'trade'; species: number; prev: Trade; next: Trade }
 
 const MAX_UNDO = 200
 const MAX_RECENT = 8
@@ -40,6 +43,8 @@ interface EditStore {
   /** Keyed by wildKey(areaIndex, kind). */
   wildDrafts: Record<string, WildGroupEdit>
   evoDrafts: Record<number, Evolution[]>
+  /** Keyed by trade index. */
+  tradeDrafts: Record<number, Trade>
   undoStack: EditRecord[]
   redoStack: EditRecord[]
   clipboard: LearnsetEntry[] | null
@@ -53,6 +58,8 @@ interface EditStore {
   applyWild(areaIndex: number, kind: WildKind, next: WildGroupEdit): void
   /** Replace a species' evolution list (records an undo step). No-op if unchanged. */
   applyEvos(species: number, next: Evolution[]): void
+  /** Replace one in-game trade (records an undo step). No-op if unchanged. */
+  applyTrade(index: number, next: Trade): void
   /** Returns the applied record (for selection jump), or null. */
   undo(): EditRecord | null
   redo(): EditRecord | null
@@ -60,6 +67,8 @@ interface EditStore {
   revert(species: number): void
   /** Restore all of an area's encounter groups to ROM state. */
   revertWild(areaIndex: number): void
+  /** Restore one trade to ROM state (an undoable step). */
+  revertTrade(index: number): void
   copy(species: number): void
   paste(species: number): void
   noteRecentMove(moveId: number): void
@@ -78,6 +87,10 @@ function originalFlags(field: CompatField, species: number): boolean[] {
 
 function originalEvos(species: number): Evolution[] {
   return useRomStore.getState().loaded?.evolutions[species] ?? []
+}
+
+function originalTrade(index: number): Trade | null {
+  return useRomStore.getState().loaded?.trades[index] ?? null
 }
 
 function originalWild(key: string): WildGroupEdit | null {
@@ -132,6 +145,29 @@ export function computeEvoDirtySet(
     if (!evosEqual(evoDrafts[species], loaded.evolutions[species] ?? [])) dirty.add(species)
   }
   return dirty
+}
+
+/** Trade indexes whose drafts differ from the ROM. */
+export function computeTradeDirtySet(
+  tradeDrafts: Record<number, Trade>,
+  loaded: LoadedRom,
+): Set<number> {
+  const dirty = new Set<number>()
+  for (const key of Object.keys(tradeDrafts)) {
+    const index = Number(key)
+    const orig = loaded.trades[index]
+    if (!orig || !tradesEqual(tradeDrafts[index], orig)) dirty.add(index)
+  }
+  return dirty
+}
+
+/** Current trade for an index: draft if present, else ROM original. */
+export function effectiveTrade(
+  tradeDrafts: Record<number, Trade>,
+  loaded: LoadedRom,
+  index: number,
+): Trade | null {
+  return tradeDrafts[index] ?? loaded.trades[index] ?? null
 }
 
 /** Union of learnset + TM + tutor + evolution dirty species. */
@@ -250,11 +286,23 @@ function evoDraftsWith(
   return next
 }
 
+function tradeDraftsWith(
+  drafts: Record<number, Trade>,
+  index: number,
+  trade: Trade,
+): Record<number, Trade> {
+  const next = { ...drafts }
+  const orig = originalTrade(index)
+  if (orig && tradesEqual(trade, orig)) delete next[index]
+  else next[index] = trade
+  return next
+}
+
 export const useEditStore = create<EditStore>((set, get) => {
   /** Partial state applying `value` as the draft for the record's field/species. */
   function patch(
     record: EditRecord,
-    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[],
+    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[] | Trade,
   ): Partial<EditStore> {
     const s = get()
     if (record.field === 'learnset') {
@@ -268,6 +316,9 @@ export const useEditStore = create<EditStore>((set, get) => {
     }
     if (record.field === 'evo') {
       return { evoDrafts: evoDraftsWith(s.evoDrafts, record.species, value as Evolution[]) }
+    }
+    if (record.field === 'trade') {
+      return { tradeDrafts: tradeDraftsWith(s.tradeDrafts, record.species, value as Trade) }
     }
     return { wildDrafts: wildDraftsWith(s.wildDrafts, record.key, value as WildGroupEdit) }
   }
@@ -287,6 +338,7 @@ export const useEditStore = create<EditStore>((set, get) => {
     tutorDrafts: {},
     wildDrafts: {},
     evoDrafts: {},
+    tradeDrafts: {},
     undoStack: [],
     redoStack: [],
     clipboard: null,
@@ -317,6 +369,12 @@ export const useEditStore = create<EditStore>((set, get) => {
       const prev = get().evoDrafts[species] ?? originalEvos(species)
       if (evosEqual(prev, next)) return
       push({ field: 'evo', species, prev, next })
+    },
+
+    applyTrade(index, next) {
+      const prev = get().tradeDrafts[index] ?? originalTrade(index)
+      if (!prev || tradesEqual(prev, next)) return
+      push({ field: 'trade', species: index, prev, next })
     },
 
     undo() {
@@ -357,6 +415,11 @@ export const useEditStore = create<EditStore>((set, get) => {
       }
     },
 
+    revertTrade(index) {
+      const orig = originalTrade(index)
+      if (orig) get().applyTrade(index, orig)
+    },
+
     copy(species) {
       const { drafts } = get()
       set({
@@ -383,6 +446,7 @@ export const useEditStore = create<EditStore>((set, get) => {
         tutorDrafts: {},
         wildDrafts: {},
         evoDrafts: {},
+        tradeDrafts: {},
         undoStack: [],
         redoStack: [],
       })

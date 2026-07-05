@@ -7,6 +7,8 @@ import { SpeciesSidebar } from './components/SpeciesSidebar'
 import { LearnsetEditor } from './components/LearnsetEditor'
 import { MapsSidebar } from './components/MapsSidebar'
 import { WildEditor } from './components/WildEditor'
+import { TradesSidebar } from './components/TradesSidebar'
+import { TradeEditor } from './components/TradeEditor'
 import { StatusBar } from './components/StatusBar'
 import { DiffPanel } from './components/DiffPanel'
 
@@ -29,6 +31,7 @@ export default function App() {
           // Jump to what changed — a species, or a map for wild edits.
           const rs = useRomStore.getState()
           if (record.field === 'wild') rs.selectArea(record.species)
+          else if (record.field === 'trade') rs.selectTrade(record.species)
           else rs.select(record.species)
         }
       } else if (key === 'k') {
@@ -62,10 +65,15 @@ export default function App() {
             <SpeciesSidebar />
             <LearnsetEditor />
           </>
-        ) : (
+        ) : viewMode === 'maps' ? (
           <>
             <MapsSidebar />
             <WildEditor />
+          </>
+        ) : (
+          <>
+            <TradesSidebar />
+            <TradeEditor />
           </>
         )}
         {diffOpen && <DiffPanel />}

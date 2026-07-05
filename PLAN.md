@@ -260,6 +260,39 @@ Verified ground truth (recon against the real ROM):
   + read-back verification; shared undo stack; revert covers evolutions
 - [x] 84 tests; smoke step 12 edits Bulbasaur's evo level and undoes it
 
+### Phase 7 — In-game trades  *(requested 2026-07-05)* — **DONE 2026-07-05**
+Verified ground truth (from the HMA sidecar's `data.pokemon.trades` block, which
+HMA derived from the real ROM — every non-name table in this mod matches vanilla,
+so `0x26CF8C` is also the genuine vanilla FireRed offset):
+- `data.pokemon.trades` @ `0x26CF8C`: **9 entries** × fixed **60-byte** (`0x3C`)
+  `struct IngameTrade` → every edit is in place, no repointing.
+- Field layout (offset · field): `0x00` nickname[12] · `0x0C` receivedSpecies u16
+  (the mon you get) · `0x0E` ivs[6] u8 (HP/Atk/Def/Speed/Sp.Atk/Sp.Def) · `0x14`
+  abilityNum u8 (+3 pad) · `0x18` otId u32 · `0x1C` conditions[5] u8
+  (Cool/Tough/Beauty/Smart/Cute, +3 pad) · `0x24` personality u32 (nature =
+  pid % 25) · `0x28` heldItem u16 · `0x2A` mailNum u8 · `0x2B` otName[11] · `0x36`
+  otGender u8 · `0x37` sheen u8 · `0x38` requestedSpecies u16 (the mon you give).
+- Trades have no level field — the received mon's in-game level matches the mon
+  the player trades away.
+- [x] `tables/trades.ts` reader + serializer (patches over the original bytes so
+  the struct's padding is preserved; names are 0xFF-terminated + zero-padded and
+  validated against the Gen 3 codec) + nature/equal/describe helpers; anchors +
+  toml mapping (literal count `]9`)
+- [x] Writer: in-place 60-byte writes, validation (trade index, received/requested
+  species range, held-item range, encodable names) + read-back verification;
+  never mutates the source buffer
+- [x] editStore: trade drafts on the shared undo stack (undo jumps to the trade);
+  romStore third "Trades" view + `selectTrade`
+- [x] UI: Trades view switch, TradesSidebar (receive ← give summary, dirty dots),
+  TradeEditor (received/requested species pickers, nickname, held item, ability
+  slot, nature dropdown + raw PID, IVs, OT name/id/gender, contest stats + sheen)
+  with per-trade Revert; StatusBar + save flow count trades
+- [x] 12 new tests (82 passing + 16 real-ROM skipped): field round-trip, padding
+  preservation, name termination, bad-character rejection, in-place writer diff +
+  source-immutability, range rejections, toml anchor/count resolution
+- ☐ Manual gate remains: edit a trade → save → open in HMA (clean) → complete the
+  trade in mGBA and confirm the received species/nickname/item
+
 ## Out of scope (deliberately)
 
 Egg moves (separate packed table, low value for this workflow), evolution editing,

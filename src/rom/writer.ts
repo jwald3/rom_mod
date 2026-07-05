@@ -23,11 +23,26 @@ import {
   serializeEvolutions,
   type Evolution,
 } from './tables/evolutions'
+import {
+  TRADE_ENTRY_LEN,
+  readTrade,
+  serializeTrade,
+  tradesEqual,
+  type Trade,
+} from './tables/trades'
 
 export interface WriteOp {
   /** Species id — or the wild area index for kind 'wild'. */
   species: number
-  kind: 'in-place' | 'repointed' | 'tm-compat' | 'tutor-compat' | 'wild' | 'evolution' | 'held-items'
+  kind:
+    | 'in-place'
+    | 'repointed'
+    | 'tm-compat'
+    | 'tutor-compat'
+    | 'wild'
+    | 'evolution'
+    | 'held-items'
+    | 'trade'
   oldOffset: number // -1 if the original pointer was invalid
   newOffset: number
   byteLength: number
@@ -46,6 +61,8 @@ export interface RomEdits {
   /** Keyed by wildKey(areaIndex, kind). */
   wild?: Map<string, WildGroupEdit>
   evolutions?: Map<number, Evolution[]>
+  /** In-game NPC trades, keyed by trade index. */
+  trades?: Map<number, Trade>
   /** Wild held items (base stats +12/+14): item1 = 50% slot, item2 = 5% slot. */
   heldItems?: Map<number, HeldItemsEdit>
 }
@@ -241,6 +258,42 @@ export function applyRomEdits(
     }
   }
 
+  // In-game trades: fixed 60-byte structs, always written in place.
+  if (romEdits.trades) {
+    for (const [index, trade] of [...romEdits.trades.entries()].sort((a, b) => a[0] - b[0])) {
+      if (index < 0 || index >= anchors.tradeCount) {
+        throw new Error(`Invalid trade index #${index}`)
+      }
+      for (const [label, species] of [
+        ['received', trade.receivedSpecies],
+        ['requested', trade.requestedSpecies],
+      ] as const) {
+        if (species < 0 || species >= anchors.speciesCount) {
+          throw new Error(`Trade #${index}: invalid ${label} species #${species}`)
+        }
+      }
+      if (trade.heldItem < 0 || trade.heldItem >= anchors.itemCount) {
+        throw new Error(`Trade #${index}: invalid held item #${trade.heldItem}`)
+      }
+      const offset = anchors.trades + index * TRADE_ENTRY_LEN
+      let block: Uint8Array
+      try {
+        block = serializeTrade(trade, out.subarray(offset, offset + TRADE_ENTRY_LEN))
+      } catch (e) {
+        throw new Error(`Trade #${index}: ${e instanceof Error ? e.message : String(e)}`)
+      }
+      out.set(block, offset)
+      ops.push({
+        species: index,
+        kind: 'trade',
+        oldOffset: offset,
+        newOffset: offset,
+        byteLength: TRADE_ENTRY_LEN,
+        erasedOld: false,
+      })
+    }
+  }
+
   // Held items: two u16s inside each species' base stats struct, in place.
   if (romEdits.heldItems) {
     for (const [species, items] of [...romEdits.heldItems.entries()].sort((a, b) => a[0] - b[0])) {
@@ -305,6 +358,13 @@ export function applyRomEdits(
       const offset = anchors.baseStats + species * BASE_STATS_LEN + HELD_ITEMS_OFFSET
       if (rom.u16(offset) !== items.item1 || rom.u16(offset + 2) !== items.item2) {
         throw new Error(`Write verification failed for species #${species} (held items) — aborting save`)
+      }
+    }
+  }
+  if (romEdits.trades) {
+    for (const [index, trade] of romEdits.trades) {
+      if (!tradesEqual(readTrade(rom, anchors, index), trade)) {
+        throw new Error(`Write verification failed for trade #${index} — aborting save`)
       }
     }
   }
