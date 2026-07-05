@@ -4,10 +4,14 @@ Two things live here:
 
 1. **`rom/`** — the mod itself, distributed as an IPS patch (no copyrighted
    ROM in this repo):
-   - `GPT_Mods.ips` — apply to the `GPT_Fresh.gba` base with
-     [Floating IPS](https://www.smwcentral.net/?p=section&a=details&id=11474),
-     Lunar IPS, or any online IPS tool to reconstruct the modded ROM
-     byte-for-byte.
+   - `GPT_Mods.ips` — reconstruct the modded ROM byte-for-byte with one
+     command (no external tools):
+
+     ```sh
+     npx tsx scripts/apply-patch.mts path/to/GPT_Fresh.gba
+     ```
+
+     (Floating IPS / Lunar IPS / online IPS tools work too.)
    - `GPT_Mods.toml` — the Hex Maniac Advance sidecar (table anchors). Keep it
      next to the reconstructed `.gba`; the editor and HMA both use it.
    - Regenerate the patch after new edits: `npx tsx scripts/make-patch.mts`
