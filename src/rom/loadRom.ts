@@ -7,6 +7,7 @@ import { readAllLearnsets, type Learnset } from './tables/learnsets'
 import { readMoveIdTable, readAllCompat } from './tables/compat'
 import { readAllWildAreas, type WildArea } from './tables/wild'
 import { readAllEvolutions, readItemNames, type Evolution } from './tables/evolutions'
+import { readAllTrainers, readTrainerClassNames, type Trainer } from './tables/trainers'
 
 export interface LoadedRom {
   fileName: string
@@ -28,6 +29,9 @@ export interface LoadedRom {
   /** Outgoing evolutions per species. */
   evolutions: Evolution[][]
   itemNames: string[]
+  /** NPC trainers and their teams. */
+  trainers: Trainer[]
+  trainerClassNames: string[]
   warnings: string[]
 }
 
@@ -69,6 +73,8 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
   const wildAreas = readAllWildAreas(rom, anchors)
   const evolutions = readAllEvolutions(rom, anchors)
   const itemNames = readItemNames(rom, anchors)
+  const trainers = readAllTrainers(rom, anchors)
+  const trainerClassNames = readTrainerClassNames(rom, anchors)
 
   if (species[1]?.name !== 'BULBASAUR') {
     warnings.push(
@@ -94,6 +100,8 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
     wildAreas,
     evolutions,
     itemNames,
+    trainers,
+    trainerClassNames,
     warnings,
   }
 }

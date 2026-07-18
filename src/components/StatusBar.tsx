@@ -5,6 +5,7 @@ import {
   computeDirtySet,
   computeAllDirty,
   computeWildDirtyAreas,
+  computeTrainerDirtySet,
 } from '../state/editStore'
 import { validateLearnset } from '../rom/validate'
 import { saveInPlace, downloadModifiedCopy, downloadLastBackup } from '../files/save'
@@ -19,6 +20,7 @@ export function StatusBar() {
   const tutorDrafts = useEditStore((s) => s.tutorDrafts)
   const wildDrafts = useEditStore((s) => s.wildDrafts)
   const evoDrafts = useEditStore((s) => s.evoDrafts)
+  const trainerDrafts = useEditStore((s) => s.trainerDrafts)
   const undoDepth = useEditStore((s) => s.undoStack.length)
   const diffOpen = useRomStore((s) => s.diffOpen)
   const setDiffOpen = useRomStore((s) => s.setDiffOpen)
@@ -33,15 +35,17 @@ export function StatusBar() {
   const { dirtyCount, dirtyLabel } = useMemo(() => {
     const speciesCount = computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts }, loaded).size
     const areaCount = computeWildDirtyAreas(wildDrafts, loaded).size
+    const trainerCount = computeTrainerDirtySet(trainerDrafts, loaded).size
     const parts = [
       speciesCount > 0 ? `${speciesCount} species` : null,
       areaCount > 0 ? `${areaCount} area${areaCount === 1 ? '' : 's'}` : null,
+      trainerCount > 0 ? `${trainerCount} trainer${trainerCount === 1 ? '' : 's'}` : null,
     ].filter(Boolean)
     return {
-      dirtyCount: speciesCount + areaCount,
+      dirtyCount: speciesCount + areaCount + trainerCount,
       dirtyLabel: parts.length > 0 ? `${parts.join(' · ')} modified` : 'No changes',
     }
-  }, [drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, loaded])
+  }, [drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, trainerDrafts, loaded])
 
   // Hard validation failures block saving (soft warnings like duplicates don't).
   const hardInvalid = useMemo(() => {

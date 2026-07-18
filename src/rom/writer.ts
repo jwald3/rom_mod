@@ -23,11 +23,30 @@ import {
   serializeEvolutions,
   type Evolution,
 } from './tables/evolutions'
+import {
+  TRAINER_STRUCT_LEN,
+  partyGbaPointer,
+  readTrainer,
+  serializeParty,
+  serializeTrainerRecord,
+  trainerToEdit,
+  trainersEqual,
+  type TrainerEdit,
+} from './tables/trainers'
 
 export interface WriteOp {
   /** Species id — or the wild area index for kind 'wild'. */
   species: number
-  kind: 'in-place' | 'repointed' | 'tm-compat' | 'tutor-compat' | 'wild' | 'evolution' | 'held-items'
+  kind:
+    | 'in-place'
+    | 'repointed'
+    | 'tm-compat'
+    | 'tutor-compat'
+    | 'wild'
+    | 'evolution'
+    | 'held-items'
+    | 'trainer'
+    | 'trainer-repointed'
   oldOffset: number // -1 if the original pointer was invalid
   newOffset: number
   byteLength: number
@@ -48,6 +67,8 @@ export interface RomEdits {
   evolutions?: Map<number, Evolution[]>
   /** Wild held items (base stats +12/+14): item1 = 50% slot, item2 = 5% slot. */
   heldItems?: Map<number, HeldItemsEdit>
+  /** NPC trainer teams, keyed by trainer index. */
+  trainers?: Map<number, TrainerEdit>
 }
 
 export interface HeldItemsEdit {
@@ -269,6 +290,72 @@ export function applyRomEdits(
     }
   }
 
+  // Trainer teams: the 40-byte record is fixed (written in place), but its
+  // party block is relocated to free space when the edited team outgrows its
+  // slot — mirroring the learnset repoint/erase/clone-on-write logic.
+  if (romEdits.trainers) {
+    // Census: how many trainers point at each party block (shared-block safety).
+    const partyOwners = new Map<number, number>()
+    for (let t = 0; t < anchors.trainers && t < anchors.trainerCount; t++) {
+      const off = rom.pointer(anchors.trainers + t * TRAINER_STRUCT_LEN + 0x24)
+      if (off !== null) partyOwners.set(off, (partyOwners.get(off) ?? 0) + 1)
+    }
+
+    for (const [index, edit] of [...romEdits.trainers.entries()].sort((a, b) => a[0] - b[0])) {
+      if (index < 0 || index >= anchors.trainerCount) {
+        throw new Error(`Trainer #${index}: out of range`)
+      }
+      const recordOffset = anchors.trainers + index * TRAINER_STRUCT_LEN
+      let party: Uint8Array
+      try {
+        party = serializeParty(edit, anchors.speciesCount, anchors.moveCount, anchors.itemCount)
+      } catch (e) {
+        throw new Error(`Trainer #${index}: ${e instanceof Error ? e.message : String(e)}`)
+      }
+
+      const cur = rom.pointer(recordOffset + 0x24)
+      const capacityBytes = readTrainer(rom, anchors, index).partyCapacity
+      const soleOwner = cur !== null && partyOwners.get(cur) === 1
+
+      let partyOffset: number
+      let erasedOld = false
+      let repointed = false
+      if (cur !== null && soleOwner && party.length <= capacityBytes) {
+        partyOffset = cur
+        out.set(party, cur)
+        out.fill(FREE_BYTE, cur + party.length, cur + capacityBytes)
+      } else {
+        repointed = true
+        partyOffset = alloc.allocate(party.length)
+        out.set(party, partyOffset)
+        if (cur !== null) {
+          if (soleOwner) {
+            out.fill(FREE_BYTE, cur, cur + capacityBytes)
+            erasedOld = true
+          }
+          partyOwners.set(cur, (partyOwners.get(cur) ?? 1) - 1)
+        }
+        partyOwners.set(partyOffset, 1)
+      }
+
+      let record: Uint8Array
+      try {
+        record = serializeTrainerRecord(edit, partyGbaPointer(partyOffset), anchors.trainerClassCount, anchors.itemCount)
+      } catch (e) {
+        throw new Error(`Trainer #${index}: ${e instanceof Error ? e.message : String(e)}`)
+      }
+      out.set(record, recordOffset)
+      ops.push({
+        species: index,
+        kind: repointed ? 'trainer-repointed' : 'trainer',
+        oldOffset: cur ?? -1,
+        newOffset: partyOffset,
+        byteLength: party.length,
+        erasedOld,
+      })
+    }
+  }
+
   // Paranoia: every edit must read back exactly as requested.
   for (const [species, entries] of sortedEdits) {
     const check = readLearnset(rom, anchors, species)
@@ -305,6 +392,13 @@ export function applyRomEdits(
       const offset = anchors.baseStats + species * BASE_STATS_LEN + HELD_ITEMS_OFFSET
       if (rom.u16(offset) !== items.item1 || rom.u16(offset + 2) !== items.item2) {
         throw new Error(`Write verification failed for species #${species} (held items) — aborting save`)
+      }
+    }
+  }
+  if (romEdits.trainers) {
+    for (const [index, edit] of romEdits.trainers) {
+      if (!trainersEqual(trainerToEdit(readTrainer(rom, anchors, index)), edit)) {
+        throw new Error(`Write verification failed for trainer #${index} — aborting save`)
       }
     }
   }

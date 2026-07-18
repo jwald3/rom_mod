@@ -10,6 +10,7 @@ export function ViewSwitch() {
         [
           ['species', 'Pokémon'],
           ['maps', 'Maps'],
+          ['trainers', 'Trainers'],
         ] as const
       ).map(([mode, label]) => (
         <button

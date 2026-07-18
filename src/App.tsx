@@ -7,6 +7,8 @@ import { SpeciesSidebar } from './components/SpeciesSidebar'
 import { LearnsetEditor } from './components/LearnsetEditor'
 import { MapsSidebar } from './components/MapsSidebar'
 import { WildEditor } from './components/WildEditor'
+import { TrainersSidebar } from './components/TrainersSidebar'
+import { TrainerEditor } from './components/TrainerEditor'
 import { StatusBar } from './components/StatusBar'
 import { DiffPanel } from './components/DiffPanel'
 
@@ -26,15 +28,20 @@ export default function App() {
         const { undo, redo } = useEditStore.getState()
         const record = key === 'y' || e.shiftKey ? redo() : undo()
         if (record !== null) {
-          // Jump to what changed — a species, or a map for wild edits.
+          // Jump to what changed — a species, a map for wild edits, or a trainer.
           const rs = useRomStore.getState()
           if (record.field === 'wild') rs.selectArea(record.species)
+          else if (record.field === 'trainer') rs.selectTrainer(record.species)
           else rs.select(record.species)
         }
       } else if (key === 'k') {
         e.preventDefault()
-        const id = useRomStore.getState().viewMode === 'maps' ? 'map-search' : 'species-search'
-        document.getElementById(id)?.focus()
+        const searchId = {
+          maps: 'map-search',
+          trainers: 'trainer-search',
+          species: 'species-search',
+        }[useRomStore.getState().viewMode]
+        document.getElementById(searchId)?.focus()
       } else if (key === 's') {
         e.preventDefault()
         if (useRomStore.getState().romHandle) void saveInPlace()
@@ -57,15 +64,22 @@ export default function App() {
         </div>
       )}
       <div className="flex min-h-0 flex-1">
-        {viewMode === 'species' ? (
+        {viewMode === 'species' && (
           <>
             <SpeciesSidebar />
             <LearnsetEditor />
           </>
-        ) : (
+        )}
+        {viewMode === 'maps' && (
           <>
             <MapsSidebar />
             <WildEditor />
+          </>
+        )}
+        {viewMode === 'trainers' && (
+          <>
+            <TrainersSidebar />
+            <TrainerEditor />
           </>
         )}
         {diffOpen && <DiffPanel />}

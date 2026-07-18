@@ -260,6 +260,41 @@ Verified ground truth (recon against the real ROM):
   + read-back verification; shared undo stack; revert covers evolutions
 - [x] 84 tests; smoke step 12 edits Bulbasaur's evo level and undoes it
 
+### Phase 7 — NPC trainer teams  *(requested 2026-07-18)* — **DONE 2026-07-18**
+Verified ground truth (recon against the real ROM, reading real bytes):
+- `data.trainers.stats` @ `0x23EAC8`: **743** fixed 40-byte records:
+  `[structType u8, class u8, music/gender u8, sprite u8, name""12,
+   items u16×4, doubleBattle u32, aiFlags u32, partyCount u32, party ptr]`.
+  `structType` bit0 = custom moves, bit1 = held items; gender = bit7 of the
+  music byte.
+- `data.trainers.classes.names` @ `0x23E558`: 107 × 13-byte text entries.
+- Party entry stride is **8 bytes** without custom moves, **16 with** —
+  confirmed 90/90 and 15/15 valid across every custom-move trainer (stride 14,
+  the strict decomp sizeof, fails). Layout: `iv u16, level u16, species u16`,
+  then held item (if bit1) and/or four move u16s (moves at +6 with no item,
+  +8 with an item); the `iv` byte is the difficulty the engine scales into IVs.
+- Sanity anchors pinned by tests: rival TERRY (#326, class RIVAL), Elite Four
+  LORELEI (#410, structType 3) → DEWGONG Lv52 ICE BEAM…, LAPRAS holding item
+  #142. structType distribution 0:591 / 1:103 / 2:33 / 3:15; party sizes 1–6.
+- The 40-byte records are fixed-size (in-place writes); a party block is
+  relocated to free space only when the edited team outgrows its slot, mirroring
+  the learnset repoint / erase / clone-on-write path (owner census included).
+
+**DONE 2026-07-18:**
+- [x] `tables/trainers.ts` reader + serializer (all four struct layouts),
+  name codec, per-field validation, structType derived from two flags
+- [x] Writer: in-place vs repointed party blocks, erase-on-repoint when sole
+  owner, full-record rewrite, read-back verification; anchors + toml mappings
+- [x] editStore: trainer drafts on the shared undo stack (undo jumps to the
+  trainer); romStore Trainers view + search; save-flow + status-bar wiring
+- [x] UI: Trainers tab, TrainersSidebar (name/class/# search), TrainerEditor
+  (class · name · double-battle, custom-moves/held-items toggles, per-mon
+  species/level/difficulty/item/4-move editors, add/remove up to 6), ItemPicker
+- [x] Tests: 103 total; unit round-trips per struct layout, writer in-place +
+  repoint + validation, real-ROM reads (743 trainers, TERRY/LORELEI) and a
+  save round-trip growing TERRY's team 1→2 (repoint) then reload; smoke
+  extended to 15 steps (edit LORELEI's lead → MEW, add a 6th mon, undo)
+
 ## Out of scope (deliberately)
 
 Egg moves (separate packed table, low value for this workflow), evolution editing,

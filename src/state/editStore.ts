@@ -10,6 +10,7 @@ import {
   type WildKind,
 } from '../rom/tables/wild'
 import { evosEqual, type Evolution } from '../rom/tables/evolutions'
+import { trainersEqual, trainerToEdit, type TrainerEdit } from '../rom/tables/trainers'
 import type { LoadedRom } from '../rom/loadRom'
 import { useRomStore } from './romStore'
 
@@ -29,6 +30,8 @@ export type EditRecord =
   | { field: 'evo'; species: number; prev: Evolution[]; next: Evolution[] }
   /** species carries the wild area index so undo can jump to it. */
   | { field: 'wild'; species: number; key: string; prev: WildGroupEdit; next: WildGroupEdit }
+  /** species carries the trainer index so undo can jump to it. */
+  | { field: 'trainer'; species: number; prev: TrainerEdit; next: TrainerEdit }
 
 const MAX_UNDO = 200
 const MAX_RECENT = 8
@@ -40,6 +43,8 @@ interface EditStore {
   /** Keyed by wildKey(areaIndex, kind). */
   wildDrafts: Record<string, WildGroupEdit>
   evoDrafts: Record<number, Evolution[]>
+  /** Keyed by trainer index. */
+  trainerDrafts: Record<number, TrainerEdit>
   undoStack: EditRecord[]
   redoStack: EditRecord[]
   clipboard: LearnsetEntry[] | null
@@ -53,6 +58,8 @@ interface EditStore {
   applyWild(areaIndex: number, kind: WildKind, next: WildGroupEdit): void
   /** Replace a species' evolution list (records an undo step). No-op if unchanged. */
   applyEvos(species: number, next: Evolution[]): void
+  /** Replace an NPC trainer (records an undo step). No-op if unchanged. */
+  applyTrainer(index: number, next: TrainerEdit): void
   /** Returns the applied record (for selection jump), or null. */
   undo(): EditRecord | null
   redo(): EditRecord | null
@@ -60,6 +67,8 @@ interface EditStore {
   revert(species: number): void
   /** Restore all of an area's encounter groups to ROM state. */
   revertWild(areaIndex: number): void
+  /** Restore an NPC trainer to ROM state. */
+  revertTrainer(index: number): void
   copy(species: number): void
   paste(species: number): void
   noteRecentMove(moveId: number): void
@@ -84,6 +93,11 @@ function originalWild(key: string): WildGroupEdit | null {
   const { areaIndex, kind } = parseWildKey(key)
   const group = useRomStore.getState().loaded?.wildAreas[areaIndex]?.groups[kind]
   return group ? { rate: group.rate, slots: group.slots } : null
+}
+
+function originalTrainer(index: number): TrainerEdit | null {
+  const trainer = useRomStore.getState().loaded?.trainers[index]
+  return trainer ? trainerToEdit(trainer) : null
 }
 
 /** Current entries for a species: draft if present, else ROM original. */
@@ -132,6 +146,29 @@ export function computeEvoDirtySet(
     if (!evosEqual(evoDrafts[species], loaded.evolutions[species] ?? [])) dirty.add(species)
   }
   return dirty
+}
+
+/** Trainer indexes whose drafts differ from the ROM. */
+export function computeTrainerDirtySet(
+  trainerDrafts: Record<number, TrainerEdit>,
+  loaded: LoadedRom,
+): Set<number> {
+  const dirty = new Set<number>()
+  for (const key of Object.keys(trainerDrafts)) {
+    const index = Number(key)
+    const orig = loaded.trainers[index]
+    if (!orig || !trainersEqual(trainerDrafts[index], trainerToEdit(orig))) dirty.add(index)
+  }
+  return dirty
+}
+
+/** Effective (draft-or-ROM) trainer edit for an index. */
+export function effectiveTrainer(
+  trainerDrafts: Record<number, TrainerEdit>,
+  loaded: LoadedRom,
+  index: number,
+): TrainerEdit | null {
+  return trainerDrafts[index] ?? (loaded.trainers[index] ? trainerToEdit(loaded.trainers[index]) : null)
 }
 
 /** Union of learnset + TM + tutor + evolution dirty species. */
@@ -250,11 +287,23 @@ function evoDraftsWith(
   return next
 }
 
+function trainerDraftsWith(
+  drafts: Record<number, TrainerEdit>,
+  index: number,
+  edit: TrainerEdit,
+): Record<number, TrainerEdit> {
+  const next = { ...drafts }
+  const orig = originalTrainer(index)
+  if (orig && trainersEqual(edit, orig)) delete next[index]
+  else next[index] = edit
+  return next
+}
+
 export const useEditStore = create<EditStore>((set, get) => {
   /** Partial state applying `value` as the draft for the record's field/species. */
   function patch(
     record: EditRecord,
-    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[],
+    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[] | TrainerEdit,
   ): Partial<EditStore> {
     const s = get()
     if (record.field === 'learnset') {
@@ -268,6 +317,9 @@ export const useEditStore = create<EditStore>((set, get) => {
     }
     if (record.field === 'evo') {
       return { evoDrafts: evoDraftsWith(s.evoDrafts, record.species, value as Evolution[]) }
+    }
+    if (record.field === 'trainer') {
+      return { trainerDrafts: trainerDraftsWith(s.trainerDrafts, record.species, value as TrainerEdit) }
     }
     return { wildDrafts: wildDraftsWith(s.wildDrafts, record.key, value as WildGroupEdit) }
   }
@@ -287,6 +339,7 @@ export const useEditStore = create<EditStore>((set, get) => {
     tutorDrafts: {},
     wildDrafts: {},
     evoDrafts: {},
+    trainerDrafts: {},
     undoStack: [],
     redoStack: [],
     clipboard: null,
@@ -317,6 +370,12 @@ export const useEditStore = create<EditStore>((set, get) => {
       const prev = get().evoDrafts[species] ?? originalEvos(species)
       if (evosEqual(prev, next)) return
       push({ field: 'evo', species, prev, next })
+    },
+
+    applyTrainer(index, next) {
+      const prev = get().trainerDrafts[index] ?? originalTrainer(index)
+      if (!prev || trainersEqual(prev, next)) return
+      push({ field: 'trainer', species: index, prev, next })
     },
 
     undo() {
@@ -357,6 +416,11 @@ export const useEditStore = create<EditStore>((set, get) => {
       }
     },
 
+    revertTrainer(index) {
+      const orig = originalTrainer(index)
+      if (orig) get().applyTrainer(index, orig)
+    },
+
     copy(species) {
       const { drafts } = get()
       set({
@@ -383,6 +447,7 @@ export const useEditStore = create<EditStore>((set, get) => {
         tutorDrafts: {},
         wildDrafts: {},
         evoDrafts: {},
+        trainerDrafts: {},
         undoStack: [],
         redoStack: [],
       })

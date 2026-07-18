@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import * as fs from 'node:fs'
 import { loadRom } from '../src/rom/loadRom'
 import { applyLearnsetEdits, applyRomEdits } from '../src/rom/writer'
+import { trainerToEdit } from '../src/rom/tables/trainers'
 
 /**
  * Phase 1 gate: verify parsing against the real modded ROM.
@@ -271,5 +272,60 @@ describe.skipIf(!romExists)('real ROM integration (Phase 1 gate)', () => {
     // every non-gap species (except placeholder 0) should have a valid pointer
     const broken = loaded.learnsets.filter((ls) => ls.origOffset === -1)
     expect(broken.length).toBe(0)
+  })
+
+  it('reads trainers and class names', () => {
+    expect(loaded.trainers.length).toBe(743)
+    expect(loaded.trainerClassNames.length).toBe(107)
+    expect(loaded.trainerClassNames[81].trim()).toBe('RIVAL')
+
+    // Rival TERRY (#326) — verified with the recon dump.
+    const terry = loaded.trainers[326]
+    expect(terry.name).toBe('TERRY')
+    expect(loaded.trainerClassNames[terry.cls].trim()).toBe('RIVAL')
+
+    // Elite Four LORELEI (#410): held items + custom moves, 5 Pokémon.
+    const lorelei = loaded.trainers[410]
+    expect(lorelei.name).toBe('LORELEI')
+    expect(lorelei.hasItems).toBe(true)
+    expect(lorelei.hasMoves).toBe(true)
+    expect(lorelei.party.length).toBe(5)
+    const dewgong = lorelei.party[0]
+    expect(loaded.species[dewgong.species].name).toBe('DEWGONG')
+    expect(dewgong.level).toBe(52)
+    expect(loaded.moves[dewgong.moves[0]].name).toBe('ICE BEAM')
+    const lapras = lorelei.party[4]
+    expect(loaded.species[lapras.species].name).toBe('LAPRAS')
+    expect(lapras.heldItem).toBe(142)
+  })
+
+  it('scans every trainer party cleanly', () => {
+    for (const t of loaded.trainers) {
+      expect(t.party.length).toBeLessThanOrEqual(6)
+      for (const m of t.party) {
+        expect(m.species).toBeLessThan(loaded.species.length)
+        expect(m.level).toBeGreaterThanOrEqual(0)
+      }
+    }
+  })
+
+  it('edits a trainer team and reads it back after a save round-trip', () => {
+    const edit = trainerToEdit(loaded.trainers[326]) // TERRY, structType 0, 1 Pokémon
+    edit.party[0] = { ...edit.party[0], species: 25, level: 60 } // PIKACHU L60
+    edit.party.push({ iv: 0, level: 58, species: 6, heldItem: 0, moves: [0, 0, 0, 0] }) // + CHARIZARD
+
+    const { bytes, ops } = applyRomEdits(loaded.rom, loaded.anchors, {
+      trainers: new Map([[326, edit]]),
+    })
+    // Growing from 1 to 2 mons (8→16 bytes) exceeds the old slot → repoint.
+    expect(ops.some((o) => o.kind === 'trainer-repointed')).toBe(true)
+
+    const reloaded = loadRom(bytes, 'test.gba', toml)
+    const terry = reloaded.trainers[326]
+    expect(terry.party.length).toBe(2)
+    expect(reloaded.species[terry.party[0].species].name).toBe('PIKACHU')
+    expect(terry.party[0].level).toBe(60)
+    expect(reloaded.species[terry.party[1].species].name).toBe('CHARIZARD')
+    expect(reloaded.warnings).toEqual([])
   })
 })

@@ -108,6 +108,34 @@ try {
   await page.keyboard.press('Control+z')
   await page.waitForSelector('text=No changes')
 
+  // Trainers view: edit an NPC team — change LORELEI's lead species, then undo.
+  await page.click('aside button:has-text("Trainers")')
+  await page.fill('#trainer-search', 'lorelei')
+  await page.click('aside button:has-text("LORELEI")')
+  await page.waitForSelector('h2, header:has-text("LORELEI")').catch(() => {})
+  await page.waitForSelector('input[value="LORELEI"]')
+  await shot(page, '13-trainer-lorelei')
+  // Open the first Pokémon's species picker and switch it to MEW.
+  await page.click('main section:first-of-type button:has-text("DEWGONG")')
+  await page.fill('input[placeholder^="Search species"]', 'mew')
+  await page.waitForSelector('li button:has-text("MEW")')
+  await page.keyboard.press('Enter')
+  await page.waitForSelector('text=● modified')
+  await page.waitForSelector('text=1 trainer modified')
+  await shot(page, '14-trainer-edited')
+  // Add a Pokémon to the team.
+  await page.click('button:has-text("Add Pokémon")')
+  await page.waitForSelector('text=6/6 Pokémon')
+  await shot(page, '15-trainer-added')
+  // Trainer details: AI items, sprite, music, gender.
+  await page.click('button:has-text("Trainer details")')
+  await page.waitForSelector('text=AI battle items')
+  await shot(page, '16-trainer-details')
+  // Undo twice — back to clean.
+  await page.keyboard.press('Control+z')
+  await page.keyboard.press('Control+z')
+  await page.waitForSelector('text=No changes')
+
   if (errors.length > 0) {
     console.error('❌ console errors:\n' + errors.join('\n'))
     process.exit(1)

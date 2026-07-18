@@ -91,6 +91,8 @@ const NAME_MAP: Record<string, { addr: keyof AnchorMap; count?: keyof AnchorMap 
   'data.pokemon.wild': { addr: 'wild' },
   'data.maps.banks': { addr: 'mapBanks' },
   'data.maps.names': { addr: 'mapNames', count: 'mapNameCount' },
+  'data.trainers.stats': { addr: 'trainers', count: 'trainerCount' },
+  'data.trainers.classes.names': { addr: 'trainerClasses', count: 'trainerClassCount' },
 }
 
 /**

@@ -31,6 +31,12 @@ export interface AnchorMap {
   /** Region-map section name pointers; map header mapsec − 0x58 indexes this. */
   mapNames: number
   mapNameCount: number
+  /** Trainer table: 40-byte records, each pointing at a party block. */
+  trainers: number
+  trainerCount: number
+  /** Trainer class names (13-byte text entries). */
+  trainerClasses: number
+  trainerClassCount: number
 }
 
 export const SPECIES_NAME_LEN = 11
@@ -70,4 +76,8 @@ export const VANILLA_BPRE: AnchorMap = {
   mapBanks: 0x3526a8,
   mapNames: 0x3f1cac,
   mapNameCount: 109,
+  trainers: 0x23eac8,
+  trainerCount: 743,
+  trainerClasses: 0x23e558,
+  trainerClassCount: 107,
 }

@@ -49,6 +49,24 @@ export function sortEntries(entries: LearnsetEntry[]): LearnsetEntry[] {
   return [...entries].sort((a, b) => a.level - b.level)
 }
 
+/**
+ * The four moves a Pokémon would know if it grew to `level` — the same result
+ * the engine produces for a trainer's default-move party member. Learns moves
+ * in level order, skips ones already known, and drops the oldest once four are
+ * held. Returns exactly four move ids, 0-padded.
+ */
+export function defaultMovesAtLevel(entries: LearnsetEntry[], level: number): number[] {
+  const learned: number[] = []
+  for (const e of sortEntries(entries)) {
+    if (e.level > level) break
+    if (e.moveId === 0 || learned.includes(e.moveId)) continue
+    if (learned.length >= 4) learned.shift()
+    learned.push(e.moveId)
+  }
+  while (learned.length < 4) learned.push(0)
+  return learned
+}
+
 export function entriesEqual(a: LearnsetEntry[], b: LearnsetEntry[]): boolean {
   return a.length === b.length && a.every((e, i) => e.level === b[i].level && e.moveId === b[i].moveId)
 }

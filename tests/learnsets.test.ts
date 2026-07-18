@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { RomBuffer, GBA_ROM_BASE } from '../src/rom/buffer'
 import { VANILLA_BPRE, type AnchorMap } from '../src/rom/anchors'
-import { readLearnset, packEntry, unpackEntry } from '../src/rom/tables/learnsets'
+import { readLearnset, packEntry, unpackEntry, defaultMovesAtLevel } from '../src/rom/tables/learnsets'
 
 /** Build a tiny synthetic ROM: pointer table at 0x10, learnset data at 0x40. */
 function syntheticRom(): { rom: RomBuffer; anchors: AnchorMap } {
@@ -63,5 +63,40 @@ describe('learnsets', () => {
     expect(ls.entries).toEqual([])
     expect(ls.origOffset).toBe(0x60)
     expect(ls.origCapacity).toBe(1)
+  })
+})
+
+describe('defaultMovesAtLevel', () => {
+  const ls = [
+    { level: 1, moveId: 33 }, // TACKLE
+    { level: 1, moveId: 45 }, // GROWL (same level, order preserved)
+    { level: 7, moveId: 73 },
+    { level: 13, moveId: 22 },
+    { level: 20, moveId: 75 },
+    { level: 27, moveId: 230 },
+  ]
+
+  it('returns the moves learned by a given level, padded to four', () => {
+    expect(defaultMovesAtLevel(ls, 1)).toEqual([33, 45, 0, 0])
+    expect(defaultMovesAtLevel(ls, 13)).toEqual([33, 45, 73, 22])
+  })
+
+  it('keeps only the most recent four, dropping the oldest', () => {
+    // By Lv27 six moves are learnable → last four survive (TACKLE, GROWL drop).
+    expect(defaultMovesAtLevel(ls, 27)).toEqual([73, 22, 75, 230])
+  })
+
+  it('skips duplicates and ignores unsorted input', () => {
+    const dup = [
+      { level: 5, moveId: 10 },
+      { level: 1, moveId: 33 },
+      { level: 9, moveId: 10 }, // duplicate of move 10
+    ]
+    expect(defaultMovesAtLevel(dup, 9)).toEqual([33, 10, 0, 0])
+  })
+
+  it('returns all zeroes for an empty learnset or a pre-first level', () => {
+    expect(defaultMovesAtLevel([], 50)).toEqual([0, 0, 0, 0])
+    expect(defaultMovesAtLevel(ls, 0)).toEqual([0, 0, 0, 0])
   })
 })

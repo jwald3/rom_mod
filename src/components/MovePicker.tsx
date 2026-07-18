@@ -11,12 +11,15 @@ export function MovePicker({
   recentMoves,
   onSelect,
   onClose,
+  allowNone = false,
 }: {
   moves: MoveInfo[]
   typeNames: string[]
   recentMoves: number[]
   onSelect: (moveId: number) => void
   onClose: () => void
+  /** Show a "no move" entry that selects move id 0 (trainer parties only). */
+  allowNone?: boolean
 }) {
   const [query, setQuery] = useState('')
   const [highlight, setHighlight] = useState(0)
@@ -76,6 +79,16 @@ export function MovePicker({
           className="w-full rounded-t-lg border-b border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-200 placeholder-slate-500 outline-none"
         />
         <ul ref={listRef} className="max-h-72 overflow-y-auto py-1">
+          {allowNone && !query && (
+            <li>
+              <button
+                onClick={() => onSelect(0)}
+                className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm italic text-slate-400"
+              >
+                — no move —
+              </button>
+            </li>
+          )}
           {results.map((m, i) => (
             <li
               key={m.id}

@@ -4,6 +4,7 @@ import { VANILLA_BPRE, type AnchorMap } from '../src/rom/anchors'
 import { readLearnset, type LearnsetEntry } from '../src/rom/tables/learnsets'
 import { readCompatRow } from '../src/rom/tables/compat'
 import { readEvolutionsFor } from '../src/rom/tables/evolutions'
+import { readTrainer, trainerToEdit } from '../src/rom/tables/trainers'
 import { applyLearnsetEdits, applyRomEdits } from '../src/rom/writer'
 
 const FLOOR = 0x800
@@ -277,5 +278,94 @@ describe('applyLearnsetEdits', () => {
     expect(() =>
       applyLearnsetEdits(rom, anchors, edit(0, [{ level: 0, moveId: 33 }]), opts),
     ).toThrow(/Species #0.*level 0/)
+  })
+})
+
+/**
+ * Synthetic ROM with one trainer (structType 0, 2 mons at 0x100, cap 16 bytes)
+ * plus free space at FLOOR — for exercising in-place vs repointed party writes.
+ */
+function trainerRom(): { rom: RomBuffer; anchors: AnchorMap } {
+  const bytes = new Uint8Array(0x1000)
+  const view = new DataView(bytes.buffer)
+  const TRAINERS = 0x20
+  const PARTY = 0x100
+  bytes[TRAINERS + 0] = 0 // structType
+  bytes[TRAINERS + 1] = 3 // class
+  bytes[TRAINERS + 4] = 0xff // empty name
+  view.setUint32(TRAINERS + 0x20, 2, true) // partyCount
+  view.setUint32(TRAINERS + 0x24, GBA_ROM_BASE + PARTY, true)
+  for (let i = 0; i < 2; i++) {
+    view.setUint16(PARTY + i * 8 + 2, 5, true) // level
+    view.setUint16(PARTY + i * 8 + 4, 1, true) // species
+  }
+  bytes.fill(0xff, FLOOR)
+  const anchors: AnchorMap = {
+    ...VANILLA_BPRE,
+    trainers: TRAINERS,
+    trainerCount: 1,
+    // Keep the always-run learnset owner-census in bounds (pointers read null).
+    learnsets: 0x300,
+    speciesCount: 412,
+  }
+  return { rom: new RomBuffer(bytes), anchors }
+}
+
+describe('trainer writes', () => {
+  it('writes a same-size team in place and updates the record', () => {
+    const { rom, anchors } = trainerRom()
+    const e = trainerToEdit(readTrainer(rom, anchors, 0))
+    e.party[0] = { ...e.party[0], species: 25, level: 50 }
+    const { bytes, ops } = applyRomEdits(rom, anchors, { trainers: new Map([[0, e]]) }, opts)
+
+    expect(ops[0].kind).toBe('trainer')
+    expect(ops[0].newOffset).toBe(0x100)
+    const out = new RomBuffer(bytes)
+    expect(readTrainer(out, anchors, 0).party[0]).toEqual({
+      iv: 0,
+      level: 50,
+      species: 25,
+      heldItem: 0,
+      moves: [0, 0, 0, 0],
+    })
+  })
+
+  it('repoints and erases the old block when the team grows past its slot', () => {
+    const { rom, anchors } = trainerRom()
+    const e = trainerToEdit(readTrainer(rom, anchors, 0))
+    // Turn on custom moves → 16-byte entries → 32 bytes > 16-byte capacity.
+    e.hasMoves = true
+    e.party = e.party.map((m) => ({ ...m, moves: [33, 0, 0, 0] }))
+    const { bytes, ops } = applyRomEdits(rom, anchors, { trainers: new Map([[0, e]]) }, opts)
+
+    expect(ops[0].kind).toBe('trainer-repointed')
+    expect(ops[0].erasedOld).toBe(true)
+    expect(ops[0].newOffset).toBeGreaterThanOrEqual(FLOOR)
+    const out = new RomBuffer(bytes)
+    expect(out.pointer(anchors.trainers + 0x24)).toBe(ops[0].newOffset)
+    expect(out.u8(anchors.trainers)).toBe(1) // structType now 1 (custom moves)
+    const t = readTrainer(out, anchors, 0)
+    expect(t.hasMoves).toBe(true)
+    expect(t.party[0].moves).toEqual([33, 0, 0, 0])
+    // old 16-byte block erased to 0xFF
+    for (let i = 0x100; i < 0x110; i++) expect(bytes[i]).toBe(0xff)
+  })
+
+  it('rejects an out-of-range team member', () => {
+    const { rom, anchors } = trainerRom()
+    const e = trainerToEdit(readTrainer(rom, anchors, 0))
+    e.party[0] = { ...e.party[0], level: 200 }
+    expect(() => applyRomEdits(rom, anchors, { trainers: new Map([[0, e]]) }, opts)).toThrow(
+      /Trainer #0.*level 200/,
+    )
+  })
+
+  it('never mutates the source buffer', () => {
+    const { rom, anchors } = trainerRom()
+    const before = rom.bytes.slice()
+    const e = trainerToEdit(readTrainer(rom, anchors, 0))
+    e.party[0] = { ...e.party[0], species: 99 }
+    applyRomEdits(rom, anchors, { trainers: new Map([[0, e]]) }, opts)
+    expect(rom.bytes).toEqual(before)
   })
 })

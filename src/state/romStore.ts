@@ -21,10 +21,12 @@ interface RomStore {
   filterNoWild: boolean
   /** Filter by evolution method category ('any' = off, 'none' = doesn't evolve). */
   evoFilter: string
-  /** Pokémon editing vs wild-encounter (map) editing. */
-  viewMode: 'species' | 'maps'
+  /** Pokémon editing vs wild-encounter (map) vs NPC trainer editing. */
+  viewMode: 'species' | 'maps' | 'trainers'
   selectedArea: number
   mapSearch: string
+  selectedTrainer: number
+  trainerSearch: string
   /** Second ROM (e.g. the unmodified base) for the diff view. */
   baseline: LoadedRom | null
   baselineError: string | null
@@ -37,9 +39,11 @@ interface RomStore {
   setShowGaps(b: boolean): void
   setFilterNoWild(b: boolean): void
   setEvoFilter(f: string): void
-  setViewMode(mode: 'species' | 'maps'): void
+  setViewMode(mode: 'species' | 'maps' | 'trainers'): void
   selectArea(index: number): void
   setMapSearch(s: string): void
+  selectTrainer(index: number): void
+  setTrainerSearch(s: string): void
   setDiffOpen(open: boolean): void
 }
 
@@ -57,6 +61,8 @@ export const useRomStore = create<RomStore>((set) => ({
   viewMode: 'species',
   selectedArea: 0,
   mapSearch: '',
+  selectedTrainer: 1,
+  trainerSearch: '',
   baseline: null,
   baselineError: null,
   diffOpen: false,
@@ -115,5 +121,7 @@ export const useRomStore = create<RomStore>((set) => ({
   setViewMode: (viewMode) => set({ viewMode }),
   selectArea: (selectedArea) => set({ selectedArea, viewMode: 'maps' }),
   setMapSearch: (mapSearch) => set({ mapSearch }),
+  selectTrainer: (selectedTrainer) => set({ selectedTrainer, viewMode: 'trainers' }),
+  setTrainerSearch: (trainerSearch) => set({ trainerSearch }),
   setDiffOpen: (diffOpen) => set({ diffOpen }),
 }))
