@@ -19,6 +19,17 @@ const OP_POKEMART_DECOR = 0x87
 const OP_POKEMART_DECOR2 = 0x88
 const MART_OPS = [OP_POKEMART, OP_POKEMART_DECOR, OP_POKEMART_DECOR2]
 
+/**
+ * `waitmsg` (0x0f) — the script command that immediately follows a real
+ * `pokemart <ptr>` (a 5-byte command) in both FireRed and Emerald. Requiring it
+ * is the discriminator that rejects the false positives a full-ROM scan surfaces
+ * (stray 0x86/0x87/0x88 bytes in graphics/map data that happen to be followed by
+ * a pointer to a valid-looking item list). Verified: all 23 FireRed shops and
+ * all 40 real Heart & Soul marts have this tail; every false positive lacks it.
+ */
+const OP_WAITMSG = 0x0f
+const POKEMART_CMD_LEN = 5 // opcode (1) + pointer (4)
+
 const MAX_ITEMS = 20 // sanity bound on a single shop's list length
 
 export interface Shop {
@@ -66,6 +77,9 @@ export function readShops(rom: RomBuffer, anchors: AnchorMap): Shop[] {
   const maxItemId = anchors.itemCount
   for (let o = start; o < end; o++) {
     if (!MART_OPS.includes(rom.u8(o))) continue
+    // A real pokemart command is followed by `waitmsg`; this rejects the
+    // coincidental opcode matches a whole-ROM scan would otherwise pick up.
+    if (rom.u8(o + POKEMART_CMD_LEN) !== OP_WAITMSG) continue
     const listOffset = rom.pointer(o + 1)
     if (listOffset === null || listOffset >= rom.length) continue
     const items = readItemList(rom, listOffset, maxItemId)
