@@ -1,0 +1,1365 @@
+[
+  {
+    "leader": "Falkner",
+    "party": [
+      {
+        "name": "Pidgey",
+        "level": 8,
+        "held": null,
+        "moves": [
+          "Tackle",
+          "Mud-Slap",
+          "Quick Attack"
+        ]
+      },
+      {
+        "name": "Noctowl",
+        "level": 11,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Tackle",
+          "Mud-Slap",
+          "Growl",
+          "Peck"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Bugsy",
+    "party": [
+      {
+        "name": "Pineco",
+        "level": 15,
+        "held": null,
+        "moves": [
+          "Pin Missile",
+          "Headbutt",
+          "Bullet Seed",
+          "Harden"
+        ]
+      },
+      {
+        "name": "Ledian",
+        "level": 15,
+        "held": null,
+        "moves": [
+          "Bullet Seed",
+          "Comet Punch",
+          "Supersonic",
+          "Reflect"
+        ]
+      },
+      {
+        "name": "Scyther",
+        "level": 16,
+        "held": "Berry Juice",
+        "moves": [
+          "Quick Attack",
+          "Fury Cutter",
+          "Bullet Seed",
+          "Pursuit"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Whitney",
+    "party": [
+      {
+        "name": "Clefairy",
+        "level": 20,
+        "held": null,
+        "moves": [
+          "Headbutt",
+          "Charm",
+          "Sweet Kiss",
+          "Metronome"
+        ]
+      },
+      {
+        "name": "Teddiursa",
+        "level": 20,
+        "held": null,
+        "moves": [
+          "Fury Swipes",
+          "Fake Tears",
+          "Lick",
+          "Mud-Slap"
+        ]
+      },
+      {
+        "name": "Miltank",
+        "level": 21,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Rollout",
+          "Attract",
+          "Stomp",
+          "Milk Drink"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Morty",
+    "party": [
+      {
+        "name": "Haunter",
+        "level": 24,
+        "held": null,
+        "moves": [
+          "Hypnosis",
+          "Nightmare",
+          "Curse",
+          "Night Shade"
+        ]
+      },
+      {
+        "name": "Stantler",
+        "level": 23,
+        "held": null,
+        "moves": [
+          "Swift",
+          "Hypnosis",
+          "Nightmare",
+          "Leer"
+        ]
+      },
+      {
+        "name": "Misdreavus",
+        "level": 24,
+        "held": null,
+        "moves": [
+          "Shadow Ball",
+          "Pain Split",
+          "Perish Song",
+          "Psywave"
+        ]
+      },
+      {
+        "name": "Gengar",
+        "level": 25,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Hypnosis",
+          "Shadow Ball",
+          "Mean Look",
+          "Dream Eater"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Chuck",
+    "party": [
+      {
+        "name": "Hitmontop",
+        "level": 30,
+        "held": null,
+        "moves": [
+          "Triple Kick",
+          "Rolling Kick",
+          "Dig",
+          "Pursuit"
+        ]
+      },
+      {
+        "name": "Primeape",
+        "level": 29,
+        "held": null,
+        "moves": [
+          "Low Kick",
+          "Karate Chop",
+          "Ice Punch",
+          "Rage"
+        ]
+      },
+      {
+        "name": "Sudowoodo",
+        "level": 30,
+        "held": null,
+        "moves": [
+          "Rock Slide",
+          "Thunderpunch",
+          "Low Kick",
+          "Faint Attack"
+        ]
+      },
+      {
+        "name": "Poliwrath",
+        "level": 31,
+        "held": "Black Belt",
+        "moves": [
+          "Hypnosis",
+          "Mind Reader",
+          "Surf",
+          "Dynamicpunch"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Jasmine",
+    "party": [
+      {
+        "name": "Skarmory",
+        "level": 35,
+        "held": null,
+        "moves": [
+          "Spikes",
+          "Drill Peck",
+          "Swagger",
+          "Steel Wing"
+        ]
+      },
+      {
+        "name": "Corsola",
+        "level": 35,
+        "held": null,
+        "moves": [
+          "Rain Dance",
+          "Surf",
+          "Recover",
+          "Ancientpower"
+        ]
+      },
+      {
+        "name": "Magneton",
+        "level": 35,
+        "held": null,
+        "moves": [
+          "Thunderbolt",
+          "Tri Attack",
+          "Rain Dance",
+          "Thunder"
+        ]
+      },
+      {
+        "name": "Scizor",
+        "level": 36,
+        "held": "Focus Band",
+        "moves": [
+          "Twineedle",
+          "Metal Claw",
+          "Agility",
+          "Swords Dance"
+        ]
+      },
+      {
+        "name": "Steelix",
+        "level": 36,
+        "held": "Quick Claw",
+        "moves": [
+          "Crunch",
+          "Earthquake",
+          "Rock Slide",
+          "Iron Tail"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Pryce",
+    "party": [
+      {
+        "name": "Dewgong",
+        "level": 31,
+        "held": null,
+        "moves": [
+          "Surf",
+          "Aurora Beam",
+          "Rain Dance",
+          "Rest"
+        ]
+      },
+      {
+        "name": "Sneasel",
+        "level": 32,
+        "held": null,
+        "moves": [
+          "Faint Attack",
+          "Metal Claw",
+          "Reflect",
+          "Icy Wind"
+        ]
+      },
+      {
+        "name": "Jynx",
+        "level": 31,
+        "held": null,
+        "moves": [
+          "Ice Punch",
+          "Psychic",
+          "Rain Dance",
+          "Lovely Kiss"
+        ]
+      },
+      {
+        "name": "Piloswine",
+        "level": 33,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Headbutt",
+          "Earthquake",
+          "Rock Smash",
+          "Blizzard"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Clair",
+    "party": [
+      {
+        "name": "Dragonair",
+        "level": 42,
+        "held": null,
+        "moves": [
+          "Thunder Wave",
+          "Thunderbolt",
+          "Flamethrower",
+          "Dragonbreath"
+        ]
+      },
+      {
+        "name": "Gyarados",
+        "level": 43,
+        "held": "Focus Band",
+        "moves": [
+          "Bite",
+          "Waterfall",
+          "Fly",
+          "Twister"
+        ]
+      },
+      {
+        "name": "Lapras",
+        "level": 43,
+        "held": "Chesto Berry",
+        "moves": [
+          "Surf",
+          "Ice Beam",
+          "Body Slam",
+          "Rest"
+        ]
+      },
+      {
+        "name": "Dunsparce",
+        "level": 44,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Glare",
+          "Ancientpower",
+          "Rest",
+          "Poison Jab"
+        ]
+      },
+      {
+        "name": "Kingdra",
+        "level": 45,
+        "held": "Leftovers",
+        "moves": [
+          "Smokescreen",
+          "Surf",
+          "Hyper Beam",
+          "Dragonbreath"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Brock",
+    "party": [
+      {
+        "name": "Golem",
+        "level": 66,
+        "held": "Quick Claw",
+        "moves": [
+          "Curse",
+          "Rock Slide",
+          "Body Slam",
+          "Earthquake"
+        ]
+      },
+      {
+        "name": "Aerodactyl",
+        "level": 66,
+        "held": "Hard Stone",
+        "moves": [
+          "Ancientpower",
+          "Sky Attack",
+          "Earthquake",
+          "Fire Blast"
+        ]
+      },
+      {
+        "name": "Kabutops",
+        "level": 66,
+        "held": "Scope Lens",
+        "moves": [
+          "Surf",
+          "Ancientpower",
+          "Cut",
+          "Swords Dance"
+        ]
+      },
+      {
+        "name": "Omastar",
+        "level": 66,
+        "held": "Focus Band",
+        "moves": [
+          "Ancientpower",
+          "Ice Beam",
+          "Surf",
+          "Toxic"
+        ]
+      },
+      {
+        "name": "Relicanth",
+        "level": 66,
+        "held": "Hard Stone",
+        "moves": [
+          "Surf",
+          "Rock Slide",
+          "Curse",
+          "Thunderbolt"
+        ]
+      },
+      {
+        "name": "Rhydon",
+        "level": 66,
+        "held": "Quick Claw",
+        "moves": [
+          "Swords Dance",
+          "Rock Slide",
+          "Earthquake",
+          "Agility"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Misty",
+    "party": [
+      {
+        "name": "Golduck",
+        "level": 62,
+        "held": null,
+        "moves": [
+          "Surf",
+          "Psychic",
+          "Hypnosis",
+          "Cross Chop"
+        ]
+      },
+      {
+        "name": "Quagsire",
+        "level": 62,
+        "held": "Quick Claw",
+        "moves": [
+          "Surf",
+          "Amnesia",
+          "Earthquake",
+          "Rain Dance"
+        ]
+      },
+      {
+        "name": "Vaporeon",
+        "level": 61,
+        "held": "Leftovers",
+        "moves": [
+          "Surf",
+          "Ice Beam",
+          "Acid Armor",
+          "Shadow Ball"
+        ]
+      },
+      {
+        "name": "Milotic",
+        "level": 61,
+        "held": null,
+        "moves": [
+          "Hydro Pump",
+          "Ice Beam",
+          "Rest",
+          "Sleep Talk"
+        ]
+      },
+      {
+        "name": "Lapras",
+        "level": 62,
+        "held": "Nevermeltice",
+        "moves": [
+          "Surf",
+          "Ice Beam",
+          "Rain Dance",
+          "Reflect"
+        ]
+      },
+      {
+        "name": "Starmie",
+        "level": 63,
+        "held": "Mystic Water",
+        "moves": [
+          "Surf",
+          "Psychic",
+          "Recover",
+          "Thunderbolt"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Ltsurge",
+    "party": [
+      {
+        "name": "Electrode",
+        "level": 57,
+        "held": "Focus Band",
+        "moves": [
+          "Thunder",
+          "Rain Dance",
+          "Thunder Wave",
+          "Explosion"
+        ]
+      },
+      {
+        "name": "Magnezone",
+        "level": 59,
+        "held": null,
+        "moves": [
+          "Thunder",
+          "Reflect",
+          "Rain Dance",
+          "Double-Edge"
+        ]
+      },
+      {
+        "name": "Lanturn",
+        "level": 58,
+        "held": "Leftovers",
+        "moves": [
+          "Surf",
+          "Thunderbolt",
+          "Ice Beam",
+          "Confuse Ray"
+        ]
+      },
+      {
+        "name": "Manectric",
+        "level": 58,
+        "held": null,
+        "moves": [
+          "Charge",
+          "Thunder",
+          "Thunder Wave",
+          "Crunch"
+        ]
+      },
+      {
+        "name": "Electivire",
+        "level": 59,
+        "held": "Scope Lens",
+        "moves": [
+          "Thunderbolt",
+          "Fire Punch",
+          "Ice Punch",
+          "Submission"
+        ]
+      },
+      {
+        "name": "Raichu",
+        "level": 60,
+        "held": "Magnet",
+        "moves": [
+          "Thunder",
+          "Rain Dance",
+          "Body Slam",
+          "Surf"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Erika",
+    "party": [
+      {
+        "name": "Jumpluff",
+        "level": 61,
+        "held": "Focus Band",
+        "moves": [
+          "Giga Drain",
+          "Sleep Powder",
+          "Encore",
+          "Leech Seed"
+        ]
+      },
+      {
+        "name": "Roserade",
+        "level": 60,
+        "held": null,
+        "moves": [
+          "Synthesis",
+          "Grasswhistle",
+          "Toxic",
+          "Petal Dance"
+        ]
+      },
+      {
+        "name": "Tangrowth",
+        "level": 60,
+        "held": null,
+        "moves": [
+          "Mega Drain",
+          "Bind",
+          "Tickle",
+          "Block"
+        ]
+      },
+      {
+        "name": "Venusaur",
+        "level": 61,
+        "held": "Leftovers",
+        "moves": [
+          "Sunny Day",
+          "Solarbeam",
+          "Sludge Bomb",
+          "Sleep Powder"
+        ]
+      },
+      {
+        "name": "Victreebel",
+        "level": 62,
+        "held": "Poison Barb",
+        "moves": [
+          "Sludge Bomb",
+          "Giga Drain",
+          "Swords Dance",
+          "Sleep Powder"
+        ]
+      },
+      {
+        "name": "Bellossom",
+        "level": 62,
+        "held": "Miracle Seed",
+        "moves": [
+          "Sunny Day",
+          "Synthesis",
+          "Sleep Powder",
+          "Solarbeam"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Janine",
+    "party": [
+      {
+        "name": "Weezing",
+        "level": 63,
+        "held": "Leftovers",
+        "moves": [
+          "Sludge Bomb",
+          "Fire Blast",
+          "Destiny Bond",
+          "Amnesia"
+        ]
+      },
+      {
+        "name": "Muk",
+        "level": 62,
+        "held": null,
+        "moves": [
+          "Minimize",
+          "Sludge Bomb",
+          "Toxic",
+          "Acid Armor"
+        ]
+      },
+      {
+        "name": "Swalot",
+        "level": 61,
+        "held": null,
+        "moves": [
+          "Swallow",
+          "Stockpile",
+          "Amnesia",
+          "Spit Up"
+        ]
+      },
+      {
+        "name": "Nidoqueen",
+        "level": 62,
+        "held": "Quick Claw",
+        "moves": [
+          "Earthquake",
+          "Sludge Bomb",
+          "Thunderbolt",
+          "Submission"
+        ]
+      },
+      {
+        "name": "Crobat",
+        "level": 63,
+        "held": null,
+        "moves": [
+          "Pursuit",
+          "Sludge Bomb",
+          "Toxic",
+          "Confuse Ray"
+        ]
+      },
+      {
+        "name": "Venomoth",
+        "level": 64,
+        "held": "Brightpowder",
+        "moves": [
+          "Giga Drain",
+          "Psychic",
+          "Toxic",
+          "Double Team"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Sabrina",
+    "party": [
+      {
+        "name": "Mr. Mime",
+        "level": 65,
+        "held": "Quick Claw",
+        "moves": [
+          "Psychic",
+          "Thunder Wave",
+          "Encore",
+          "Ice Punch"
+        ]
+      },
+      {
+        "name": "Jynx",
+        "level": 64,
+        "held": null,
+        "moves": [
+          "Psychic",
+          "Ice Beam",
+          "Lovely Kiss",
+          "Bubblebeam"
+        ]
+      },
+      {
+        "name": "Slowbro",
+        "level": 64,
+        "held": "Chesto Berry",
+        "moves": [
+          "Rest",
+          "Sleep Talk",
+          "Submission",
+          "Surf"
+        ]
+      },
+      {
+        "name": "Wobbuffet",
+        "level": 64,
+        "held": "Leftovers",
+        "moves": [
+          "Mirror Coat",
+          "Counter",
+          "Safeguard",
+          "Destiny Bond"
+        ]
+      },
+      {
+        "name": "Espeon",
+        "level": 65,
+        "held": null,
+        "moves": [
+          "Psychic",
+          "Morning Sun",
+          "Future Sight",
+          "Power Gem"
+        ]
+      },
+      {
+        "name": "Alakazam",
+        "level": 66,
+        "held": "Twistedspoon",
+        "moves": [
+          "Shadow Ball",
+          "Psychic",
+          "Recover",
+          "Thunderpunch"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Blaine",
+    "party": [
+      {
+        "name": "Rapidash",
+        "level": 66,
+        "held": "Quick Claw",
+        "moves": [
+          "Double-Edge",
+          "Sunny Day",
+          "Fire Blast",
+          "Solarbeam"
+        ]
+      },
+      {
+        "name": "Magmortar",
+        "level": 65,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Thunderpunch",
+          "Fire Blast",
+          "Psychic",
+          "Confuse Ray"
+        ]
+      },
+      {
+        "name": "Houndoom",
+        "level": 66,
+        "held": "Miracle Seed",
+        "moves": [
+          "Fire Blast",
+          "Sunny Day",
+          "Solarbeam",
+          "Crunch"
+        ]
+      },
+      {
+        "name": "Magcargo",
+        "level": 65,
+        "held": "Leftovers",
+        "moves": [
+          "Fire Blast",
+          "Shadow Ball",
+          "Sunny Day",
+          "Hypnosis"
+        ]
+      },
+      {
+        "name": "Torkoal",
+        "level": 67,
+        "held": "White Herb",
+        "moves": [
+          "Curse",
+          "Iron Defense",
+          "Withdraw",
+          "Heat Wave"
+        ]
+      },
+      {
+        "name": "Camerupt",
+        "level": 67,
+        "held": "Charcoal",
+        "moves": [
+          "Earth Power",
+          "Eruption",
+          "Yawn",
+          "Amnesia"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Blue",
+    "party": [
+      {
+        "name": "Articuno",
+        "level": 69,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Ice Beam",
+          "Sky Attack",
+          "Rest",
+          "Toxic"
+        ]
+      },
+      {
+        "name": "Alakazam",
+        "level": 68,
+        "held": "Twistedspoon",
+        "moves": [
+          "Thunderbolt",
+          "Recover",
+          "Psychic",
+          "Shadow Ball"
+        ]
+      },
+      {
+        "name": "Rhydon",
+        "level": 67,
+        "held": "Quick Claw",
+        "moves": [
+          "Rock Slide",
+          "Earthquake",
+          "Iron Tail",
+          "Crunch"
+        ]
+      },
+      {
+        "name": "Exeggutor",
+        "level": 68,
+        "held": "Leftovers",
+        "moves": [
+          "Leech Seed",
+          "Sleep Powder",
+          "Psychic",
+          "Giga Drain"
+        ]
+      },
+      {
+        "name": "Gyarados",
+        "level": 68,
+        "held": "Focus Band",
+        "moves": [
+          "Hydro Pump",
+          "Double Team",
+          "Body Slam",
+          "Reversal"
+        ]
+      },
+      {
+        "name": "Arcanine",
+        "level": 69,
+        "held": "Silk Scarf",
+        "moves": [
+          "Flamethrower",
+          "Curse",
+          "Crunch",
+          "Extremespeed"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Will",
+    "party": [
+      {
+        "name": "Gardevoir",
+        "level": 66,
+        "held": null,
+        "moves": [
+          "Psychic",
+          "Hyper Voice",
+          "Moonblast",
+          "Reflect"
+        ]
+      },
+      {
+        "name": "Jynx",
+        "level": 67,
+        "held": null,
+        "moves": [
+          "Blizzard",
+          "Psychic",
+          "Perish Song",
+          "Sing"
+        ]
+      },
+      {
+        "name": "Exeggutor",
+        "level": 67,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Ancientpower",
+          "Sleep Powder",
+          "Dream Eater",
+          "Softboiled"
+        ]
+      },
+      {
+        "name": "Grumpig",
+        "level": 67,
+        "held": null,
+        "moves": [
+          "Teeter Dance",
+          "Power Gem",
+          "Snore",
+          "Rest"
+        ]
+      },
+      {
+        "name": "Slowbro",
+        "level": 66,
+        "held": "Quick Claw",
+        "moves": [
+          "Flamethrower",
+          "Curse",
+          "Earthquake",
+          "Rock Smash"
+        ]
+      },
+      {
+        "name": "Xatu",
+        "level": 68,
+        "held": "Leftovers",
+        "moves": [
+          "Future Sight",
+          "Fly",
+          "Confuse Ray",
+          "Protect"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Koga",
+    "party": [
+      {
+        "name": "Tentacruel",
+        "level": 67,
+        "held": "Chesto Berry",
+        "moves": [
+          "Waterfall",
+          "Blizzard",
+          "Giga Drain",
+          "Rest"
+        ]
+      },
+      {
+        "name": "Muk",
+        "level": 67,
+        "held": "Leftovers",
+        "moves": [
+          "Minimize",
+          "Fire Blast",
+          "Sludge Bomb",
+          "Toxic"
+        ]
+      },
+      {
+        "name": "Swalot",
+        "level": 67,
+        "held": null,
+        "moves": [
+          "Swallow",
+          "Stockpile",
+          "Amnesia",
+          "Spit Up"
+        ]
+      },
+      {
+        "name": "Nidoking",
+        "level": 67,
+        "held": "Quick Claw",
+        "moves": [
+          "Lovely Kiss",
+          "Fire Blast",
+          "Surf",
+          "Earthquake"
+        ]
+      },
+      {
+        "name": "Venomoth",
+        "level": 67,
+        "held": "Brightpowder",
+        "moves": [
+          "Silver Wind",
+          "Signal Beam",
+          "Psychic",
+          "Supersonic"
+        ]
+      },
+      {
+        "name": "Crobat",
+        "level": 68,
+        "held": "Leftovers",
+        "moves": [
+          "Protect",
+          "Fly",
+          "Toxic",
+          "Confuse Ray"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Bruno",
+    "party": [
+      {
+        "name": "Steelix",
+        "level": 67,
+        "held": "Quick Claw",
+        "moves": [
+          "Crunch",
+          "Earthquake",
+          "Explosion",
+          "Iron Tail"
+        ]
+      },
+      {
+        "name": "Poliwrath",
+        "level": 68,
+        "held": "Scope Lens",
+        "moves": [
+          "Submission",
+          "Blizzard",
+          "Hydro Pump",
+          "Psychic"
+        ]
+      },
+      {
+        "name": "Heracross",
+        "level": 67,
+        "held": "Quick Claw",
+        "moves": [
+          "Cross Chop",
+          "Megahorn",
+          "Reversal",
+          "Earthquake"
+        ]
+      },
+      {
+        "name": "Hariyama",
+        "level": 68,
+        "held": null,
+        "moves": [
+          "Belly Drum",
+          "Smellingsalt",
+          "Focus Punch",
+          "Seismic Toss"
+        ]
+      },
+      {
+        "name": "Hitmontop",
+        "level": 67,
+        "held": "Scope Lens",
+        "moves": [
+          "Triple Kick",
+          "Double Kick",
+          "Dig",
+          "Pursuit"
+        ]
+      },
+      {
+        "name": "Machamp",
+        "level": 68,
+        "held": "Leftovers",
+        "moves": [
+          "Rock Slide",
+          "Earthquake",
+          "Body Slam",
+          "Cross Chop"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Karen",
+    "party": [
+      {
+        "name": "Umbreon",
+        "level": 68,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Growth",
+          "Shadow Ball",
+          "Hidden Power",
+          "Baton Pass"
+        ]
+      },
+      {
+        "name": "Weavile",
+        "level": 67,
+        "held": null,
+        "moves": [
+          "Faint Attack",
+          "Metal Claw",
+          "Beat Up",
+          "Blizzard"
+        ]
+      },
+      {
+        "name": "Persian",
+        "level": 68,
+        "held": "Scope Lens",
+        "moves": [
+          "Slash",
+          "Cut",
+          "Iron Tail",
+          "Hypnosis"
+        ]
+      },
+      {
+        "name": "Honchkrow",
+        "level": 68,
+        "held": "Sharp Beak",
+        "moves": [
+          "Sky Attack",
+          "Pursuit",
+          "Swagger",
+          "Psych Up"
+        ]
+      },
+      {
+        "name": "Absol",
+        "level": 67,
+        "held": "Leftovers",
+        "moves": [
+          "Psycho Cut",
+          "Shadow Claw",
+          "Perish Song",
+          "Slash"
+        ]
+      },
+      {
+        "name": "Houndoom",
+        "level": 69,
+        "held": "Charcoal",
+        "moves": [
+          "Flamethrower",
+          "Crunch",
+          "Iron Tail",
+          "Hidden Power"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Lance",
+    "party": [
+      {
+        "name": "Salamence",
+        "level": 69,
+        "held": null,
+        "moves": [
+          "Dragon Claw",
+          "Air Slash",
+          "Double-Edge",
+          "Thunderbolt"
+        ]
+      },
+      {
+        "name": "Dragonite",
+        "level": 68,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Blizzard",
+          "Extremespeed",
+          "Thunder",
+          "Hyper Beam"
+        ]
+      },
+      {
+        "name": "Gyarados",
+        "level": 69,
+        "held": "Quick Claw",
+        "moves": [
+          "Hidden Power",
+          "Hyper Beam",
+          "Hydro Pump",
+          "Fire Blast"
+        ]
+      },
+      {
+        "name": "Charizard",
+        "level": 68,
+        "held": "Leftovers",
+        "moves": [
+          "Fire Blast",
+          "Crunch",
+          "Earthquake",
+          "Swords Dance"
+        ]
+      },
+      {
+        "name": "Aerodactyl",
+        "level": 69,
+        "held": "Scope Lens",
+        "moves": [
+          "Sky Attack",
+          "Rock Slide",
+          "Earthquake",
+          "Iron Tail"
+        ]
+      },
+      {
+        "name": "Altaria",
+        "level": 70,
+        "held": "Silk Scarf",
+        "moves": [
+          "Dragon Dance",
+          "Play Rough",
+          "Safeguard",
+          "Sky Attack"
+        ]
+      }
+    ]
+  },
+  {
+    "leader": "Red",
+    "party": [
+      {
+        "name": "Pikachu",
+        "level": 93,
+        "held": "Light Ball",
+        "moves": [
+          "Thunderbolt",
+          "Surf",
+          "Iron Tail",
+          "Double Team"
+        ]
+      },
+      {
+        "name": "Snorlax",
+        "level": 75,
+        "held": "Leftovers",
+        "moves": [
+          "Amnesia",
+          "Curse",
+          "Body Slam",
+          "Earthquake"
+        ]
+      },
+      {
+        "name": "Charizard",
+        "level": 77,
+        "held": "Charcoal",
+        "moves": [
+          "Fire Blast",
+          "Wing Attack",
+          "Outrage",
+          "Steel Wing"
+        ]
+      },
+      {
+        "name": "Venusaur",
+        "level": 77,
+        "held": "Miracle Seed",
+        "moves": [
+          "Giga Drain",
+          "Body Slam",
+          "Sleep Powder",
+          "Leech Seed"
+        ]
+      },
+      {
+        "name": "Blastoise",
+        "level": 77,
+        "held": "Quick Claw",
+        "moves": [
+          "Ice Beam",
+          "Hydro Pump",
+          "Body Slam",
+          "Earthquake"
+        ]
+      },
+      {
+        "name": "Espeon",
+        "level": 80,
+        "held": "Sitrus Berry",
+        "moves": [
+          "Psychic",
+          "Shadow Ball",
+          "Hidden Power",
+          "Morning Sun"
+        ]
+      }
+    ]
+  }
+]
