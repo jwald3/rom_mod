@@ -56,6 +56,12 @@ export interface AnchorMap {
    * blocks), which is why Eevee can hold all eight of its evolutions.
    */
   evosPerSpecies: number
+  /**
+   * Highest valid evolution-method id. Vanilla has 15; pokeemerald-expansion
+   * adds more (Heart & Soul uses up to 27, e.g. "knows move"). Guards writes
+   * against garbage method values.
+   */
+  maxEvoMethod: number
 }
 
 export const SPECIES_NAME_LEN = 11
@@ -101,6 +107,7 @@ export const VANILLA_BPRE: AnchorMap = {
   trainerClassCount: 107,
   baseStatsLen: 28,
   evosPerSpecies: 5,
+  maxEvoMethod: 15,
   mapNameStride: 4,
   mapNamePtrOffset: 0,
   mapsecBase: 0x58,
@@ -151,6 +158,7 @@ export const HS_BPEE: AnchorMap = {
   trainerClassCount: 75,
   baseStatsLen: 40,
   evosPerSpecies: 8,
+  maxEvoMethod: 44, // expansion evolution-method range (H&S uses ≤27)
   mapNameStride: 8, // Emerald: {u8 x,y,w,h; const u8* name}
   mapNamePtrOffset: 4,
   mapsecBase: 0, // Emerald mapsec ids index the table directly

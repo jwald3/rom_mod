@@ -50,10 +50,17 @@ const char = r.learnsets[4].entries.map((e) => r.moves[e.moveId]?.name)
 check('charmander knows EMBER', char.includes('EMBER'), true)
 console.log('bulbasaur learnset:', bulba.join(' '))
 
-// --- evolutions ---
-const be = readEvolutionsFor(r.rom, r.anchors, 1)
-check('bulbasaur evolves via', be[0] && describeEvolution(be[0], r.itemNames), 'Lv 16')
-check('bulbasaur evolves into', be[0] && r.species[be[0].target]?.name, 'IVYSAUR')
+// --- evolutions (stride/slot-count correctness across the dex) ---
+const evoOf = (sp: number) => readEvolutionsFor(r.rom, r.anchors, sp)
+check('slots per species', r.anchors.evosPerSpecies, 8)
+check('bulbasaur → IVYSAUR Lv16', describeEvolution(evoOf(1)[0], r.itemNames) + ' ' + r.species[evoOf(1)[0].target].name, 'Lv 16 IVYSAUR')
+check('charmander → CHARMELEON Lv16', r.species[evoOf(4)[0].target]?.name, 'CHARMELEON')
+check('squirtle → WARTORTLE', r.species[evoOf(7)[0].target]?.name, 'WARTORTLE')
+check('wartortle → BLASTOISE Lv36', describeEvolution(evoOf(8)[0], r.itemNames), 'Lv 36')
+check('pikachu → RAICHU via stone', r.species[evoOf(25)[0].target]?.name, 'RAICHU')
+check('eevee has 8 evolutions', evoOf(133).length, 8)
+check('eevee → all distinct targets', new Set(evoOf(133).map((e) => e.target)).size, 8)
+console.log('eevee:', evoOf(133).map((e) => `${describeEvolution(e, r.itemNames)}→${r.species[e.target]?.name}`).join(', '))
 
 // --- items ---
 check('item #1', r.itemNames[1], 'MASTER BALL')

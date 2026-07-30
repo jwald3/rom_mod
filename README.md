@@ -20,7 +20,8 @@ Two things live here:
    Pokémon FireRed (BPRE) ROMs, plus the **Pokémon Heart & Soul** Emerald hack
    (BPEE, pokéemerald-expansion). Everything runs client-side; the ROM never
    leaves your machine. Edits level-up movesets, TM/HM + tutor compatibility,
-   evolutions (all 15 methods), wild encounters (grass/surf/rock-smash/
+   evolutions (vanilla's 15 methods plus expansion's such as "knows move"; up
+   to 8 branches per species on Heart & Soul), wild encounters (grass/surf/rock-smash/
    fishing, rates, levels, species), and NPC trainer teams (class, name,
    double-battle, per-Pokémon species/level/difficulty/held-item/moves), with
    undo/redo, a diff view against a baseline ROM, reverse "Locations" lookup,

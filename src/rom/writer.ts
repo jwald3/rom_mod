@@ -16,7 +16,6 @@ import {
   type WildGroupEdit,
 } from './tables/wild'
 import {
-  EVOS_PER_SPECIES,
   evoParamKind,
   evosEqual,
   readEvolutionsFor,
@@ -232,12 +231,16 @@ export function applyRomEdits(
   // Evolution lists: fixed 40-byte blocks per species, always in place.
   if (romEdits.evolutions) {
     for (const [species, evos] of [...romEdits.evolutions.entries()].sort((a, b) => a[0] - b[0])) {
-      if (evos.length > EVOS_PER_SPECIES) {
-        throw new Error(`Species #${species}: ${evos.length} evolutions, max ${EVOS_PER_SPECIES}`)
+      if (evos.length > anchors.evosPerSpecies) {
+        throw new Error(`Species #${species}: ${evos.length} evolutions, max ${anchors.evosPerSpecies}`)
       }
       evos.forEach((e, i) => {
         const where = `Species #${species} evolution ${i + 1}`
-        if (e.method < 1 || e.method > 15) throw new Error(`${where}: unknown method ${e.method}`)
+        // Expansion adds evolution methods past 15; the profile's ceiling bounds
+        // them (0 = empty slot). The param kind bounds the parameter below.
+        if (e.method < 1 || e.method > anchors.maxEvoMethod) {
+          throw new Error(`${where}: unknown method ${e.method}`)
+        }
         if (e.target < 1 || e.target >= anchors.speciesCount) {
           throw new Error(`${where}: invalid target species #${e.target}`)
         }
@@ -248,15 +251,18 @@ export function applyRomEdits(
         if (kind === 'item' && (e.param < 0 || e.param >= anchors.itemCount)) {
           throw new Error(`${where}: invalid item #${e.param}`)
         }
+        if (kind === 'move' && (e.param < 0 || e.param >= anchors.moveCount)) {
+          throw new Error(`${where}: invalid move #${e.param}`)
+        }
       })
-      const offset = anchors.evolutions + species * EVOS_PER_SPECIES * 8
-      out.set(serializeEvolutions(evos), offset)
+      const offset = anchors.evolutions + species * anchors.evosPerSpecies * 8
+      out.set(serializeEvolutions(evos, anchors.evosPerSpecies), offset)
       ops.push({
         species,
         kind: 'evolution',
         oldOffset: offset,
         newOffset: offset,
-        byteLength: EVOS_PER_SPECIES * 8,
+        byteLength: anchors.evosPerSpecies * 8,
         erasedOld: false,
       })
     }

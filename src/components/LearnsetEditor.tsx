@@ -12,8 +12,8 @@ import { WILD_KINDS, WILD_KIND_LABELS, WILD_SLOT_PERCENTS } from '../rom/tables/
 import {
   describeEvolution,
   evoParamKind,
+  evoMethodLabel,
   EVO_METHOD_LABELS,
-  EVOS_PER_SPECIES,
   type Evolution,
 } from '../rom/tables/evolutions'
 import { SpeciesPicker } from './SpeciesPicker'
@@ -389,6 +389,9 @@ export function LearnsetEditor() {
                             {label}
                           </option>
                         ))}
+                        {!(evo.method in EVO_METHOD_LABELS) && (
+                          <option value={evo.method}>{evoMethodLabel(evo.method)}</option>
+                        )}
                       </select>
                     </td>
                     <td className="px-3 py-1.5">
@@ -422,6 +425,20 @@ export function LearnsetEditor() {
                           ))}
                         </select>
                       )}
+                      {kind === 'move' && (
+                        <select
+                          value={evo.param}
+                          onChange={(e) => setEvo(i, { param: Number(e.target.value) })}
+                          className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-200 outline-none focus:border-emerald-500"
+                          title="Evolves upon knowing this move"
+                        >
+                          {loaded.moves.map((m) => (
+                            <option key={m.id} value={m.id}>
+                              {m.name || `move #${m.id}`}
+                            </option>
+                          ))}
+                        </select>
+                      )}
                       {kind === 'none' && <span className="text-xs text-slate-600">—</span>}
                     </td>
                     <td className="px-3 py-1.5 text-right">
@@ -449,15 +466,15 @@ export function LearnsetEditor() {
           <div className="relative mt-2">
             <button
               onClick={() => setEvoPicker('add')}
-              disabled={evolutions.length >= EVOS_PER_SPECIES}
+              disabled={evolutions.length >= loaded.anchors.evosPerSpecies}
               className="w-full rounded-lg border border-dashed border-slate-700 px-3 py-2 text-left text-sm text-slate-400 hover:border-emerald-600 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-40"
               title={
-                evolutions.length >= EVOS_PER_SPECIES
-                  ? `The ROM supports at most ${EVOS_PER_SPECIES} evolutions per species`
+                evolutions.length >= loaded.anchors.evosPerSpecies
+                  ? `The ROM supports at most ${loaded.anchors.evosPerSpecies} evolutions per species`
                   : 'Add an evolution branch'
               }
             >
-              + Add evolution… ({evolutions.length}/{EVOS_PER_SPECIES})
+              + Add evolution… ({evolutions.length}/{loaded.anchors.evosPerSpecies})
             </button>
             {evoPicker === 'add' && (
               <SpeciesPicker

@@ -2,10 +2,12 @@ import type { RomBuffer } from '../buffer'
 import type { AnchorMap } from '../anchors'
 
 /**
- * Evolution table: per species, 5 entries of
+ * Evolution table: per species, `evosPerSpecies` entries of
  *   [method u16, param u16, targetSpecies u16, unused u16]
  * Method 0 = empty slot. Params: level for level methods, item id for
- * stone/held-item methods, beauty threshold for method 15.
+ * stone/held-item methods, move id for method 22, beauty threshold for 15.
+ * Vanilla FireRed/Emerald store 5 entries (40-byte blocks); pokeemerald-
+ * expansion (Heart & Soul) stores 8 (64-byte blocks).
  */
 
 export interface Evolution {

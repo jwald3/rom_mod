@@ -46,7 +46,7 @@ const A = {
   tutors: 0x91a098, tutorCount: 30,
   tmCompat: 0x93a010,
   tutorCompat: 0x9667ac,
-  evolutions: 0x946638,
+  evolutions: 0x946620, evosPerSpecies: 8,
   items: 0x8fe910, itemCount: 626,
   wild: 0xd3bd90,
   mapBanks: 0xf39750,
@@ -77,7 +77,8 @@ const rows = [
   ['moves.tmcompat', A.tmCompat, () => 'bitfield rows (8B/species)'],
   ['moves.tutorcompat', A.tutorCompat, () => 'bitfield rows (4B/species)'],
   ['evolutions', A.evolutions, () => {
-    const o = A.evolutions + 40; return `bulba m${u16(o)}/p${u16(o + 2)}/${name(A.speciesNames, 11, u16(o + 4)).trim()}`
+    const o = A.evolutions + A.evosPerSpecies * 8; // species 1
+    return `bulba m${u16(o)}/p${u16(o + 2)}/${name(A.speciesNames, 11, u16(o + 4)).trim()}`
   }],
   ['items.stats', A.items, () => `#1 ${name(A.items, 44, 1)}`],
   ['wild', A.wild, () => `hdr0 bank ${hs[A.wild]} map ${hs[A.wild + 1]}`],

@@ -9,6 +9,7 @@ import { loadRom } from '../src/rom/loadRom'
 import { applyRomEdits, type RomEdits } from '../src/rom/writer'
 import { wildKey } from '../src/rom/tables/wild'
 import { trainerToEdit } from '../src/rom/tables/trainers'
+import { readEvolutionsFor } from '../src/rom/tables/evolutions'
 
 const path = process.argv[2] || 'C:/Users/Waldo/Downloads/H&S/Pokemon Heart & Soul.gba'
 const toml = process.argv[3] ? readFileSync(process.argv[3], 'utf8') : undefined
@@ -35,12 +36,18 @@ const newGrass = { rate: grass.rate, slots: grass.slots.map((s, i) => (i === 0 ?
 // grow a learnset well past its slot to force a repoint
 const bulbaLs = [...r.learnsets[1].entries, { level: 50, moveId: 1 }, { level: 55, moveId: 2 }]
 
+// Eevee keeps all 8 evolutions (incl. expansion methods 2/7/26) round-tripped
+const eeveeEvos = readEvolutionsFor(r.rom, r.anchors, 133)
+
 const edits: RomEdits = {
   learnsets: new Map([[1, bulbaLs]]),
   tmCompat: new Map([[1, r.tmCompat[1].map((v, i) => (i === 0 ? !v : v))]]),
   tutorCompat: new Map([[1, r.tutorCompat[1].map((v, i) => (i === 0 ? !v : v))]]),
   wild: new Map([[wildKey(0, 'grass'), newGrass]]),
-  evolutions: new Map([[1, [{ method: 4, param: 20, target: 3 }]]]), // Bulbasaur -> Venusaur @20
+  evolutions: new Map([
+    [1, [{ method: 4, param: 20, target: 3 }]], // Bulbasaur -> Venusaur @20
+    [133, eeveeEvos], // rewrite all 8 Eevee branches, incl. expansion methods
+  ]),
   heldItems: new Map([[1, { item1: 1, item2: 2 }]]),
   trainers: new Map([[sawyerIdx, sawyer]]),
 }
@@ -61,6 +68,8 @@ ok('tutorCompat toggled', r2.tutorCompat[1][0], !r.tutorCompat[1][0])
 ok('wild grass[0] species', r2.wildAreas[0].groups.grass!.slots[0].species, 25)
 ok('evolution changed', r2.evolutions[1][0]?.target, 3)
 ok('evolution param', r2.evolutions[1][0]?.param, 20)
+ok('eevee 8 evolutions round-trip', r2.evolutions[133].length, 8)
+ok('eevee expansion method preserved', r2.evolutions[133].some((e) => e.method === 26), true)
 ok('held item1', r2.species[1].heldItem1, 1)
 ok('trainer party grew', r2.trainers[sawyerIdx].party.length, sawyer.party.length)
 ok('trainer new mon level', r2.trainers[sawyerIdx].party.at(-1)?.level, 42)
