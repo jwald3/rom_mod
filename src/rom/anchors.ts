@@ -70,6 +70,14 @@ export interface AnchorMap {
   multichoice: number
   /** Celadon Game Corner prize-room script entry (Pokémon menu). */
   gcScript: number
+  /**
+   * ROM offset range to scan for `pokemart` script commands (shop editor).
+   * FireRed keeps all map scripts in a narrow window; pokeemerald-expansion
+   * (Heart & Soul) scatters them across the whole 32 MB image, so BPEE scans
+   * the entire ROM. `scriptScanEnd = 0` means "scan to the end of the ROM".
+   */
+  scriptScanStart: number
+  scriptScanEnd: number
 }
 
 export const SPECIES_NAME_LEN = 11
@@ -121,6 +129,8 @@ export const VANILLA_BPRE: AnchorMap = {
   mapsecBase: 0x58,
   multichoice: 0x3e04b0,
   gcScript: 0x16cb75,
+  scriptScanStart: 0x140000, // FireRed map scripts live in this window
+  scriptScanEnd: 0x1c0000,
 }
 
 /**
@@ -174,4 +184,8 @@ export const HS_BPEE: AnchorMap = {
   mapsecBase: 0, // Emerald mapsec ids index the table directly
   multichoice: 0, // Celadon Game Corner prizes unresolved for H&S (FireRed-specific)
   gcScript: 0,
+  // Expansion scatters pokemart commands across the whole 32 MB ROM (marts run
+  // from ~0x83f00 up past 0x400000), so scan the entire image (end = 0).
+  scriptScanStart: 0,
+  scriptScanEnd: 0,
 }
