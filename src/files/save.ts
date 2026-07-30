@@ -6,6 +6,8 @@ import {
   computeWildDirtyKeys,
   computeEvoDirtySet,
   computeTrainerDirtySet,
+  computeGcDirty,
+  computeShopDirty,
 } from '../state/editStore'
 import { applyRomEdits, type RomEdits } from '../rom/writer'
 import { loadRom } from '../rom/loadRom'
@@ -13,6 +15,7 @@ import type { LearnsetEntry } from '../rom/tables/learnsets'
 import type { WildGroupEdit } from '../rom/tables/wild'
 import type { Evolution } from '../rom/tables/evolutions'
 import type { TrainerEdit } from '../rom/tables/trainers'
+import type { Prize, PrizeKind } from '../rom/tables/gameCorner'
 import { stashBackup, latestBackup } from './backup'
 
 function setSaveState(saveState: SaveState) {
@@ -21,13 +24,16 @@ function setSaveState(saveState: SaveState) {
 
 function buildEdits(): { edits: RomEdits; count: number } {
   const { loaded } = useRomStore.getState()
-  const { drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, trainerDrafts } = useEditStore.getState()
+  const { drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, trainerDrafts, gcDrafts, shopDrafts } =
+    useEditStore.getState()
   const learnsets = new Map<number, LearnsetEntry[]>()
   const tmCompat = new Map<number, boolean[]>()
   const tutorCompat = new Map<number, boolean[]>()
   const wild = new Map<string, WildGroupEdit>()
   const evolutions = new Map<number, Evolution[]>()
   const trainers = new Map<number, TrainerEdit>()
+  const gameCorner = new Map<PrizeKind, Prize[]>()
+  const shops = new Map<number, number[]>()
   if (loaded) {
     for (const s of computeDirtySet(drafts, loaded.learnsets)) learnsets.set(s, drafts[s])
     for (const s of computeCompatDirtySet(tmDrafts, loaded.tmCompat)) tmCompat.set(s, tmDrafts[s])
@@ -37,11 +43,20 @@ function buildEdits(): { edits: RomEdits; count: number } {
     for (const key of computeWildDirtyKeys(wildDrafts, loaded)) wild.set(key, wildDrafts[key])
     for (const s of computeEvoDirtySet(evoDrafts, loaded)) evolutions.set(s, evoDrafts[s])
     for (const t of computeTrainerDirtySet(trainerDrafts, loaded)) trainers.set(t, trainerDrafts[t])
+    for (const kind of computeGcDirty(gcDrafts, loaded)) gameCorner.set(kind, gcDrafts[kind]!)
+    for (const cmd of computeShopDirty(shopDrafts, loaded)) shops.set(cmd, shopDrafts[cmd])
   }
   return {
-    edits: { learnsets, tmCompat, tutorCompat, wild, evolutions, trainers },
+    edits: { learnsets, tmCompat, tutorCompat, wild, evolutions, trainers, gameCorner, shops },
     count:
-      learnsets.size + tmCompat.size + tutorCompat.size + wild.size + evolutions.size + trainers.size,
+      learnsets.size +
+      tmCompat.size +
+      tutorCompat.size +
+      wild.size +
+      evolutions.size +
+      trainers.size +
+      gameCorner.size +
+      shops.size,
   }
 }
 
@@ -116,6 +131,8 @@ export async function saveInPlace(): Promise<void> {
       wildDrafts: {},
       evoDrafts: {},
       trainerDrafts: {},
+      gcDrafts: {},
+      shopDrafts: {},
     })
 
     const inPlace = ops.filter((o) => o.kind === 'in-place').length
@@ -124,8 +141,10 @@ export async function saveInPlace(): Promise<void> {
     const evoOps = ops.filter((o) => o.kind === 'evolution').length
     const trainerOps = ops.filter((o) => o.kind === 'trainer' || o.kind === 'trainer-repointed').length
     const trainerRepointed = ops.filter((o) => o.kind === 'trainer-repointed').length
+    const gcOps = ops.filter((o) => o.kind === 'game-corner').length
+    const shopOps = ops.filter((o) => o.kind === 'shop').length
     const learnsetOps = inPlace + repointed
-    const compat = ops.length - learnsetOps - wildOps - evoOps - trainerOps
+    const compat = ops.length - learnsetOps - wildOps - evoOps - trainerOps - gcOps - shopOps
     const parts = [
       learnsetOps > 0 ? `Saved ${learnsetOps} learnset${learnsetOps === 1 ? '' : 's'}` : null,
       repointed > 0 ? `${repointed} repointed to free space` : null,
@@ -137,6 +156,8 @@ export async function saveInPlace(): Promise<void> {
             trainerRepointed > 0 ? ` (${trainerRepointed} party repointed)` : ''
           }`
         : null,
+      gcOps > 0 ? `${gcOps} Game Corner list${gcOps === 1 ? '' : 's'}` : null,
+      shopOps > 0 ? `${shopOps} shop${shopOps === 1 ? '' : 's'}` : null,
       backupOk ? 'backup kept' : '⚠ backup failed',
     ].filter(Boolean)
     setSaveState({ status: 'saved', message: parts.join(' · ') })

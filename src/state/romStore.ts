@@ -21,12 +21,16 @@ interface RomStore {
   filterNoWild: boolean
   /** Filter by evolution method category ('any' = off, 'none' = doesn't evolve). */
   evoFilter: string
-  /** Pokémon editing vs wild-encounter (map) vs NPC trainer editing. */
-  viewMode: 'species' | 'maps' | 'trainers'
+  /** Pokémon editing vs wild-encounter (map) vs trainers vs Game Corner prizes vs shops. */
+  viewMode: 'species' | 'maps' | 'trainers' | 'gamecorner' | 'shops'
   selectedArea: number
   mapSearch: string
   selectedTrainer: number
   trainerSearch: string
+  /** Which Game Corner prize list is being edited. */
+  selectedPrizeKind: 'pokemon' | 'tm' | 'item'
+  /** Command offset of the shop being edited (0 = first/none yet). */
+  selectedShop: number
   /** Second ROM (e.g. the unmodified base) for the diff view. */
   baseline: LoadedRom | null
   baselineError: string | null
@@ -39,11 +43,13 @@ interface RomStore {
   setShowGaps(b: boolean): void
   setFilterNoWild(b: boolean): void
   setEvoFilter(f: string): void
-  setViewMode(mode: 'species' | 'maps' | 'trainers'): void
+  setViewMode(mode: 'species' | 'maps' | 'trainers' | 'gamecorner' | 'shops'): void
   selectArea(index: number): void
   setMapSearch(s: string): void
   selectTrainer(index: number): void
   setTrainerSearch(s: string): void
+  selectPrizeKind(kind: 'pokemon' | 'tm' | 'item'): void
+  selectShop(cmdOffset: number): void
   setDiffOpen(open: boolean): void
 }
 
@@ -63,6 +69,8 @@ export const useRomStore = create<RomStore>((set) => ({
   mapSearch: '',
   selectedTrainer: 1,
   trainerSearch: '',
+  selectedPrizeKind: 'pokemon',
+  selectedShop: 0,
   baseline: null,
   baselineError: null,
   diffOpen: false,
@@ -123,5 +131,7 @@ export const useRomStore = create<RomStore>((set) => ({
   setMapSearch: (mapSearch) => set({ mapSearch }),
   selectTrainer: (selectedTrainer) => set({ selectedTrainer, viewMode: 'trainers' }),
   setTrainerSearch: (trainerSearch) => set({ trainerSearch }),
+  selectPrizeKind: (selectedPrizeKind) => set({ selectedPrizeKind, viewMode: 'gamecorner' }),
+  selectShop: (selectedShop) => set({ selectedShop, viewMode: 'shops' }),
   setDiffOpen: (diffOpen) => set({ diffOpen }),
 }))

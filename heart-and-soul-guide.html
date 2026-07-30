@@ -1,0 +1,963 @@
+
+<style>
+:root{
+  --ink:#14151d; --ink-2:#1c1e28; --panel:#f6f2e7; --panel-2:#efe9d8;
+  --paper:#faf6ec; --line:#e0d8c2; --line-strong:#cdc3a6;
+  --text:#26241d; --muted:#6b6553; --faint:#8f8973;
+  --gold:#b0862f; --gold-deep:#8a681f; --gold-soft:#d8b878;
+  --silver:#6f7885; --silver-soft:#9aa4b0;
+  --ember:#c0552f; --ember-soft:#e07a4e;
+  --good:#3f7d47;
+  --shadow:0 1px 2px rgba(40,32,10,.06),0 8px 28px -12px rgba(40,32,10,.18);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Helvetica,Arial,sans-serif;
+  --mono:"SF Mono","JetBrains Mono","Cascadia Mono",Consolas,"Roboto Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ink:#0c0d13; --ink-2:#12131b; --panel:#181a24; --panel-2:#1f2230;
+    --paper:#101119; --line:#2a2d3b; --line-strong:#3a3e50;
+    --text:#e7e2d3; --muted:#9d987f; --faint:#726d5a;
+    --gold:#d8b25a; --gold-deep:#c8a24a; --gold-soft:#e6cf94;
+    --silver:#9aa4b3; --silver-soft:#6f7885;
+    --ember:#e07a4e; --ember-soft:#c0552f;
+    --good:#6bbe73;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 40px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="light"]{
+  --ink:#14151d; --ink-2:#1c1e28; --panel:#f6f2e7; --panel-2:#efe9d8;
+  --paper:#faf6ec; --line:#e0d8c2; --line-strong:#cdc3a6;
+  --text:#26241d; --muted:#6b6553; --faint:#8f8973;
+  --gold:#b0862f; --gold-deep:#8a681f; --gold-soft:#d8b878;
+  --silver:#6f7885; --silver-soft:#9aa4b0; --ember:#c0552f; --ember-soft:#e07a4e; --good:#3f7d47;
+  --shadow:0 1px 2px rgba(40,32,10,.06),0 8px 28px -12px rgba(40,32,10,.18);
+}
+:root[data-theme="dark"]{
+  --ink:#0c0d13; --ink-2:#12131b; --panel:#181a24; --panel-2:#1f2230;
+  --paper:#101119; --line:#2a2d3b; --line-strong:#3a3e50;
+  --text:#e7e2d3; --muted:#9d987f; --faint:#726d5a;
+  --gold:#d8b25a; --gold-deep:#c8a24a; --gold-soft:#e6cf94;
+  --silver:#9aa4b3; --silver-soft:#6f7885; --ember:#e07a4e; --ember-soft:#c0552f; --good:#6bbe73;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 40px -14px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--serif);line-height:1.65;
+  -webkit-font-smoothing:antialiased;font-size:17px}
+a{color:var(--gold-deep);text-decoration:none}
+:where(a):focus-visible,:where(button):focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:3px}
+b,strong{color:var(--text);font-weight:700}
+em{font-style:italic;color:var(--muted)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;margin:0 calc(50% - 50vw);padding:clamp(56px,10vw,120px) 0 clamp(40px,7vw,80px);
+  background:
+    radial-gradient(120% 90% at 80% -10%, color-mix(in srgb,var(--gold) 22%, transparent), transparent 60%),
+    linear-gradient(180deg,var(--ink),var(--ink-2));
+  color:#efe7d2;overflow:hidden;border-bottom:3px solid var(--gold)}
+.hero::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:radial-gradient(circle at 1px 1px, rgba(216,184,120,.14) 1px, transparent 0);background-size:26px 26px}
+.hero::after{content:"";position:absolute;right:-14vw;top:-14vw;width:46vw;height:46vw;border-radius:50%;
+  background:conic-gradient(from 200deg, transparent, color-mix(in srgb,var(--gold) 30%, transparent), transparent 55%);
+  filter:blur(8px);opacity:.5;pointer-events:none}
+.hero-inner{position:relative;max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold-soft);margin-bottom:22px}
+.hero h1{font-family:var(--serif);font-weight:800;font-size:clamp(48px,11vw,132px);line-height:.9;margin:0;
+  letter-spacing:-.02em;text-wrap:balance;color:#f4ecd8}
+.hero h1 .hs{background:linear-gradient(180deg,#f0dca0,var(--gold) 55%,var(--gold-deep));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  font-style:italic;font-weight:800}
+.tagline{max-width:46ch;margin:28px 0 0;font-size:clamp(17px,2.2vw,21px);color:#d9d0ba;line-height:1.5}
+.hero-stats{display:flex;flex-wrap:wrap;gap:clamp(20px,5vw,56px);margin-top:44px;
+  border-top:1px solid rgba(216,184,120,.25);padding-top:26px}
+.hero-stats div{display:flex;flex-direction:column;gap:2px}
+.hero-stats b{font-family:var(--mono);font-size:clamp(24px,4vw,34px);font-weight:600;color:var(--gold-soft);
+  font-variant-numeric:tabular-nums;line-height:1}
+.hero-stats span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a89f88;font-family:var(--sans)}
+
+/* ---------- TOC ---------- */
+.toc{position:sticky;top:0;z-index:20;display:flex;gap:2px;flex-wrap:wrap;
+  margin:0 calc(50% - 50vw);padding:10px clamp(16px,4vw,48px);
+  background:color-mix(in srgb,var(--paper) 88%, transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);justify-content:center}
+.toc a{font-family:var(--sans);font-size:12.5px;letter-spacing:.02em;color:var(--muted);
+  padding:7px 13px;border-radius:100px;white-space:nowrap;transition:background .15s,color .15s}
+.toc a:hover{background:var(--panel-2);color:var(--text)}
+.toc a.active{background:var(--gold);color:var(--ink);font-weight:600}
+
+/* ---------- CHAPTERS ---------- */
+.chapter{padding:clamp(48px,8vw,88px) 0;border-bottom:1px solid var(--line)}
+.chapter.narrow{max-width:820px}
+.chapter-head{display:flex;align-items:baseline;gap:18px;margin-bottom:8px}
+.ch-mark{font-family:var(--mono);font-size:14px;color:var(--gold);letter-spacing:.05em;
+  border:1px solid var(--line-strong);padding:4px 9px;border-radius:6px;flex:none;line-height:1}
+.chapter-head h2{font-size:clamp(30px,5vw,46px);font-weight:800;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.lead{font-size:clamp(17px,1.6vw,19.5px);color:var(--muted);max-width:70ch;margin:14px 0 34px;line-height:1.6}
+.chapter p{max-width:68ch}
+.sub-head{font-size:clamp(20px,3vw,27px);font-weight:800;letter-spacing:-.01em;margin:52px 0 0;
+  padding-top:10px;display:flex;align-items:center;gap:12px;text-wrap:balance}
+.sub-head::before{content:"";width:26px;height:2px;background:var(--gold);flex:none}
+.sub-lead{font-size:16px;color:var(--muted);max-width:70ch;margin:10px 0 26px;line-height:1.55}
+
+/* ---------- CALLOUTS / TIPS ---------- */
+.callout{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:10px;padding:22px 26px;margin:26px 0;box-shadow:var(--shadow)}
+.callout-tag{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-deep);font-weight:700;margin-bottom:8px}
+.callout p{margin:0;max-width:72ch}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:28px}
+.tip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.tip h5{font-family:var(--sans);font-size:13.5px;margin:0 0 8px;color:var(--ember);letter-spacing:.01em;
+  display:flex;align-items:center;gap:8px}
+.tip h5::before{content:"";width:7px;height:7px;background:var(--ember);border-radius:50%;flex:none}
+.tip p{font-size:14.5px;margin:0;color:var(--muted);line-height:1.55}
+
+/* ---------- ZONES — two-column magazine ---------- */
+.zones{display:flex;flex-direction:column}
+.zone{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(24px,4vw,52px);
+  align-items:start;padding:30px 0;border-top:1px solid var(--line)}
+.zone:first-child{border-top:0;padding-top:8px}
+.zone-notable{grid-template-columns:minmax(0,1fr)}
+.zone-body{min-width:0}
+.zone-name{font-family:var(--serif);font-size:clamp(21px,2.6vw,27px);font-weight:800;letter-spacing:-.01em;
+  margin:0 0 12px;color:var(--text);position:relative;padding-left:22px;text-wrap:balance}
+.zone-name::before{content:"";position:absolute;left:0;top:.34em;width:11px;height:11px;flex:none;
+  border-radius:2px;transform:rotate(45deg);background:var(--gold);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 20%, transparent)}
+.zone-body p{font-size:16.5px;color:var(--text);margin:0;line-height:1.68;max-width:64ch}
+.zone-body p b,.zone-body p strong{color:var(--text);font-weight:700;
+  border-bottom:1.5px solid color-mix(in srgb,var(--gold) 45%, transparent)}
+.zone-side{position:sticky;top:64px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:16px 18px;box-shadow:var(--shadow)}
+.zone-side-tag{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;color:var(--gold-deep);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px}
+.zone-side-tag::after{content:"";flex:1;height:1px;background:var(--line-strong)}
+.enc{overflow-x:auto}
+.enc table{width:100%;border-collapse:collapse;font-size:13px}
+.enc th{text-align:left;font-family:var(--sans);font-weight:700;font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--silver);white-space:nowrap;vertical-align:top;
+  padding:7px 12px 7px 0}
+.enc td{padding:7px 0;vertical-align:top;color:var(--text);border-top:1px solid var(--line);line-height:1.5}
+.enc tr:first-child td,.enc tr:first-child th{border-top:0}
+.enc .lv{font-family:var(--mono);font-size:11px;color:var(--gold-deep);white-space:nowrap;
+  padding-right:12px;font-variant-numeric:tabular-nums}
+@media (max-width:760px){
+  .zone{grid-template-columns:1fr;gap:16px}
+  .zone-side{position:static}
+}
+
+/* ---------- GYMS ---------- */
+.gyms{display:flex;flex-direction:column;gap:40px}
+.gym{position:relative;display:grid;grid-template-columns:64px 1fr;gap:0;align-items:stretch}
+.gym-num{background:var(--ink);border-radius:14px 0 0 14px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:18px 0}
+.gym-num span{font-family:var(--sans);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-soft);writing-mode:vertical-rl;text-orientation:mixed}
+.gym-num b{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--gold);
+  font-variant-numeric:tabular-nums}
+.boss{background:var(--panel);border:1px solid var(--line);border-left:0;border-radius:0 14px 14px 0;
+  padding:clamp(24px,3.5vw,38px);box-shadow:var(--shadow)}
+.league .boss,.red-fight .boss{border-left:1px solid var(--line);border-radius:14px}
+.boss-eyebrow{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);font-weight:600;margin-bottom:6px}
+.boss-name{font-size:clamp(26px,3.8vw,38px);font-weight:800;letter-spacing:-.015em;margin:0;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.boss-note{font-size:15.5px;color:var(--muted);margin:14px 0 4px;line-height:1.62;max-width:78ch;
+  padding-left:16px;border-left:2px solid var(--gold-soft)}
+.boss-note b{color:var(--text)}
+
+/* ---------- MATCHUP CHART ---------- */
+.matchup{margin:24px 0 6px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
+  padding:20px 22px}
+.matchup-read{font-size:15px;color:var(--text);line-height:1.6;max-width:80ch;margin-bottom:18px}
+.matchup-read b{color:var(--text);font-weight:700}
+.matchup-grid{display:flex;flex-direction:column;gap:10px;
+  padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.mu-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mu-label{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:700;width:74px;flex:none}
+.mu-bring .mu-label{color:var(--good)}
+.mu-avoid .mu-label{color:var(--ember)}
+.mu-chips{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.type-none{font-family:var(--sans);font-size:13px;color:var(--muted);font-style:italic}
+.mu-counters{margin-top:16px}
+.mu-counters .mu-label{display:block;width:auto;margin-bottom:10px;color:var(--gold-deep)}
+.mu-counters ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.mu-counters li{position:relative;padding-left:22px;font-size:14.5px;color:var(--muted);line-height:1.5}
+.mu-counters li::before{content:"";position:absolute;left:4px;top:.55em;width:7px;height:7px;
+  background:var(--gold);border-radius:50%;transform:rotate(45deg)}
+.mu-counters li b{color:var(--text);font-weight:700}
+.team-label{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;color:var(--gold-deep);margin:26px 0 0;
+  display:flex;align-items:center;gap:12px}
+.team-label::after{content:"";flex:1;height:1px;background:var(--line-strong)}
+.party{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px}
+.mon{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+.mon-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.mon-name{font-family:var(--sans);font-weight:700;font-size:15px;letter-spacing:.01em}
+.mon .lvl{font-family:var(--mono);font-size:11.5px;color:var(--ink);background:var(--gold-soft);
+  padding:1px 7px;border-radius:100px;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.held{font-family:var(--sans);font-size:11.5px;color:var(--ember);margin-top:5px;font-style:italic}
+.moves{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px}
+.moves span{font-family:var(--sans);font-size:10.5px;color:var(--muted);background:var(--paper);
+  border:1px solid var(--line);padding:2px 7px;border-radius:5px;line-height:1.35}
+
+/* type chip */
+.type{font-family:var(--sans);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;background:var(--tc);padding:3px 10px;border-radius:100px;line-height:1;
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,.18)}
+
+/* league / endgame */
+.league{display:flex;flex-direction:column;gap:20px}
+.red-fight{margin-top:34px}
+.red-fight .boss{border:1px solid var(--gold);
+  background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--ember) 7%, var(--panel)))}
+.signoff{font-size:17px;color:var(--muted);font-style:italic;margin-top:30px;text-align:center;max-width:60ch;margin-left:auto;margin-right:auto}
+
+/* choose starter callout accent */
+.callout.choose{border-left-color:var(--ember)}
+.callout.choose .callout-tag{color:var(--ember)}
+
+.foot{padding:40px 0 70px;color:var(--faint);font-size:13.5px;font-family:var(--sans);line-height:1.6}
+.foot p{max-width:80ch;margin:0}
+
+@media (max-width:560px){
+  body{font-size:16px}
+  .gym{grid-template-columns:44px 1fr}
+  .gym-num b{font-size:18px}
+  .party{grid-template-columns:1fr}
+  .toc{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}
+  .mu-row{align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">The Complete Field Guide · Fan ROM Hack</div>
+      <h1>Pokémon<br><span class="hs">Heart &amp; Soul</span></h1>
+      <p class="tagline">A full Johto-to-Kanto walkthrough — sixteen gyms, the Elite Four, and the long climb to Red. Every route, every wild encounter, every leader's modern roster.</p>
+      <div class="hero-stats">
+        <div><b>16</b><span>Gym Badges</span></div>
+        <div><b>462</b><span>Pokémon</span></div>
+        <div><b>90</b><span>Zones Charted</span></div>
+        <div><b>Lv 93</b><span>Final Boss</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Contents">
+    <a href="#start">Getting Started</a>
+    <a href="#johto">Johto · Badges 1–8</a>
+    <a href="#crossing">The League Road</a>
+    <a href="#kanto">Kanto · Badges 9–16</a>
+    <a href="#league">Elite Four &amp; Champion</a>
+    <a href="#red">Mt. Silver &amp; Red</a>
+  </nav>
+
+  <section id="start" class="chapter">
+    <div class="chapter-head"><span class="ch-mark">§1</span><h2>Getting Started</h2></div>
+    <p class="lead">You've booted a modded FireRed/Emerald hybrid that plays like an all-star cut of <em>Gold &amp; Silver</em>: the full <strong>Johto → Kanto</strong> journey, <strong>sixteen gyms</strong>, and a final climb to <strong>Red</strong> atop Mt. Silver — but every roster has been dragged into the modern era. Leaders field six-Pokémon teams with held items, competitive movesets, and cross-generation evolutions (Kleavor, Ursaluna, Annihilape, Wyrdeer, Kingdra). This guide walks the whole region in order, tells you what's in the grass, and hands you the battle plans.</p>
+    <div class="callout choose">
+      <div class="callout-tag">Choosing a Starter</div>
+      <p>Professor Elm's lab starts you with the classic Johto trio — <strong>Chikorita</strong>, <strong>Cyndaquil</strong>, or <strong>Totodile</strong>. There's no wrong pick, but the road ahead skews the odds: <strong>Cyndaquil</strong> has the smoothest early game (Falkner is trivial, Bugsy folds, and Fire coverage matters for the Bug/Grass/Ice/Steel gyms that dominate Johto). <strong>Totodile</strong> is the safest all-rounder with the best raw stats. <strong>Chikorita</strong> is the hard-mode run — it's walled by four of the first six leaders — but a Meganium that survives becomes a superb bulky pivot.</p>
+    </div>
+    <div class="tips">
+      <div class="tip"><h5>Catch early, catch often</h5><p>This hack front-loads elite catches. Cherrygrove's grass can drop an <b>Eevee line</b>; Sprout Tower hides <b>Gastly</b>; the National Park has wild <b>Scyther</b>. A great mon caught at level 6 is worth more than any TM.</p></div>
+      <div class="tip"><h5>Mind the day/night clock</h5><p>Spawns rotate with the in-game time. Nocturnal grass swaps in Hoothoot, Zubat, and the Gastly line; daytime favors birds and normals. If you can't find something, change the hour.</p></div>
+      <div class="tip"><h5>Build coverage, not a monotype</h5><p>Leaders run six-mon teams with held berries and setup moves. A balanced squad with answers to Steel, Ice, Ground, and Dragon will carry you further than a single overleveled ace.</p></div>
+    </div>
+  </section>
+
+  <section id="johto" class="chapter">
+    <div class="chapter-head"><span class="ch-mark">§2</span><h2>Johto · The First Eight Badges</h2></div>
+    <p class="lead">New Bark Town to Blackthorn City. Follow the road top to bottom — each zone carries a write-up and its real encounter table (pulled straight from the ROM), and every <strong>gym leader appears inline the moment you reach their city</strong>, complete with a matchup chart and full roster. Watch the day/night notes; a good chunk of the grass rotates with the clock.</p>
+    <div class="zones"><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">New Bark Town</h4>
+      <p>Where it all begins. Professor Elm hands you your starter and sends you north to Mr. Pokémon's house on an errand that quietly kicks off the whole adventure. There's nothing in the town grass itself, but the water is worth remembering for later: once you have Surf, the bay off New Bark hides <strong>Tentacool</strong>, and a rod after dark pulls up <strong>Chinchou</strong> and even <strong>Lanturn</strong> — a strong, unusual early Water/Electric type if you circle back. Heal up, save, and step out into Route 29.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;25–29</td><td>Tentacool</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Chinchou, Shellder, Tentacruel, Lanturn</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 29</h4>
+      <p>Your first taste of tall grass, and a surprisingly rich one. By day it's a bird-and-mammal nursery — <strong>Pidgey, Sentret, Hoothoot,</strong> and <strong>Rattata</strong> — but the slot table also rolls genuine keepers: <strong>Pichu</strong> (a future Light Ball Raichu), <strong>Marill</strong> and its baby <strong>Azurill</strong>, <strong>Hoppip,</strong> and <strong>Taillow</strong>. Grab a Sentret or Pidgey as a disposable HM mule and grind a level or two here; the road only gets steeper. Rock Smash trees shake loose Ledyba and Spinarak.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;2–5</td><td>Poochyena, Wingull, Rattata, Hoothoot, Marill, Taillow, Hoppip, Pidgey, Wurmple, Sentret, Azurill, Pichu</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;10–30</td><td>Wingull, Pelipper</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Magikarp</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Cherrygrove City</h4>
+      <p>On paper a sleepy tutorial town where a kind old man walks you around the map. In practice, the single best early-game catch spot in the whole hack. The grass around Cherrygrove can spawn <strong>Eevee</strong> — and, rarely, a fully-evolved <strong>Espeon</strong> or <strong>Umbreon</strong> outright. An Eevee this early is a run-defining companion: evolve it into Espeon (day, high friendship) for a monstrous special attacker, or Umbreon (night) for a wall that trivializes the Ghost and Psychic gyms ahead. Park here, save your game, and hunt the grass until one appears — it's worth every minute.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;2–5</td><td>Espeon, Umbreon, Solrock, Wurmple, Poochyena, Eevee, Rattata, Weedle, Zigzagoon</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;15–24</td><td>Tentacool, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Krabby, Magikarp, Corsola, Staryu, Kingler</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 30</h4>
+      <p>Rocky, wet, and generous. The headline pickup is <strong>Poliwag</strong> in the ponds — a fantastic long-term investment that becomes a Water/Fighting <strong>Poliwrath</strong> or a rain-setting <strong>Politoed</strong>. The grass mixes early bugs with <strong>Hoothoot</strong> and stray <strong>Zubat,</strong> and the Headbutt/Rock Smash trees rattle out <strong>Ledyba</strong> and <strong>Pineco</strong> (a future Forretress). Mr. Pokémon's house at the top of the route is your first story checkpoint.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;3–4</td><td>Weedle, Hoothoot, Poliwag, Caterpie, Pidgey, Spinarak, Ledyba, Zubat</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Poliwag, Wingull, Pelipper, Tentacool, Krabby, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Poliwag, Tentacool, Krabby, Kingler, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 31</h4>
+      <p>A short connector into Violet City past the Dark Cave entrance. <strong>Bellsprout, Caterpie,</strong> and more <strong>Poliwag</strong> fill the grass, with <strong>Zubat</strong> near the cave mouth. Nothing rare, but a solid place to bring anything under-leveled up to speed before your first gym. Peek into Dark Cave if you're feeling brave.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;4–5</td><td>Bellsprout, Poliwag, Ledyba, Caterpie, Mareep, Weedle, Pichu, Spinarak, Hoothoot, Gastly, Zubat</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Pelipper, Poliwag, Wingull, Tentacool, Krabby, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Poliwag, Tentacool, Krabby, Kingler, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Dark Cave</h4>
+      <p>An optional pitch-black cavern (bring Flash) that spills off Routes 31 and 45. Early on it's <strong>Geodude</strong> and <strong>Zubat</strong> fodder, but its level range scales surprisingly high — deeper visits turn up <strong>Ursaring, Teddiursa, Graveler,</strong> a rare <strong>Dunsparce,</strong> and even <strong>Wobbuffet</strong>. The Surf and fishing spots inside hold Slowpoke and Seel. Not required, but a good detour for a bulky Normal-type or a Dunsparce novelty.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;2–35</td><td>Zubat, Geodude, Golbat, Graveler, Ursaring, Wobbuffet, Teddiursa, Dunsparce, Larvitar</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Magikarp, Pelipper, Tentacool, Wingull, Seel, Slowpoke, Slowbro, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Magikarp, Wailmer, Goldeen, Tentacool, Sharpedo, Seel, Seaking</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Violet City</h4>
+      <p>Your first gym city. Before you challenge Falkner, clear out <strong>Sprout Tower</strong> to the north for an easy TM and a stack of Sage battles that'll level your team nicely. Mr. Pokémon's <strong>Mystery Egg</strong> (it hatches into a <strong>Togepi</strong>, a future Fairy-type sweeper) comes due around here, so keep it in your party and walk it hatched. The city pond holds nothing but <strong>Magikarp</strong> — but patience turns one into a <strong>Gyarados</strong> that single-handedly carries the entire Johto arc. Stock up, then take the Zephyr Badge.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;15–24</td><td>Poliwag, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Bellsprout, Rattata, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-1">
+    <div class="gym-num"><span>Badge</span><b>01</b></div>
+    <div class="boss"><div class="boss-eyebrow">Zephyr Badge · Violet City</div>
+       <h3 class="boss-name">Falkner <span class="type" style="--tc:#8aa6d6">FLYING</span></h3><p class="boss-note">Johto's opener flies six birds by the endgame, but the real threat is <b>Pidgeot's Sky Attack</b> and a <b>Pelipper</b> packing Surf. Rock and Electric hard-wall the whole team; a Magneton or a Gyarados eats him alive. Watch for Steel Wing chip on your Rock-types.</p><div class="matchup">
+    <div class="matchup-read">It reads as a pure Flying gym, but Skarmory (Steel/Flying) shrugs off Electric and Ice, and Pelipper (Water/Flying) laughs at Rock. Lead Electric for the fliers, keep a Rock or Electric move for Skarmory's Steel half, and don't bring anything that fears Steel Wing.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#e0b62c">Electric</span><span class="type" style="--tc:#b09150">Rock</span><span class="type" style="--tc:#5fc4c9">Ice</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#8aa93a">Bug</span><span class="type" style="--tc:#c0392b">Fighting</span><span class="type" style="--tc:#c99a45">Ground</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Magnemite</b> (Route 38) — Steel/Electric eats the whole flock</li><li><b>Mareep→Ampharos</b> (Route 32) — Thunderbolt sweeps</li><li>A <b>Gyarados</b> from Violet's pond resists nothing here but out-bulks the birds</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Noctowl</span><span class="lvl">Lv 64</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Psychic</span><span>Wing Attack</span><span>Hypnosis</span><span>Dream Eater</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Skarmory</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Spikes</span><span>Drill Peck</span><span>Mud-Slap</span><span>Steel Wing</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Swellow</span><span class="lvl">Lv 63</span></div><div class="held">@ Focus Band</div><div class="moves"><span>Endure</span><span>Flail</span><span>Drill Peck</span><span>Steel Wing</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Honchkrow</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Drill Peck</span><span>Faint Attack</span><span>Haze</span><span>Icy Wind</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Pidgeot</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Sky Attack</span><span>Extremespeed</span><span>Double Team</span><span>Steel Wing</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Pelipper</span><span class="lvl">Lv 68</span></div><div class="moves"><span>Aerial Ace</span><span>Surf</span><span>Double Team</span><span>Steel Wing</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Sprout Tower</h4>
+      <p>A three-storey pagoda whose swaying central pillar is pure atmosphere. Every floor is monks throwing <strong>Bellsprout</strong> at you — trivial — but the reason to climb is the rare wild <strong>Gastly</strong> that haunts the tower. A Ghost-type this early is a cheat code: it's completely immune to Normal and Fighting, which walls half of Johto's early trainers, and it grows into a devastating Gengar. Snag one before you leave.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;3–6</td><td>Rattata, Gastly</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;20–35</td><td>Clamperl, Relicanth, Chinchou</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 32</h4>
+      <p>The long southern highway toward Union Cave, lined with fishermen and a Pokémon Center at the halfway mark. This is prime rod territory — the water is thick with <strong>Tentacool, Krabby,</strong> and Magikarp. In the grass you'll find <strong>Mareep</strong> (an Ampharos in waiting, and one of Johto's best early Electric answers), plus <strong>Wooper</strong> and <strong>Rattata</strong>. Grab a Mareep; it bridges you cleanly into the mid-game.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–7</td><td>Wooper, Mareep, Gastly, Zubat, Ekans, Pidgey, Bellsprout</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Tentacool, Wingull, Pelipper, Krabby, Quagsire, Kingler, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Krabby, Shellder, Qwilfish, Kingler</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ekans, Pineco, Exeggcute</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Ruins Of Alph</h4>
+      <p>The Unown puzzle ruins — four chambers, each sealed behind a sliding-tile picture puzzle. Solving them fills your Unown "dex" and drops useful items, and the research center up top rewards your progress. Wild <strong>Unown</strong> flood the interior once you crack a puzzle. It's more lore and completionism than raw power (Unown only knows Hidden Power), but it's a charming, self-contained diversion right on the path to Union Cave.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;4–8</td><td>Whismur, Unown, Natu, Wooper, Onix, Nosepass, Larvitar</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;15–24</td><td>Wooper, Quagsire</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10–40</td><td>Nosepass, Geodude, Smeargle, Onix</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Union Cave</h4>
+      <p>Your first proper dungeon. <strong>Geodude, Zubat, Onix,</strong> and a chance at <strong>Sandshrew</strong> fill the tunnels, with <strong>Wooper</strong> and Rattata lower down. Bring a Water- or Grass-type to neuter the wall of Rock/Ground types — a Poliwag or Bellsprout from earlier does the job. The lower B2F level connects through to Route 33 and the Azalea side; deeper still there's a seasonal Lapras event on Fridays in the original games worth checking for here.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;8–25</td><td>Zubat, Onix, Geodude, Cubone, Marill, Sandshrew, Golbat, Raticate, Quagsire, Kangaskhan</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Tentacool, Wooper, Quagsire, Wingull, Pelipper, Seel, Slowpoke, Dewgong, Slowbro, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Magikarp, Wailmer, Tentacool, Goldeen, Sharpedo, Slowbro, Seaking, Chinchou, Shellder, Tentacruel, Lanturn</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 33</h4>
+      <p>A brief, dry connector between Union Cave and Azalea Town. <strong>Ekans, Spearow, Rattata,</strong> and a notable <strong>Machop</strong> — grab the Machop, since a Machamp is one of the best answers to the Normal, Rock, and Ice gyms waiting up the road. Rock Smash here can turn up Aipom. Short walk; keep moving toward the Slowpoke Well crisis.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;8–9</td><td>Ekans, Machop, Rattata, Zubat, Spearow</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Pelipper, Wingull, Tentacool, Krabby</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Krabby, Shellder, Kingler</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ekans, Pineco, Aipom</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Azalea Town</h4>
+      <p>A quiet woodland town with a big problem: Team Rocket has taken over the <strong>Slowpoke Well</strong> and is sawing off Slowpoke tails to sell. You'll need to run them out before Bugsy will battle you. This is also <strong>Kurt's town</strong> — he crafts custom Poké Balls from Apricorns, so start shaking every Headbutt tree for Apricorns now (Fast Balls and Heavy Balls pay off all game). Charcoal, the Fire-boosting item, is nearby too.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Aipom, Pineco, Spinarak, Heracross</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-2">
+    <div class="gym-num"><span>Badge</span><b>02</b></div>
+    <div class="boss"><div class="boss-eyebrow">Hive Badge · Azalea Town</div>
+       <h3 class="boss-name">Bugsy <span class="type" style="--tc:#8aa93a">BUG</span></h3><p class="boss-note">A pure Bug swarm led by a <b>Scizor</b> and a <b>Shedinja</b> — and Shedinja's Wonder Guard means only super-effective hits (Fire, Flying, Rock, Ghost, Dark) touch it, so bring at least one of those. Fire clears the rest in a turn.</p><div class="matchup">
+    <div class="matchup-read">Shedinja is the trap: its Wonder Guard blocks every move that isn't super-effective, so you MUST have Fire, Flying, Rock, Ghost, or Dark to touch it. Fire does double duty, roasting Scizor and Forretress (both Steel/Bug) at 4×.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#8aa6d6">Flying</span><span class="type" style="--tc:#b09150">Rock</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#8aa93a">Bug</span><span class="type" style="--tc:#c0392b">Fighting</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Growlithe</b> (Route 36/37) — Fire clears everything, including Shedinja</li><li><b>Pidgeotto</b>/any strong flier for Scyther and Ledian</li><li><b>Cyndaquil</b> line if that was your starter — hard-counters the whole gym</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Ledian</span><span class="lvl">Lv 64</span></div><div class="held">@ Focus Band</div><div class="moves"><span>Giga Drain</span><span>Agility</span><span>Baton Pass</span><span>Light Screen</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Forretress</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Curse</span><span>Explosion</span><span>Pin Missile</span><span>Spike Cannon</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Yanmega</span><span class="lvl">Lv 63</span></div><div class="held">@ Berry Juice</div><div class="moves"><span>Aerial Ace</span><span>Hypnosis</span><span>Ancientpower</span><span>Bug Buzz</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Scizor</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Metal Claw</span><span>Twineedle</span><span>Agility</span><span>Substitute</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Shedinja</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Shadow Claw</span><span>Bug Buzz</span><span>Grudge</span><span>Sand-Attack</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Scyther</span><span class="lvl">Lv 65</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Slash</span><span>Cut</span><span>Wing Attack</span><span>Swords Dance</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Slowpoke Well</h4>
+      <p>A short but mandatory Rocket dungeon under Azalea. Wild <strong>Slowpoke</strong> and <strong>Zubat</strong> throughout — a Slowpoke caught here becomes a superb bulky Slowbro or a Slowking with a King's Rock. Fight down to the Rocket executive at the bottom, send him packing, and the town reopens Bugsy's gym.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–23</td><td>Zubat, Slowpoke, Golbat</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;10–35</td><td>Slowpoke, Slowbro, Clamperl, Relicanth, Chinchou</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Goldeen, Magikarp, Seaking</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Ilex Forest</h4>
+      <p>The iconic maze forest — dark, dense, and full of bugs (<strong>Caterpie, Weedle, Paras, Venonat</strong>) with <strong>Oddish</strong> and <strong>Psyduck</strong> creeping in at night and in the water. There's a lost-Farfetch'd puzzle to solve for the boss's permission to pass, and you'll walk away with the <strong>Cut</strong> HM. Headbutt the trees here for <strong>Butterfree</strong> and <strong>Beedrill</strong>. The shrine deep in the forest is where a certain mythical Pokémon can appear with the right item.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;8–13</td><td>Oddish, Paras, Caterpie, Weedle, Kakuna, Venonat, Hoothoot, Psyduck, Metapod</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Pelipper, Psyduck, Wingull, Tentacool, Tentacruel, Dewgong, Golduck</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Poliwag, Tentacool, Sharpedo, Slowpoke, Dewgong, Tentacruel, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Beedrill, Pineco, Exeggcute, Butterfree</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 34</h4>
+      <p>A pastoral, open route rolling down toward Goldenrod, and home to the <strong>Day-Care</strong> — leave two compatible Pokémon here to start finding Eggs (great for building a competitive team or hatching a fresh starter). The grass holds both <strong>Nidoran</strong> lines; catch both and you're on your way to a Nidoking <em>and</em> a Nidoqueen, two of the most reliable mixed attackers in the game. Ditto also roams here for breeding shenanigans.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;10–14</td><td>Abra, Snubbull, Grimer, Jigglypuff, Ditto, Mankey, Drowzee</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Tentacool, Wingull, Pelipper, Tentacruel, Krabby, Kingler</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Krabby, Tentacool, Kingler, Corsola, Staryu, Shellder</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Goldenrod City</h4>
+      <p>Johto's booming metropolis and the best shopping in the region. The <strong>Department Store</strong> is your one-stop shop — stock up on healing and raid the TM floor, because the coverage moves here (Thunderbolt, Ice Beam-tier picks) shape your entire mid-game. Grab the free <strong>Bicycle</strong> from the Bike Shop and the <strong>Coin Case</strong> for the Game Corner. Other stops: the Radio Tower (a later Rocket target, and where you earn the Radio Card), the Name Rater, a friendship-checker, and a house that gifts an <strong>Eevee</strong> if you missed the Cherrygrove one. Then there's the gym — <strong>Whitney</strong> and her infamous Miltank, the wall that ends more runs than any Johto leader. Come prepared.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-3">
+    <div class="gym-num"><span>Badge</span><b>03</b></div>
+    <div class="boss"><div class="boss-eyebrow">Plain Badge · Goldenrod City</div>
+       <h3 class="boss-name">Whitney <span class="type" style="--tc:#9099a1">NORMAL</span></h3><p class="boss-note">The legendary wall. Modern Whitney backs <b>Miltank</b> (Milk Drink + Body Slam paralysis) with <b>Blissey</b> and a Rollout <b>Lickilicky</b>. Fighting-types are essential; a Ghost blanks her Normal STAB. Kill Miltank before Rollout snowballs.</p><div class="matchup">
+    <div class="matchup-read">The Miltank wall: Rollout snowballs and Milk Drink stalls, so end it fast with a Fighting-type. A Ghost blanks her Normal attacks entirely and buys free turns. Watch Blissey's Light Screen — bring physical Fighting, not special.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#c0392b">Fighting</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#6a5a9e">Ghost</span><span class="type" style="--tc:#b09150">Rock</span><span class="type" style="--tc:#8fa3b0">Steel</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Machop</b> (Route 33) — Karate Chop/Brick Break flattens the team</li><li><b>Gastly/Haunter</b> (Sprout Tower) — immune to her Normal STAB</li><li>A <b>Sudowoodo</b> or Geodude walls Body Slam while you set up</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Clefable</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Ice Punch</span><span>Fire Punch</span><span>Thunderpunch</span><span>Encore</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Delcatty</span><span class="lvl">Lv 64</span></div><div class="held">@ Chesto Berry</div><div class="moves"><span>Yawn</span><span>Attract</span><span>Fake Out</span><span>Hyper Voice</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Blissey</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Egg Bomb</span><span>Attract</span><span>Softboiled</span><span>Light Screen</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Tauros</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Thrash</span><span>Earthquake</span><span>Rage</span><span>Pursuit</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Miltank</span><span class="lvl">Lv 65</span></div><div class="held">@ Silk Scarf</div><div class="moves"><span>Iron Tail</span><span>Attract</span><span>Body Slam</span><span>Milk Drink</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Lickilicky</span><span class="lvl">Lv 65</span></div><div class="held">@ Silk Scarf</div><div class="moves"><span>Defense Curl</span><span>Rollout</span><span>Focus Blast</span><span>Supersonic</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">National Park</h4>
+      <p>A gated nature preserve north of Goldenrod, and the site of the <strong>Bug-Catching Contest</strong>. The marquee catch is a wild <strong>Scyther</strong> in the grass — a blistering Bug/Flying sweeper that becomes a <strong>Scizor</strong> the moment you trade it a Metal Coat (or use the hack's evolution method). <strong>Pinsir, Nidoran,</strong> and a rare <strong>Sunkern</strong> round out the grass. Even the surf and fishing here are decent. Win the contest for prizes and a shot at rare bugs.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;10–17</td><td>Scyther, Weedle, Sunkern, Caterpie, Venonat, Nidoran♂, Nidoran♀, Psyduck, Murkrow, Spinarak, Hoothoot, Pinsir, Metapod, Kakuna, Paras, Butterfree, Beedrill</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Pelipper, Wingull, Tentacool, Dewgong, Seel, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Sharpedo, Seel</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 35</h4>
+      <p>The corridor linking Goldenrod, the National Park, and Route 36. This is where you want to be if you missed a psychic: <strong>Abra</strong> lurks in the grass, and a caught Abra becomes a game-warping <strong>Alakazam</strong> that sweeps the Ghost and Fighting gyms. <strong>Nidoran, Yanma,</strong> and <strong>Pidgey</strong> fill out the rest. A guard house on the east side gates the way north until the story lets you pass.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;12–18</td><td>Gulpin, Minun, Plusle, Yanma, Electrike, Poochyena, Oddish, Wingull, Abra, Growlithe, Psyduck, Bellsprout, Drowzee, Snubbull, Pidgey, Ditto</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Pelipper, Psyduck, Tentacool, Golduck</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Poliwag, Tentacool, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 36</h4>
+      <p>The junction route toward Ecruteak, blocked partway by a "tree" that's actually a sleeping <strong>Sudowoodo</strong> — you'll need the <strong>Squirtbottle</strong> from Goldenrod's flower shop to wake and battle (or catch) it. A Sudowoodo is a fine Rock-type pickup. <strong>Wooper, Growlithe,</strong> and <strong>Vulpix</strong> roam the grass depending on the time of day; a Growlithe here is your ticket to an Arcanine.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;4–22</td><td>Trapinch, Sandshrew, Baltoy, Cacnea, Rattata, Cubone, Growlithe, Houndour, Pidgey, Gastly, Rhyhorn, Bellsprout, Hoothoot</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Marill, Goldeen, Surskit</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Barboach, Magikarp, Goldeen</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;5–20</td><td>Geodude, Ledyba, Nosepass, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 37</h4>
+      <p>A short, tree-lined stretch just south of Ecruteak where the day/night clock really matters — <strong>Stantler</strong> and Hoothoot own the night while <strong>Growlithe</strong> and <strong>Vulpix</strong> prowl by day. Berry and Headbutt trees line the path. Quick to cross, but swing through at both times if you're filling the dex.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;14–19</td><td>Numel, Marill, Stantler, Poliwag, Growlithe, Spinarak, Tyrogue, Poliwhirl, Larvitar, Vulpix, Pidgeotto, Hoothoot, Noctowl, Ariados, Pidgey, Ledian</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Ecruteak City</h4>
+      <p>The historic, spiritual heart of Johto — all wooden architecture and old legends. Two great towers frame the town: the scorched <strong>Burned Tower</strong> and the sacred <strong>Tin (Bell) Tower</strong>. The <strong>Dance Theatre</strong> hosts the five <strong>Kimono Girls</strong>, whose performances tie into the roaming-legendary and Lugia/Ho-Oh storylines — beat all five for a reward and a story flag. Keep an eye out for <strong>Eusine</strong>, the cloak-wearing Suicune fanatic (Politoed, Electrode, Hypno) who dogs your steps around the beast plot. Morty's Ghost gym is the challenge — bring a Dark-type.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;15–24</td><td>Poliwag, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-4">
+    <div class="gym-num"><span>Badge</span><b>04</b></div>
+    <div class="boss"><div class="boss-eyebrow">Fog Badge · Ecruteak City</div>
+       <h3 class="boss-name">Morty <span class="type" style="--tc:#6a5a9e">GHOST</span></h3><p class="boss-note"><b>Three Gengars</b> plus Mismagius and Dusknoir — a Ghost/Poison nightmare that spams Hypnosis and Mean Look to trap you. Bring a Dark-type (immune to nothing here but resists Ghost) and Sleep-proofing; a Normal-type is dead weight against the Gengar wall.</p><div class="matchup">
+    <div class="matchup-read">Three Gengars (Ghost/Poison) plus Dusknoir. Dark is king — it's super-effective and immune to nothing they throw. Their whole gameplan is Hypnosis + Mean Look to trap and sleep you, so pack a Sleep-proof item or a fast Dark-type that ends them first.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#5a5560">Dark</span><span class="type" style="--tc:#6a5a9e">Ghost</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#9099a1">Normal</span><span class="type" style="--tc:#c0392b">Fighting</span><span class="type" style="--tc:#9b59b6">Poison</span><span class="type" style="--tc:#8aa93a">Bug</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Umbreon</b> (Cherrygrove Eevee) — Dark, immune to nothing scary here, walls Gengar</li><li><b>Houndour/Sneasel</b>-tier Dark from later runs</li><li><b>Alakazam</b> (Abra, Route 35) — outspeeds and OHKOs the Gengars</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Sableye</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Shadow Claw</span><span>Power Gem</span><span>Mean Look</span><span>Detect</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Wyrdeer</span><span class="lvl">Lv 63</span></div><div class="held">@ Silk Scarf</div><div class="moves"><span>Jump Kick</span><span>Headbutt</span><span>Hypnosis</span><span>Psycho Cut</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Gengar</span><span class="lvl">Lv 64</span></div><div class="held">@ Spell Tag</div><div class="moves"><span>Shadow Ball</span><span>Giga Drain</span><span>Sludge Bomb</span><span>Psychic</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Mismagius</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Shadow Ball</span><span>Mean Look</span><span>Pain Split</span><span>Perish Song</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Gengar</span><span class="lvl">Lv 65</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Shadow Ball</span><span>Hypnosis</span><span>Thunderbolt</span><span>Dream Eater</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Dusknoir</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Shadow Punch</span><span>Fire Punch</span><span>Will-O-Wisp</span><span>Dark Pulse</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Burned Tower</h4>
+      <p>The blackened ruin beside the Tin Tower. Descend to the basement and you'll trigger the awakening of the three <strong>legendary beasts</strong> — Raikou, Entei, and Suicune — which then bolt and roam the region for the rest of the game (Suicune has its own dedicated storyline). The wild mons are humble: <strong>Rattata, Koffing,</strong> and endless <strong>Zubat</strong>. Come for the cutscene, not the grinding.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;13–18</td><td>Koffing, Slugma, Zubat, Magmar, Misdreavus, Raticate, Houndour, Rattata</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Tin Tower</h4>
+      <p>The towering pagoda at Ecruteak's back — the roost of <strong>Ho-Oh</strong> at its summit, reachable once the story and the Rainbow Wing align. The lower floors are quiet, with <strong>Rattata</strong> and a rare wild <strong>Gastly</strong> in the shadows. Save your master-tier balls for the bird at the top; it's one of the crown-jewel catches of the Johto half.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;3–6</td><td>Rattata, Gastly</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 38</h4>
+      <p>Open farmland rolling west toward Olivine, patrolled by trainers herding cattle. The grass here is a Normal-type ranch: wild <strong>Tauros</strong> and <strong>Miltank</strong> both appear, and a Tauros makes a genuinely good physical beatstick with Return and Earthquake. <strong>Magnemite</strong> near the fences offers an early Steel/Electric option. A café on the route sells useful goods.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;14–21</td><td>Spinda, Slugma, Skarmory, Magnemite, Meowth, Raticate, Noctowl, Miltank, Tauros, Doduo, Growlithe, Houndour</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10–15</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 39</h4>
+      <p>The last leg into Olivine, sunny and dotted with berry trees and a Moomoo dairy farm (feed the sick Miltank for a reward). A calm, pleasant stretch — good for topping off levels and berries before the coastal city cluster. <strong>Magnemite, Meowth,</strong> and Ponyta round out the encounters.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;15–21</td><td>Swablu, Lombre, Seviper, Zangoose, Nuzleaf, Noctowl, Lotad, Surskit, Seedot, Raticate, Magnemite, Meowth, Ponyta, Doduo, Miltank, Tauros, Spearow, Murkrow</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Marill, Goldeen, Surskit</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Barboach, Magikarp, Goldeen</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;5–20</td><td>Geodude, Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Olivine City</h4>
+      <p>A working port dominated by the <strong>Glitter Lighthouse</strong>, where a gravely ill <strong>Ampharos</strong> ("Amphy") powers the beacon — and gates the story. Jasmine won't battle for the Mineral Badge until you sail to Cianwood and fetch its medicine. So Olivine is really a two-part stop: come now, leave, come back to claim the badge. The docks are also where the <strong>S.S. Aqua</strong> later ferries you to Kanto. Battle Tower fans note the facility here too.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;15–24</td><td>Tentacool, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Krabby, Tentacool, Chinchou, Shellder, Corsola, Staryu, Kingler, Tentacruel, Lanturn</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 40</h4>
+      <p>The open-sea Surf route from Olivine toward Cianwood, a gauntlet of Swimmers the whole way across. <strong>Tentacool</strong> and <strong>Mantyke</strong> populate the water, with <strong>Wingull</strong> overhead. Whirlpools and currents make it a proper crossing — pack a Water-type with Surf and Whirlpool and enjoy the ride.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;23–28</td><td>Jigglypuff, Wingull, Taillow, Mankey, Swablu, Swellow, Pidgey, Pidgeotto, Nidorina, Hoothoot, Nidorino, Noctowl, Igglybuff, Primeape</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Pelipper, Tentacool, Shellder, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Krabby, Corsola, Staryu, Kingler</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 41</h4>
+      <p>The whirlpool-strewn ocean between Route 40 and Cianwood, wrapped around the <strong>Whirl Islands</strong>. Below the surface swim <strong>Chinchou, Tentacruel,</strong> and <strong>Mantine</strong>. The islands jutting from the water are the entrance to Lugia's lair — note them now and return with Whirlpool and strong balls when you're ready for the legendary dive.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;6–8</td><td>Poochyena, Taillow, Nincada, Skitty, Abra, Whismur, Nidoran♂, Nidoran♀, Ekans, Pidgey, Spearow</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;20–26</td><td>Tentacool, Horsea, Mantine</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Shellder, Magikarp, Chinchou, Tentacruel, Lanturn</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Whirl Islands</h4>
+      <p>A four-cornered sea-cave complex ringed by whirlpools — and the roost of <strong>Lugia</strong> in its deepest chamber. The wild population is a solid Water/Ice grab-bag: <strong>Seel, Dewgong, Corsola, Slowbro,</strong> and Golbat inside, with <strong>Horsea, Mantine,</strong> and a rare <strong>Luvdisc</strong> in the surrounding water. Bring Surf, Whirlpool, Strength, and Flash. The Silver Wing points the way to Lugia.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;24–29</td><td>Seel, Corsola, Golbat, Krabby, Dewgong, Slowbro, Natu, Pidgeotto, Tentacruel, Golduck, Drowzee, Skarmory, Xatu, Omanyte, Kabuto</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Horsea, Tentacruel, Tentacool, Mantine, Pelipper, Wingull, Mantyke, Seel, Dewgong</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Krabby, Magikarp, Horsea, Seadra, Wailmer, Luvdisc, Kingler, Tentacool, Corsola, Staryu, Dewgong</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Cianwood City</h4>
+      <p>A remote western port hemmed in by cliffs, reachable only by Surf. Grab the <strong>SecretPotion</strong> from the pharmacy to cure Olivine's Ampharos, buy the Cianwood-exclusive items, and take on <strong>Chuck's</strong> Fighting gym for the Storm Badge. The rocky shoreline offers <strong>Tentacool</strong> and <strong>Krabby</strong>, and a nearby cliffside cave hides Fighting-types. A photographer here gives you a useful HM item.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;15–24</td><td>Tentacool, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Krabby, Shellder, Staryu, Chinchou, Tentacruel, Lanturn, Kingler</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20–22</td><td>Geodude, Shuckle</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-5">
+    <div class="gym-num"><span>Badge</span><b>05</b></div>
+    <div class="boss"><div class="boss-eyebrow">Storm Badge · Cianwood City</div>
+       <h3 class="boss-name">Chuck <span class="type" style="--tc:#c0392b">FIGHT</span></h3><p class="boss-note">All Fighting, all offense — <b>Breloom, Annihilape, Poliwrath,</b> and the Hitmons. Psychic and Flying demolish him, but beware Poliwrath's Surf and Breloom's Bullet Seed on your Water/Rock answers. A Crobat or Alakazam sweeps.</p><div class="matchup">
+    <div class="matchup-read">All-out Fighting offense. Psychic and Flying tear through it, but Poliwrath (Water/Fighting) resists Ice and eats Psychic poorly, and Breloom (Grass/Fighting) shrugs off Psychic too — hit Breloom with Flying/Fire and Poliwrath with Grass/Electric.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#e05a8a">Psychic</span><span class="type" style="--tc:#8aa6d6">Flying</span><span class="type" style="--tc:#e08fc0">Fairy</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#b09150">Rock</span><span class="type" style="--tc:#8aa93a">Bug</span><span class="type" style="--tc:#5a5560">Dark</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Alakazam</b>/<b>Espeon</b> — Psychic sweeps the pure Fighters</li><li><b>Crobat</b> (Zubat line, everywhere) — Flying + Speed</li><li><b>Xatu</b>/any flier for Breloom (which fears Flying at 4×)</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Hitmonchan</span><span class="lvl">Lv 64</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Fire Punch</span><span>Ice Punch</span><span>Thunderpunch</span><span>Mach Punch</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Medicham</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Detect</span><span>Hi Jump Kick</span><span>Psych Up</span><span>Reversal</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Annihilape</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Cross Chop</span><span>Shadow Punch</span><span>Rock Slide</span><span>Meditate</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Hitmonlee</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Mega Kick</span><span>Blaze Kick</span><span>Hi Jump Kick</span><span>Rolling Kick</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Breloom</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Mach Punch</span><span>Bullet Seed</span><span>Sky Uppercut</span><span>Dynamicpunch</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Poliwrath</span><span class="lvl">Lv 65</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Surf</span><span>Dynamicpunch</span><span>Belly Drum</span><span>Body Slam</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Cliff Cave</h4>
+      <p>An optional seaside cavern near Cianwood, worth a look for its unusually strong early residents — a wild <strong>Steelix</strong> can appear alongside <strong>Onix, Machop, Geodude,</strong> and <strong>Kingler</strong> on the water's edge. A rare pre-badge Steel/Ground type is a real prize. Bring Rock Smash, Surf, and Strength to work through it fully.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;23–26</td><td>Steelix, Golbat, Geodude, Machop, Onix, Krabby, Kingler, Wooper, Quagsire, Graveler, Machoke</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–40</td><td>Quagsire, Wingull, Wooper, Tentacool, Pelipper, Wailord</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Sharpedo</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;23–31</td><td>Kingler, Krabby</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-6">
+    <div class="gym-num"><span>Badge</span><b>06</b></div>
+    <div class="boss"><div class="boss-eyebrow">Mineral Badge · Olivine City</div>
+       <h3 class="boss-name">Jasmine <span class="type" style="--tc:#8fa3b0">STEEL</span></h3><p class="boss-note">Steel to the core: dual <b>Steelix</b>, <b>Aggron</b>, <b>Skarmory</b>, and a rain-boosted <b>Magnezone</b>. Fighting, Fire, and Ground all hit hard — an Earthquake user handles most of the team, but Skarmory flies over Ground, so keep an Electric or Rock move in reserve.</p><div class="matchup">
+    <div class="matchup-read">Steel to the core, and it resists a huge chunk of the type chart — don't bring anything Normal, Flying, or Psychic and expect damage. Earthquake is the answer to five of six... except Skarmory flies over Ground, so keep a Fire or Electric move in your back pocket for it.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#c99a45">Ground</span><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#c0392b">Fighting</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#8fa3b0">Steel</span><span class="type" style="--tc:#8aa93a">Bug</span><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#5fc4c9">Ice</span><span class="type" style="--tc:#b09150">Rock</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Quagsire</b>/<b>Marill→Azumarill</b> — Ground/Water ignores Steel resistances</li><li><b>Growlithe→Arcanine</b> — Fire melts Steelix's and Skarmory's teammates</li><li>A <b>Machamp</b> (Cliff Cave/Rock Tunnel) for Dynamic Punch</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Skarmory</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Spikes</span><span>Drill Peck</span><span>Swagger</span><span>Steel Wing</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Mawile</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Flash Cannon</span><span>Iron Defense</span><span>Baton Pass</span><span>Play Rough</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Corsola</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Rain Dance</span><span>Surf</span><span>Recover</span><span>Ancientpower</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Magnezone</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Double-Edge</span><span>Substitute</span><span>Rain Dance</span><span>Thunder</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Aggron</span><span class="lvl">Lv 65</span></div><div class="held">@ Hard Stone</div><div class="moves"><span>Rock Slide</span><span>Iron Tail</span><span>Swords Dance</span><span>Earthquake</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Steelix</span><span class="lvl">Lv 65</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Crunch</span><span>Earthquake</span><span>Rock Slide</span><span>Iron Tail</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 42</h4>
+      <p>The east–west link between Ecruteak and Mahogany, threaded through <strong>Mt. Mortar</strong>. <strong>Mankey, Mareep,</strong> and Spearow fill the grass; the water routes you into Mt. Mortar's flooded lower chambers. A hiker here can trade or tutor. Cross it on your way to the Mahogany crisis.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;13–22</td><td>Illumise, Oddish, Volbeat, Raticate, Poochyena, Budew, Marill, Seedot, Gligar, Fearow, Zubat, Golbat, Lickitung, Ekans, Arbok</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Marill, Goldeen, Surskit, Remoraid, Seaking</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Corphish, Magikarp, Goldeen, Seaking</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;15</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Mt Mortar</h4>
+      <p>Johto's biggest optional cave — a sprawling four-area complex you can only fully loot once you have Surf, Strength, and Waterfall. Deep inside lives a wild <strong>Tyrogue</strong> (which evolves into Hitmonlee, Hitmonchan, or Hitmontop based on its stats) plus a black-belt NPC who gifts one. The wild list is a Fighting/Rock brawl — <strong>Machop, Graveler, Marill,</strong> and more. A rewarding return-trip dungeon; don't sweat clearing it on the first pass.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–100</td><td>Wynaut, Geodude, Golbat, Zubat, Rhyhorn, Cubone, Machop, Marill, Graveler, Machoke, Raticate, Wobbuffet</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Goldeen, Marill, Pelipper, Seaking, Wingull, Tentacool, Tentacruel, Seel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Magikarp, Goldeen, Wailmer, Seaking, Tentacool, Sharpedo, Tentacruel, Seel</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Mahogany Town</h4>
+      <p>A tiny souvenir town with a big secret: Team Rocket's revived operation runs out of a <strong>base hidden beneath the shop</strong>. The pushy salesman hawking overpriced RageCandyBar out front is the cover story. The plot routes you first north to the Lake of Rage to investigate the red Gyarados, then back to smash the hideout. Only after the base falls does Pryce open his Ice gym. Stock up on Antidotes before you descend — the grunts below lean hard on Poison-types.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;15</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-7">
+    <div class="gym-num"><span>Badge</span><b>07</b></div>
+    <div class="boss"><div class="boss-eyebrow">Glacier Badge · Mahogany Town</div>
+       <h3 class="boss-name">Pryce <span class="type" style="--tc:#5fc4c9">ICE</span></h3><p class="boss-note">Six Ice types anchored by <b>Mamoswine, Weavile, Froslass,</b> and a Sheer Cold <b>Glalie</b>. Ice is fragile — Fire, Fighting, Rock, and Steel all crush it. The danger is Glalie's OHKO move; keep your switches healthy and don't let it snipe your sweeper.</p><div class="matchup">
+    <div class="matchup-read">Six Ice types, which is to say six glass cannons — Fire, Fighting, Rock, and Steel all hit hard and most Ice mons fold in one blow. The one real danger is Glalie's Sheer Cold (a one-hit KO if it connects); keep your switches healthy so a bad-luck freeze doesn't cascade.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#c0392b">Fighting</span><span class="type" style="--tc:#b09150">Rock</span><span class="type" style="--tc:#8fa3b0">Steel</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#5fc4c9">Ice</span><span class="type" style="--tc:#c99a45">Ground</span><span class="type" style="--tc:#8aa6d6">Flying</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Machamp</b>/<b>Primeape</b> — Fighting crushes the whole gym</li><li><b>Magmar/Arcanine</b> — Fire, and Steel-types wall Blizzard</li><li>A <b>Steelix</b> (Cliff Cave) resists Ice and hits back hard</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Weavile</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Faint Attack</span><span>Metal Claw</span><span>Beat Up</span><span>Blizzard</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Dewgong</span><span class="lvl">Lv 63</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Surf</span><span>Ice Beam</span><span>Rest</span><span>Encore</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Jynx</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Ice Beam</span><span>Psychic</span><span>Shadow Ball</span><span>Lovely Kiss</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Froslass</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Shadow Ball</span><span>Ice Beam</span><span>Will-O-Wisp</span><span>Destiny Bond</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Mamoswine</span><span class="lvl">Lv 65</span></div><div class="held">@ Soft Sand</div><div class="moves"><span>Strength</span><span>Earthquake</span><span>Rock Smash</span><span>Blizzard</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Glalie</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Sheer Cold</span><span>Crunch</span><span>Dark Pulse</span><span>Blizzard</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 43</h4>
+      <p>The tollgate road connecting Mahogany to the Lake of Rage, with a Rocket-run checkpoint that hassles you on the way up. Trainers and <strong>Flying</strong>-types (Pidgeotto, Noctowl) line the fences, with <strong>Magikarp</strong> and Poliwag in the roadside water. A quick but scenic climb to the lake.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;21–27</td><td>Wingull, Electrike, Raticate, Flaaffy, Zigzagoon, Manectric, Kecleon, Poochyena, Girafarig, Skarmory, Exeggcute, Linoone, Mightyena, Furret, Farfetch’d, Venonat, Venomoth</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Magikarp, Wingull, Pelipper, Tentacool</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Carvanha, Magikarp, Poliwag, Tentacool, Sharpedo</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Venonat, Pineco, Exeggcute</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Lake Of Rage</h4>
+      <p>A huge crater lake and the site of the game's signature set-piece: the enraged <strong>red Gyarados</strong>. Surf or fish it out for a <em>guaranteed shiny</em> catch and a powerful Water/Flying attacker with Intimidate. The rest of the lake is a <strong>Gyarados</strong> factory — Magikarp everywhere, evolving fast in the deep water. A house on the shore hands out an item once you calm the lake. Grab the Gyarados; it earns its slot.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Pelipper, Wingull, Tentacool, Magikarp, Tentacruel, Gyarados</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–100</td><td>Wailmer, Magikarp, Tentacool, Gyarados, Sharpedo, Tentacruel, Dewgong</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Venonat, Pineco, Exeggcute</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Rocket Hideout</h4>
+      <p>The Mahogany underground base — a maze of password-locked doors, spinning arrow tiles, and hidden Voltorb/Geodude traps disguised as items. This is where the four reborn Rocket executives make their stand: <strong>Petrel</strong> (Forretress, Pupitar, Cloyster), <strong>Proton</strong> (Muk, Nidoking, Nidoqueen), <strong>Ariana</strong> (Arbok, Persian, Murkrow, Gyarados), and their leader <strong>Archer</strong> (Houndoom, Porygon-Z, Slowbro) — each a genuine step up from the grunts. Shut down the jammed radio signal via the password (eavesdrop on the executives for it), and the road to Blackthorn reopens. Bring a Ground- or Fighting-type and a full bag of heals.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;21</td><td>Koffing, Geodude, Voltorb</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Ice Path</h4>
+      <p>A sliding-ice puzzle cave between Mahogany and Blackthorn — push boulders across frictionless floors to carve a path down. The residents are excellent: <strong>Sneasel</strong> (a future <strong>Weavile</strong>, and one of the best Ice/Dark attackers in the game), <strong>Swinub</strong> (→ Mamoswine, your future Clair-and-Lance-killer), and <strong>Delibird</strong>. Bring a Fire- or Fighting-type and Full Heals; the wild Ice/Ground crowd hits hard and the puzzle is unforgiving.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;21–36</td><td>Golbat, Sneasel, Delibird, Jynx, Swinub, Zubat</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Pelipper, Tentacool, Seel, Tentacruel, Dewgong</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Horsea, Sharpedo, Qwilfish</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Blackthorn City</h4>
+      <p>A dragon-worshipping mountain town and the end of the Johto gym road. <strong>Clair</strong>, the region's fiercest leader, guards the Rising Badge with a Dragon squad — but she won't hand it over until you pass a trial in the <strong>Dragon's Den</strong> behind the gym. Blackthorn is a services hub: the <strong>Move Deleter</strong> and <strong>Move Reminder</strong> live here (the Reminder can re-teach your starter's forgotten signature moves), and the Dragon's Den elder rewards the trial with a <strong>Dratini holding a rare move</strong>. Last stop before the League road opens.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;5–19</td><td>Magikarp</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;15</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-8">
+    <div class="gym-num"><span>Badge</span><b>08</b></div>
+    <div class="boss"><div class="boss-eyebrow">Rising Badge · Blackthorn City</div>
+       <h3 class="boss-name">Clair <span class="type" style="--tc:#5c53c9">DRAGON</span></h3><p class="boss-note">Johto's final wall: a Dragon-Dance-free but brutal squad of <b>Dragonite, Kingdra,</b> and <b>Gyarados</b>. Ice is king — one strong Ice Beam or a Mamoswine from the Ice Path folds her. Fairy-types (Clefable, Togekiss) are immune to Dragon STAB entirely.</p><div class="matchup">
+    <div class="matchup-read">Johto's hardest gym. Ice is the clean answer — a single strong Ice Beam or a Mamoswine folds Dragonair, Kingdra, and Dragonite. But Kingdra (Water/Dragon) only fears Dragon and Fairy, and Gyarados wants Electric or Rock, so bring layered coverage, not just one Ice attacker.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#5fc4c9">Ice</span><span class="type" style="--tc:#5c53c9">Dragon</span><span class="type" style="--tc:#e08fc0">Fairy</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#3d8bd4">Water</span><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#e0b62c">Electric</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Mamoswine</b> (Swinub, Ice Path) — Ice STAB one-shots the dragons</li><li><b>Weavile</b> (Sneasel, Ice Path) — fast Ice Shard finishes weakened dragons</li><li>A <b>Clefable</b> (Fairy) is immune to Dragon attacks entirely</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Dragonair</span><span class="lvl">Lv 64</span></div><div class="held">@ Metal Coat</div><div class="moves"><span>Thunder Wave</span><span>Thunderbolt</span><span>Flamethrower</span><span>Iron Tail</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Gyarados</span><span class="lvl">Lv 63</span></div><div class="held">@ Focus Band</div><div class="moves"><span>Bite</span><span>Surf</span><span>Fly</span><span>Twister</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Dudunsparc</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Rest</span><span>Glare</span><span>Poison Jab</span><span>Skull Bash</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Shelgon</span><span class="lvl">Lv 64</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Thunder Wave</span><span>Thunderbolt</span><span>Ice Beam</span><span>Dragonbreath</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Dragonite</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Agility</span><span>Thunder</span><span>Dragon Pulse</span><span>Hyper Beam</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Kingdra</span><span class="lvl">Lv 65</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Agility</span><span>Hydro Pump</span><span>Ice Beam</span><span>Dragonbreath</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Dragon’s Den</h4>
+      <p>The sacred cavern behind Blackthorn, and the reason you should never skip this town. Fish and Surf the inner lake for <strong>Dratini</strong> — and, with luck, <strong>Dragonair</strong> and <strong>Seadra</strong> outright. A Dratini caught here is your golden ticket to a <strong>Dragonite</strong> for the Elite Four and beyond. Clair's trial (an elder quizzes your trainer philosophy) plays out at the shrine within. Fish patiently; the Dragon line is worth it.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–10</td><td>Wurmple, Shroomish, Slakoth, Silcoon, Cascoon, Poochyena, Taillow, Venonat, Ledyba, Yanma, Paras, Spinarak, Caterpie, Metapod, Weedle, Kakuna</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;10–19</td><td>Dratini, Magikarp, Horsea</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Dratini, Dragonair, Seadra</td></tr></tbody></table></div></aside>
+  </article></div>
+    <h3 class="sub-head">Far Johto &amp; the Western Cliffs</h3>
+    <p class="sub-lead">Once Blackthorn opens the eastern road, these outlying routes become reachable — and they hide some of the best catches in the region, from a second Dratini source to wild Chansey and Tropius. Well worth the detour before you commit to the League.</p>
+    <div class="zones"><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 44</h4>
+      <p>The lakeside road east of Mahogany toward the Ice Path and Blackthorn, dense with fishermen and tall grass. Notable grass here: a rare <strong>Tropius</strong> (a unique Grass/Flying) and <strong>Lickitung,</strong> alongside Oddish, Weepinbell, and an <strong>Electabuzz</strong>. The water holds <strong>Carvanha</strong> and Poliwag. A rewarding detour before the Ice Path grind.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;24–36</td><td>Oddish, Tropius, Electabuzz, Zigzagoon, Linoone, Kecleon, Lickitung, Weepinbell, Poliwhirl, Mightyena, Rattata, Raticate, Tangela, Castform, Poochyena, Pidgeotto, Exeggcute</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Pelipper, Poliwag, Tentacool, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Carvanha, Magikarp, Poliwag, Tentacool</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 45</h4>
+      <p>The rugged mountain road south of Blackthorn — steep, ledge-broken, and thick with strong trainers. The grass turns up <strong>Absol, Donphan, Mightyena,</strong> and Marill, but the real prize is in the water: wild <strong>Dratini</strong> and even <strong>Dragonair</strong> can be fished up here, a second Dragon-line source beyond the Dragon's Den. Well worth a careful comb-through.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;25–37</td><td>Absol, Mightyena, Oddish, Marill, Poochyena, Kecleon, Raticate, Donphan, Graveler, Seedot, Gligar, Ursaring, Skarmory, Arbok, Honchkrow</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Marill, Magikarp, Goldeen, Surskit, Dratini</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Barboach, Magikarp, Goldeen, Dratini, Dragonair</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 46</h4>
+      <p>The short, dusty cliff-route linking Blackthorn's approach back toward Route 29 and the Dark Cave's lower mouth. <strong>Geodude, Spearow, Rattata,</strong> and a rare <strong>Shuppet</strong> (→ Banette) roam the grass. A convenient shortcut and a spot to round out early dex gaps you left behind.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;2–28</td><td>Rattata, Mightyena, Shuppet, Wingull, Geodude, Oddish, Spearow, Poochyena, Kecleon, Gloom, Fearow, Dunsparce, Misdreavus, Gastly, Phanpy, Murkrow</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Tentacool, Pelipper, Slowpoke, Krabby</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Krabby, Kingler, Slowpoke</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 47</h4>
+      <p>A remote sea-cliff route out toward the western islands, and a Normal-hunter's dream: wild <strong>Chansey</strong> (huge EXP and a future Blissey), <strong>Miltank, Ditto,</strong> and a rare <strong>Farfetch'd</strong> all appear in the grass. The surf and fishing add <strong>Chinchou, Staryu,</strong> and Slowbro. Bring plenty of balls for the Chansey and Ditto.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;33–40</td><td>Chansey, Miltank, Farfetch’d, Fearow, Gloom, Raticate, Ditto</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Pelipper, Tentacool, Staryu, Slowpoke, Slowbro, Seel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Sharpedo, Slowpoke, Kingler, Shellder, Chinchou, Lanturn, Tentacruel</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 48</h4>
+      <p>The companion route to 47, threading the western cliffs. <strong>Mightyena, Gloom, Roselia,</strong> and another shot at <strong>Shuppet</strong> fill the grass, with the usual Tentacool/Wingull on the water. Quieter than its neighbor, but a Roselia here is a strong Grass/Poison option for the road ahead.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;22–28</td><td>Shuppet, Mightyena, Wingull, Gloom, Poochyena, Kecleon, Oddish, Roselia, Budew, Skiploom, Exeggcute, Farfetch’d, Growlithe, Vulpix, Girafarig, Hoppip, Swellow, Drowzee, Noctowl, Hypno, Tauros, Fearow</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Pelipper, Tentacool</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Aipom, Heracross, Pineco</td></tr></tbody></table></div></aside>
+  </article></div>
+  </section>
+
+  <section id="crossing" class="chapter">
+    <div class="chapter-head"><span class="ch-mark">§3</span><h2>The League Road &amp; the Crossing</h2></div>
+    <p class="lead">With eight badges earned, the road bends east through Routes 26–27, <strong>Victory Road,</strong> and <strong>Tohjo Falls</strong> toward the Indigo Plateau. Beyond the League, the <strong>S.S. Aqua</strong> ferries you from Olivine to <strong>Vermilion City</strong> and all of Kanto — a second full region, eight more gyms, and levels that climb from the 50s into the 70s. Sell your spare evolution stones, top up on Full Restores, and make sure your team has matured past its Johto movepools before you sail.</p>
+    <div class="zones"><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 26</h4>
+      <p>The long coastal highway running south to the Indigo Plateau, and a startling grass table: this build seeds the <strong>Kanto starters</strong> — wild <strong>Bulbasaur, Charmander,</strong> and <strong>Squirtle</strong> — into the tall grass here, alongside <strong>Chansey, Rapidash,</strong> and Arbok. If you ever wanted Charizard or Blastoise without trading, this is the spot. A house partway down offers free heals. Comb every patch.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–42</td><td>Dodrio, Arbok, Rapidash, Ponyta, Bulbasaur, Charmander, Murkrow, Squirtle</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Tentacool, Pelipper, Wingull, Tentacruel, Marill, Krabby, Dewgong</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Luvdisc, Krabby, Corphish, Corsola, Shellder, Kingler, Dewgong, Goldeen, Tentacruel, Sharpedo</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20</td><td>Aipom, Pineco, Heracross</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 27</h4>
+      <p>The eastern stretch bridging Tohjo Falls to New Bark, a mix of desert grass and coastline. <strong>Ralts</strong> (a future Gardevoir) is the standout catch, with <strong>Dodrio, Lotad, Surskit,</strong> and Seedot filling out the grass and <strong>Corphish</strong> in the water. Trainers here punch at League-approach levels, so it doubles as a warm-up gauntlet.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;3–42</td><td>Zigzagoon, Poochyena, Wurmple, Lotad, Ralts, Dodrio, Surskit, Seedot, Arbok, Rapidash, Bellsprout, Ponyta, Chikorita, Cyndaquil, Murkrow, Totodile, Caterpie, Sunkern, Munchlax, Weedle, Mime Jr.</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Marill, Tentacool, Goldeen, Surskit, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Corphish, Magikarp, Goldeen, Tentacool, Tentacruel</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ekans, Pineco, Exeggcute</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 28</h4>
+      <p>The hidden trail winding up the back of <strong>Mt. Silver</strong>, reachable only after you've conquered the League. It's a rugged, high-level approach — <strong>Tangela, Snubbull, Golbat,</strong> and <strong>Poliwhirl</strong> in the grass, with a Rock Smash tree hiding <strong>Scyther</strong> and <strong>Heracross</strong>. Consider it the doormat to the toughest fight in the game; steel yourself before climbing.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;2–43</td><td>Poochyena, Zigzagoon, Wingull, Snubbull, Tangela, Golbat, Poliwag, Poliwhirl, Ponyta, Rapidash, Arbok, Doduo, Dodrio</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–44</td><td>Wingull, Pelipper, Poliwag, Tentacool, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Magikarp, Wailmer, Poliwag, Tentacool, Sharpedo, Tentacruel, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;40</td><td>Scyther, Forretress, Ambipom, Heracross</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Victory Road</h4>
+      <p>Johto's final dungeon before the Indigo League — a multi-floor Strength-boulder cave crawling with high-level wild Pokémon and rival-tier trainers. Expect <strong>Golbat, Graveler, Onix, Rhyhorn,</strong> and Ursaring at League-ready levels, plus hidden items tucked behind boulders. Stock a full bag of Full Restores, a stack of Revives, and a fresh Repel before you commit — there's no Pokémon Center inside.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;36–48</td><td>Lairon, Hariyama, Mawile, Golbat, Meditite, Sableye, Medicham, Onix, Loudred, Golem, Rhydon, Donphan, Dragonair, Pupitar, Makuhita, Aron, Whismur, Exploud, Sandslash, Steelix, Zubat, Crobat, Aggron, Dusclops, Haunter</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–46</td><td>Golbat, Shellder, Cloyster, Wooper, Lapras, Quagsire</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Magikarp, Whiscash, Goldeen, Barboach, Tentacool, Chinchou, Shellder, Kabuto, Omanyte, Tentacruel, Lanturn</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;30–40</td><td>Graveler, Geodude, Golem, Probopass</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Tohjo Falls</h4>
+      <p>The scenic waterfall cave straddling the Johto–Kanto border (linking Routes 26 and 27). A short Surf-and-Waterfall crossing populated by <strong>Slowpoke, Golbat,</strong> and Zubat, with Magikarp in the pools. More of a checkpoint than a challenge, but the cascade is a memorable landmark on the long road to the Plateau.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;28–30</td><td>Slowpoke, Zubat, Raticate, Golbat, Rattata</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Pelipper, Tentacool, Goldeen, Slowpoke, Seaking</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Magikarp, Wailmer, Tentacool, Goldeen, Sharpedo, Horsea, Qwilfish, Seaking, Slowpoke</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">S.S. Aqua</h4>
+      <p>The cross-region ferry itself doubles as a walkable encounter zone — and it's an Electric-type sanctuary. Roaming the decks and holds are <strong>Voltorb, Magnemite, Electrode, Magneton, Elekid, Electabuzz,</strong> and even a rare loose <strong>Jolteon</strong> and <strong>Pichu</strong>. If your team lacks a spark, the voyage between Olivine and Vermilion is the place to fix that.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;22–30</td><td>Voltorb, Magnemite, Electrode, Magneton, Elekid, Electabuzz, Pichu, Jolteon</td></tr></tbody></table></div></aside>
+  </article></div>
+  </section>
+
+  <section id="kanto" class="chapter">
+    <div class="chapter-head"><span class="ch-mark">§4</span><h2>Kanto · Badges Nine to Sixteen</h2></div>
+    <p class="lead">The nostalgia tour, re-leveled for a hardened team — everything from Pallet to Cinnabar, gyms dropped in where they fall. Blue waits at the very end, holding the Viridian gym as the sixteenth and final leader. Includes the fishing-coast routes east of Lavender and the Safari Zone's spectacular rare-hunt.</p>
+    <div class="zones"><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Pallet Town</h4>
+      <p>You've crossed the sea to Kanto and landed in Professor Oak's sleepy hometown — two houses and a lab, exactly as legend remembers it. There's no wild grass in town, but the shoreline is a Surf gateway: <strong>Tentacool</strong> in the shallows, and this is your launch point for the Route 21 crossing down to Cinnabar later. Pop into Oak's lab for a story beat, then head north into Route 1.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Corphish, Magikarp, Tentacool, Quagsire</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 1</h4>
+      <p>The nostalgic first steps of every Kanto adventure — a gentle path of <strong>Pidgey</strong> and <strong>Rattata</strong> that your Johto-hardened, badge-laden team will flatten without breaking stride. Nothing to catch you haven't seen, but soak in the callback. A shopkeeper hands out a free sample near the top.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;2–6</td><td>Rattata, Furret, Hoothoot, Pidgey, Sentret, Raticate, Poochyena</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–14</td><td>Poliwag, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Viridian City</h4>
+      <p>The green city — and the site of Kanto's <strong>final</strong> gym, which stays firmly locked until you've earned the other fifteen badges. <strong>Blue</strong> waits inside as the sixteenth leader (his full team and matchup are covered at the end of the Kanto loop, where you'll actually fight him). For now it's a rest stop: restock at the Mart, heal, replay the old man's catching tutorial for a freebie, and move on north. Don't waste a trip to the gym door yet — it won't open.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;5–14</td><td>Poliwag, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 2 / Viridian Forest</h4>
+      <p>The winding forest maze between Viridian and Pewter, walled by tall trees and buzzing with bugs. The full evolutionary bug cast is here — <strong>Caterpie, Weedle,</strong> and their already-evolved <strong>Butterfree/Beedrill</strong> — but the reason to slow down is the wild <strong>Pikachu</strong> hiding in the grass. If you never grabbed a Pichu back on Route 29, this is your shot at the mascot. <strong>Oddish</strong> and <strong>Paras</strong> fill the remaining slots.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;3–7</td><td>Ledyba, Hoothoot, Spinarak, Noctowl, Pidgey, Caterpie, Pidgeotto, Zigzagoon, Ariados, Butterfree, Ledian</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–14</td><td>Poliwag, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Pewter City</h4>
+      <p>The rock-solid town at the forest's edge, home to the excellent Pewter Museum of Science and <strong>Brock's</strong> gym — the leader who reopens the Kanto badge circuit. His modern squad is a full fossil brigade (Aerodactyl, Kabutops, Omastar), so a Water- or Grass-type is your ticket. Grab a fossil-revival lead here for lore and dex progress.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-9">
+    <div class="gym-num"><span>Badge</span><b>09</b></div>
+    <div class="boss"><div class="boss-eyebrow">Boulder Badge · Pewter City</div>
+       <h3 class="boss-name">Brock <span class="type" style="--tc:#b09150">ROCK</span></h3><p class="boss-note">Kanto's Rock gym went full fossil: <b>Aerodactyl, Kabutops, Omastar, Relicanth,</b> and a <b>Kleavor</b>. Grass and Water two-shot almost everything; watch Aerodactyl's Fire Blast on your Grass-types and Kabutops's Surf on your Rock/Ground.</p><div class="matchup">
+    <div class="matchup-read">A fossil brigade — most are Rock paired with Water, Ground, or Flying, all of which crumble to Grass and Water (many at 4×). Aerodactyl (Rock/Flying) carries Fire Blast to burn your Grass leads, and Kabutops (Rock/Water) has Surf, so lead Grass but keep a bulky backup.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#3d8bd4">Water</span><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#c0392b">Fighting</span><span class="type" style="--tc:#c99a45">Ground</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#9b59b6">Poison</span><span class="type" style="--tc:#9099a1">Normal</span><span class="type" style="--tc:#8aa6d6">Flying</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Any Grass starter</b> or a Bellossom/Victreebel — 4× on the fossils</li><li><b>A strong Water-type</b> (Vaporeon, Poliwrath) — Surf sweeps</li><li><b>Machamp</b> for Aerodactyl and Relicanth</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Golem</span><span class="lvl">Lv 66</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Curse</span><span>Rock Slide</span><span>Body Slam</span><span>Earthquake</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Aerodactyl</span><span class="lvl">Lv 66</span></div><div class="held">@ Hard Stone</div><div class="moves"><span>Ancientpower</span><span>Sky Attack</span><span>Earthquake</span><span>Fire Blast</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Kabutops</span><span class="lvl">Lv 66</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Surf</span><span>Ancientpower</span><span>Cut</span><span>Swords Dance</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Omastar</span><span class="lvl">Lv 66</span></div><div class="held">@ Focus Band</div><div class="moves"><span>Ancientpower</span><span>Ice Beam</span><span>Surf</span><span>Toxic</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Relicanth</span><span class="lvl">Lv 66</span></div><div class="held">@ Hard Stone</div><div class="moves"><span>Surf</span><span>Rock Slide</span><span>Curse</span><span>Thunderbolt</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Kleavor</span><span class="lvl">Lv 66</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Swords Dance</span><span>Rock Slide</span><span>Twineedle</span><span>Agility</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Mt. Moon</h4>
+      <p>The famous three-floor cave crossing between Pewter and Cerulean. <strong>Clefairy</strong> is the signature catch — bulky, flexible, and a monster once you evolve it with a Moon Stone (several are hidden in the walls here). Around it roam <strong>Geodude, Zubat, Paras, Sandshrew,</strong> and the <strong>Lunatone/Solrock</strong> pair (one per version-flavor). Rocket grunts squat here digging for fossils; clear them out and pick a fossil to revive back in Pewter.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;6–12</td><td>Clefairy, Geodude, Zubat, Paras, Sandshrew, Solrock, Lunatone</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 3</h4>
+      <p>The cliffside road climbing east out of Pewter toward Mt. Moon, packed with bug-catchers and hikers eager to battle. <strong>Spearow, Jigglypuff,</strong> and <strong>Mankey</strong> populate the grass — a Jigglypuff makes a cute bulky Normal/Fairy with a Moon Stone, and Mankey grows into a fierce Primeape. The Mt. Moon Pokémon Center sits at the far end.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–10</td><td>Rattata, Jigglypuff, Raticate, Sandshrew, Arbok, Zubat, Clefairy, Spearow, Skitty, Nincada</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 4</h4>
+      <p>The short, arid ledge-drop route spilling out of Mt. Moon's east exit into Cerulean City. <strong>Ekans, Sandshrew,</strong> and <strong>Spearow</strong> bake in the sun here. If you skipped a Ground-type, a Sandshrew now saves you grief against the Electric gym ahead. Mostly a quick downhill into the water city.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–10</td><td>Rattata, Raticate, Spearow, Ekans, Sandshrew, Arbok, Clefairy, Zangoose, Seviper, Zubat</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–14</td><td>Goldeen, Seaking</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Goldeen, Seaking</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Cerulean City</h4>
+      <p>The bridge-and-river city, home to <strong>Misty's</strong> Water gym and a cluster of side content: Bill's house (of PC fame) north via the Nugget Bridge, a Rocket break-in at the house with the smashed back wall, and the Bike Shop connection. Misty's all-star Water team wants an Electric or Grass answer — line one up before you challenge her.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;5–14</td><td>Goldeen, Seaking</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-10">
+    <div class="gym-num"><span>Badge</span><b>10</b></div>
+    <div class="boss"><div class="boss-eyebrow">Cascade Badge · Cerulean City</div>
+       <h3 class="boss-name">Misty <span class="type" style="--tc:#3d8bd4">WATER</span></h3><p class="boss-note">An all-star Water squad — <b>Starmie, Milotic, Vaporeon, Lapras.</b> Electric and Grass are the play, but every mon carries a coverage move (Starmie has Thunderbolt, Lapras has Reflect). A Grass-type with a status move outlasts the tankier picks.</p><div class="matchup">
+    <div class="matchup-read">An all-star Water squad built to stall — Milotic and Vaporeon have Recover/Rest, so raw Electric power is better than chip damage. Quagsire (Water/Ground) is immune to Electric, so save a Grass move for it, and note Lapras carries Reflect to blunt physical hits.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#e0b62c">Electric</span><span class="type" style="--tc:#4a9d52">Grass</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#3d8bd4">Water</span><span class="type" style="--tc:#5fc4c9">Ice</span><span class="type" style="--tc:#8fa3b0">Steel</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Jolteon</b> (S.S. Aqua / Eevee) — Thunderbolt sweeps the tank squad</li><li><b>Victreebel/Venusaur</b> — Grass with a status move outlasts the bulk</li><li><b>Lanturn</b> or any Electric for Milotic and Starmie</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Golduck</span><span class="lvl">Lv 62</span></div><div class="moves"><span>Surf</span><span>Psychic</span><span>Hypnosis</span><span>Cross Chop</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Quagsire</span><span class="lvl">Lv 62</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Surf</span><span>Amnesia</span><span>Earthquake</span><span>Rain Dance</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Vaporeon</span><span class="lvl">Lv 61</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Surf</span><span>Ice Beam</span><span>Acid Armor</span><span>Shadow Ball</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Milotic</span><span class="lvl">Lv 61</span></div><div class="moves"><span>Hydro Pump</span><span>Ice Beam</span><span>Rest</span><span>Sleep Talk</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Lapras</span><span class="lvl">Lv 62</span></div><div class="held">@ Nevermeltice</div><div class="moves"><span>Surf</span><span>Ice Beam</span><span>Rain Dance</span><span>Reflect</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Starmie</span><span class="lvl">Lv 63</span></div><div class="held">@ Mystic Water</div><div class="moves"><span>Surf</span><span>Psychic</span><span>Recover</span><span>Thunderbolt</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 24 / 25</h4>
+      <p>The <strong>Nugget Bridge</strong> gauntlet north of Cerulean — five trainers back-to-back, a Nugget prize at the end, and a Rocket recruiter's proposition to reject. Beyond the bridge, Route 25 winds to <strong>Bill's Sea Cottage</strong> at the cape. The grass offers <strong>Oddish, Bellsprout, Abra,</strong> and <strong>Caterpie</strong> — grab an Abra here if Route 35 didn't give you one. A strong early-Kanto EXP run.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;8–14</td><td>Abra, Caterpie, Oddish, Venonat, Sunkern, Bellsprout, Butterfree, Gloom, Surskit, Metapod, Spoink</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;10–19</td><td>Goldeen, Seaking</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 5 / 6</h4>
+      <p>The paired north–south roads flanking Saffron City, joined beneath the city by the Underground Path. <strong>Meowth, Mankey,</strong> and <strong>Pidgey</strong> roam the fences; a Meowth here nets you a Persian and some Pay Day pocket money. The Day-Care on Route 5 is handy for hatching anything you picked up in Kanto.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;12–15</td><td>Abra, Meowth, Jigglypuff, Pidgey, Spinda, Noctowl, Snubbull, Pidgeotto, Hoothoot</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Vermilion City</h4>
+      <p>The southern port and <strong>Lt. Surge's</strong> Electric gym — famous for its <strong>trash-can switch puzzle</strong> guarding the leader (check adjacent cans; the second follows the first). The S.S. Anne cruise ship docks here (Cut HM inside), and <strong>Diglett's Cave</strong> tunnels west toward Route 2. Bring a Ground-type for Surge; just mind his Lanturn.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;30–39</td><td>Tentacool, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Chinchou, Shellder, Tentacruel, Lanturn</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;20–22</td><td>Geodude, Shuckle</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-11">
+    <div class="gym-num"><span>Badge</span><b>11</b></div>
+    <div class="boss"><div class="boss-eyebrow">Thunder Badge · Vermilion City</div>
+       <h3 class="boss-name">Ltsurge <span class="type" style="--tc:#e0b62c">ELECTR</span></h3><p class="boss-note">Six Electric threats with rain support and a Surf <b>Raichu</b>. Ground is your bread and butter — but <b>Lanturn</b> (Water/Electric) laughs at it, so keep a Grass or Electric answer for the fish. Explosion off Electrode can surprise you; lead carefully.</p><div class="matchup">
+    <div class="matchup-read">Ground shuts down five of six — but Lanturn (Water/Electric) is immune to Earthquake and will Surf your digger, so pack a Grass or Electric answer for the fish. Electrode's Explosion can trade with your lead; send in something expendable first or outspeed it.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#c99a45">Ground</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#e0b62c">Electric</span><span class="type" style="--tc:#8aa6d6">Flying</span><span class="type" style="--tc:#8fa3b0">Steel</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Dugtrio</b> (Diglett's Cave) — Earthquake, and its Speed outruns the team</li><li><b>Marowak/Rhydon</b> — Ground/Rock walls the whole gym</li><li>A <b>Donphan</b> or Sandslash for bulk + Earthquake</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Electrode</span><span class="lvl">Lv 57</span></div><div class="held">@ Focus Band</div><div class="moves"><span>Thunder</span><span>Rain Dance</span><span>Thunder Wave</span><span>Explosion</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Magnezone</span><span class="lvl">Lv 59</span></div><div class="moves"><span>Thunder</span><span>Reflect</span><span>Rain Dance</span><span>Double-Edge</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Lanturn</span><span class="lvl">Lv 58</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Surf</span><span>Thunderbolt</span><span>Ice Beam</span><span>Confuse Ray</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Manectric</span><span class="lvl">Lv 58</span></div><div class="moves"><span>Charge</span><span>Thunder</span><span>Thunder Wave</span><span>Crunch</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Electivire</span><span class="lvl">Lv 59</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Thunderbolt</span><span>Fire Punch</span><span>Ice Punch</span><span>Submission</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Raichu</span><span class="lvl">Lv 60</span></div><div class="held">@ Magnet</div><div class="moves"><span>Thunder</span><span>Rain Dance</span><span>Body Slam</span><span>Surf</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Diglett’s Cave</h4>
+      <p>A dead-simple mono-species tunnel connecting Vermilion to Route 2 — nothing but <strong>Diglett</strong> and the occasional <strong>Dugtrio</strong>. It's both a convenient shortcut and your easy button for a Ground-type: a Dugtrio's blinding Speed and Earthquake trivialize Lt. Surge and chip in against several Kanto leaders.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;2–32</td><td>Diglett, Dugtrio</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 11</h4>
+      <p>The wide eastern road out of Vermilion toward the Rock Tunnel approach and Route 12, crawling with gamblers and <strong>Drowzee</strong> (a future Hypno and a fine early Psychic). <strong>Spearow</strong> and <strong>Ekans</strong> fill the rest. A scientist in the gatehouse trades for a Pokémon; the sleeping <strong>Snorlax</strong> blocking the way south of here needs the Poké Flute to move.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;13–16</td><td>Magnemite, Raticate, Hoppip, Pidgeotto, Rattata, Slakoth, Drowzee, Meowth, Hypno, Noctowl</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 9 / 10</h4>
+      <p>The rugged, ledge-broken roads east to the Rock Tunnel and the Power Plant. Near the plant expect <strong>Voltorb, Magnemite,</strong> and — if you poke around — the legendary bird <strong>Zapdos</strong> roosting inside. The cliffs hold <strong>Spearow, Ekans,</strong> and <strong>Machop</strong>. Bring Rock Smash and a way to see in the dark for the tunnel just ahead.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;15–18</td><td>Raticate, Fearow, Zubat, Rattata, Spearow, Aron, Marowak, Venonat, Venomoth</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;10–19</td><td>Goldeen, Seaking</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Goldeen, Seaking</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Rock Tunnel</h4>
+      <p>A genuinely pitch-black two-floor cave — bring <strong>Flash</strong> or wander blind. In this build it's a beefy mid-40s dungeon: <strong>Onix, Machop, Cubone/Marowak,</strong> and <strong>Haunter</strong> throughout, with Zubat filler. A Cubone (Thick Club Marowak) or a Machoke caught here is a real payoff, and the high wild levels make it a superb grinding spot before you tackle Celadon and Saffron.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;42–46</td><td>Zubat, Geodude, Haunter, Cubone, Marowak, Golbat, Onix, Machop, Sableye, Machoke, Mawile, Kangaskhan</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Lavender Town</h4>
+      <p>The somber tower town, forever tied to its haunting theme. The <strong>Pokémon Tower</strong> is a memorial full of restless Ghost-types and grieving Channelers — you'll need the Silph Scope to see the ghosts clearly and lay a certain Marowak to rest. The Name Rater and the region's radio quests live here too. Ghosts everywhere: a Dark- or Ghost-type earns its keep.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 8 / 7</h4>
+      <p>The direct eastern approaches into Saffron (Route 7) and toward Celadon/Lavender (Route 8), guarded by gatehouses. <strong>Growlithe, Vulpix, Ekans,</strong> and <strong>Kadabra</strong>-tier psychics roam here — a Vulpix or Growlithe rounds out a Fire slot if you still need one. Tight, trainer-dense roads; good steady EXP.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;16–20</td><td>Abra, Kadabra, Jigglypuff, Snubbull, Pidgeotto, Growlithe, Meowth, Haunter, Vulpix, Noctowl, Duskull</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Celadon City</h4>
+      <p>Kanto's glittering west-side metropolis — the biggest <strong>Department Store</strong> in the game (all the evolution stones, TMs, and vitamins), and the <strong>Game Corner</strong>, where slot winnings buy prize Pokémon and TMs. There's a free <strong>Eevee</strong> on the Dept. Store roof and, famously, a hobo behind the Game Corner who sells you a Porygon-adjacent oddity. <strong>Erika's</strong> perfumed Grass gym sits in a greenhouse, and a Rocket cell operates from the hideout under the arcade. Budget a long shopping stop — the rooftop vending machine drinks double as cheap healing.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;15–24</td><td>Grimer, Muk</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5</td><td>Grimer</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-12">
+    <div class="gym-num"><span>Badge</span><b>12</b></div>
+    <div class="boss"><div class="boss-eyebrow">Rainbow Badge · Celadon City</div>
+       <h3 class="boss-name">Erika <span class="type" style="--tc:#4a9d52">GRASS</span></h3><p class="boss-note">A sun-team Grass gym: <b>Venusaur, Victreebel, Roserade,</b> and <b>Bellossom</b> spamming SolarBeam and Sleep Powder. Fire and Flying roast the lot; a Fire-type with a Sleep-proof item cleans house. Don't let Jumpluff Encore-lock your sweeper.</p><div class="matchup">
+    <div class="matchup-read">A sun-boosted Grass gym leaning on SolarBeam and Sleep Powder. Fire is ideal — it's super-effective AND the sun powers up your own Fire moves — but everything here spams sleep, so lead with a Vital Spirit/Insomnia mon or a Chesto/Lum holder. Don't let Jumpluff Encore-lock your sweeper.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#8aa6d6">Flying</span><span class="type" style="--tc:#5fc4c9">Ice</span><span class="type" style="--tc:#9b59b6">Poison</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#3d8bd4">Water</span><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#c99a45">Ground</span><span class="type" style="--tc:#e0b62c">Electric</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Any Fire-type</b> (Arcanine, Magmar, Houndoom) — 2×, and burns through Sleep</li><li><b>Crobat/Pidgeot</b> — Flying + Speed to beat the Sleep Powder</li><li>A <b>Fire/Flying</b> like Charizard does double super-effective duty</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Jumpluff</span><span class="lvl">Lv 61</span></div><div class="held">@ Focus Band</div><div class="moves"><span>Giga Drain</span><span>Sleep Powder</span><span>Encore</span><span>Leech Seed</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Roserade</span><span class="lvl">Lv 60</span></div><div class="moves"><span>Synthesis</span><span>Grasswhistle</span><span>Toxic</span><span>Petal Dance</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Tangrowth</span><span class="lvl">Lv 60</span></div><div class="moves"><span>Mega Drain</span><span>Bind</span><span>Tickle</span><span>Block</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Venusaur</span><span class="lvl">Lv 61</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Sunny Day</span><span>Solarbeam</span><span>Sludge Bomb</span><span>Sleep Powder</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Victreebel</span><span class="lvl">Lv 62</span></div><div class="held">@ Poison Barb</div><div class="moves"><span>Sludge Bomb</span><span>Giga Drain</span><span>Swords Dance</span><span>Sleep Powder</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Bellossom</span><span class="lvl">Lv 62</span></div><div class="held">@ Miracle Seed</div><div class="moves"><span>Sunny Day</span><span>Synthesis</span><span>Sleep Powder</span><span>Solarbeam</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 16 / 17 / 18</h4>
+      <p>The <strong>Cycling Road</strong> corridor running west from Celadon down to Fuchsia — a long downhill you'll want the Bike for, lined with bikers and <strong>Doduo/Spearow</strong>. Route 17's steep grade is a rapid one-way sprint south; the Snorlax gate and a hidden-item-rich verge make the ride worthwhile. Fearow and Raticate round out the encounters.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;26–30</td><td>Grimer, Fearow, Muk, Slugma, Murkrow, Roselia, Shuppet</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Fuchsia City</h4>
+      <p>The southern town built around wildlife preservation — <strong>Janine's</strong> Poison gym (with its maze of invisible walls) and, more importantly, the gateway to the <strong>Safari Zone</strong>. The Warden's house, the HM-move fetch quests, and a move tutor cluster here. Line up a Ground- or Psychic-type for Janine before you challenge her.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–30</td><td>Absol, Geodude, Zubat, Tropius, Chimecho, Trapinch, Nosepass, Makuhita, Beldum, Vibrava, Whismur, Meditite, Numel, Baltoy, Lotad, Cacnea, Lombre, Bagon, Medicham, Camerupt, Castform</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–30</td><td>Magikarp, Tentacool, Barboach, Quagsire, Relicanth, Wooper, Whiscash</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–40</td><td>Magikarp, Gyarados, Barboach, Tentacool, Quagsire, Tentacruel, Feebas, Whiscash</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-13">
+    <div class="gym-num"><span>Badge</span><b>13</b></div>
+    <div class="boss"><div class="boss-eyebrow">Soul Badge · Fuchsia City</div>
+       <h3 class="boss-name">Janine <span class="type" style="--tc:#9b59b6">POISON</span></h3><p class="boss-note">Koga's daughter runs Poison with a nasty <b>Nidoqueen</b> and a Double-Team <b>Venomoth</b>. Ground and Psychic are the answers; watch Weezing's Fire Blast and the evasion cheese from Venomoth — pack an accuracy-independent move or Haze.</p><div class="matchup">
+    <div class="matchup-read">Poison, with a nasty Nidoqueen (Poison/Ground) that ignores your own Ground moves and a Double-Team Venomoth that gets annoying fast. Psychic is the cleanest answer. Bring an accuracy-independent move (or Haze/a Steel-type) so Venomoth's evasion cheese doesn't stall you out.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#c99a45">Ground</span><span class="type" style="--tc:#e05a8a">Psychic</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#9b59b6">Poison</span><span class="type" style="--tc:#8aa93a">Bug</span><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#e08fc0">Fairy</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Alakazam/Espeon</b> — Psychic sweeps the Poisons</li><li><b>Dugtrio/Rhydon</b> — Ground, and immune to nothing here</li><li>A <b>Steelix</b> is immune to Poison and hits back with Earthquake</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Weezing</span><span class="lvl">Lv 63</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Sludge Bomb</span><span>Fire Blast</span><span>Destiny Bond</span><span>Amnesia</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Muk</span><span class="lvl">Lv 62</span></div><div class="moves"><span>Minimize</span><span>Sludge Bomb</span><span>Toxic</span><span>Acid Armor</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Swalot</span><span class="lvl">Lv 61</span></div><div class="moves"><span>Swallow</span><span>Stockpile</span><span>Amnesia</span><span>Spit Up</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Nidoqueen</span><span class="lvl">Lv 62</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Earthquake</span><span>Sludge Bomb</span><span>Thunderbolt</span><span>Submission</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Crobat</span><span class="lvl">Lv 63</span></div><div class="moves"><span>Pursuit</span><span>Sludge Bomb</span><span>Toxic</span><span>Confuse Ray</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Venomoth</span><span class="lvl">Lv 64</span></div><div class="held">@ Brightpowder</div><div class="moves"><span>Giga Drain</span><span>Psychic</span><span>Toxic</span><span>Double Team</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Safari Zone</h4>
+      <p>The crown-jewel catching preserve — special rules apply (no fainting; you lob Bait and Rocks and pray), but the species list is spectacular. Highlights include <strong>Pinsir, Kangaskhan, Chansey,</strong> <strong>Tauros,</strong> and rarities you can't get elsewhere: a <strong>Squirtle</strong> paddling the surf, wild <strong>Pikachu,</strong> and the <strong>Wooper/Quagsire</strong> line in the marshes. Bring a full wallet, plan a route between the exits, and treat this as your one-stop rare hunt.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;19–40</td><td>Oddish, Natu, Girafarig, Gloom, Pikachu, Wobbuffet, Doduo, Aipom, Pinsir, Sunkern, Phanpy, Heracross, Rhyhorn, Dodrio, Mareep, Stantler, Miltank, Tauros, Hoothoot, Xatu, Scyther, Gligar, Teddiursa, Happiny, Bonsly, Ledyba, Pineco, Houndour, Kangaskhan, Yanma, Togepi, Bulbasaur, Cleffa, Charmander, Chansey, Spinarak, Snubbull, Porygon, Murkrow, Farfetch’d, Munchlax, Snorlax, Torchic, Mudkip, Bellossom, Togetic, Clefairy, Blissey, Tangela, Tangrowth, Gliscor, Treecko, Ekans, Ponyta</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;20–40</td><td>Psyduck, Golduck, Marill, Mantyke, Wooper, Quagsire, Squirtle, Politoed</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–40</td><td>Goldeen, Magikarp, Seaking, Remoraid, Octillery, Squirtle</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;5–40</td><td>Geodude, Shuckle</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Saffron City</h4>
+      <p>Loop back to the central transit hub — once seized by Team Rocket and locked down inside <strong>Silph Co.</strong> until you liberate it floor by floor. The reward for the cleanup is superb: a free <strong>Master Ball</strong> from the company president (save it for a roaming legendary) and a gift <strong>Lapras</strong>. Home to <strong>Sabrina's</strong> Psychic gym, the rival <strong>Fighting Dojo</strong> next door (beat the Karate King to claim a free <strong>Hitmonlee or Hitmonchan</strong>), and the <strong>Magnet Train</strong> station linking straight back to Goldenrod.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-14">
+    <div class="gym-num"><span>Badge</span><b>14</b></div>
+    <div class="boss"><div class="boss-eyebrow">Marsh Badge · Saffron City</div>
+       <h3 class="boss-name">Sabrina <span class="type" style="--tc:#e05a8a">PSYCHC</span></h3><p class="boss-note">Elite Psychics: <b>Alakazam, Espeon, Mr. Mime,</b> and a maddening <b>Wobbuffet</b> that Counters/Mirror Coats your big hits. Dark and Ghost tear through, but bait Wobbuffet with weak moves or status. Bug (Scizor, Crobat's Cross Poison-tier) also does work.</p><div class="matchup">
+    <div class="matchup-read">Elite Psychics, plus a Wobbuffet that Counters and Mirror Coats your big hits back at you. Dark is the answer — immune to Psychic and super-effective — but bait Wobbuffet with a weak move or status first, then unload. Slowbro (Water/Psychic) also wants an Electric or Grass hit.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#5a5560">Dark</span><span class="type" style="--tc:#6a5a9e">Ghost</span><span class="type" style="--tc:#8aa93a">Bug</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#e05a8a">Psychic</span><span class="type" style="--tc:#c0392b">Fighting</span><span class="type" style="--tc:#9b59b6">Poison</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Umbreon/Weavile</b> — Dark, immune to Psychic STAB</li><li><b>Scizor/Crobat</b> — Bug + Steel resists and revenge-kills</li><li><b>Houndoom</b> — Dark/Fire covers the whole gym</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Mr. Mime</span><span class="lvl">Lv 65</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Psychic</span><span>Thunder Wave</span><span>Encore</span><span>Ice Punch</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Jynx</span><span class="lvl">Lv 64</span></div><div class="moves"><span>Psychic</span><span>Ice Beam</span><span>Lovely Kiss</span><span>Bubblebeam</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Slowbro</span><span class="lvl">Lv 64</span></div><div class="held">@ Chesto Berry</div><div class="moves"><span>Rest</span><span>Sleep Talk</span><span>Submission</span><span>Surf</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Wobbuffet</span><span class="lvl">Lv 64</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Mirror Coat</span><span>Counter</span><span>Safeguard</span><span>Destiny Bond</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Espeon</span><span class="lvl">Lv 65</span></div><div class="moves"><span>Psychic</span><span>Morning Sun</span><span>Future Sight</span><span>Power Gem</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Alakazam</span><span class="lvl">Lv 66</span></div><div class="held">@ Twistedspoon</div><div class="moves"><span>Shadow Ball</span><span>Psychic</span><span>Recover</span><span>Thunderpunch</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 19 / 20</h4>
+      <p>The southern sea lanes linking Fuchsia, the <strong>Seafoam Islands,</strong> and Cinnabar — pure Surf territory once you round the Fuchsia coast. <strong>Tentacool, Tentacruel,</strong> and <strong>Wingull</strong> ride the waves, with <strong>Seel</strong> and <strong>Staryu</strong> in the deeper water. Whirlpools gate progress; a Staryu here becomes a superb Starmie.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;30–39</td><td>Tentacool, Wingull, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Quagsire, Tentacruel</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Seafoam Islands</h4>
+      <p>A frozen, current-swept sea-cave between the mainland and Cinnabar, and the roost of the legendary <strong>Articuno</strong> in its depths. Push boulders into the rushing water to still the currents and descend. Residents skew cold and coastal: <strong>Seel, Dewgong, Slowpoke, Golbat,</strong> and Krabby. Bring Surf, Strength, and a healthy respect for Articuno's Blizzard.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5–44</td><td>Smoochum, Jynx, Piloswine, Seel, Dewgong, Delibird, Spheal, Snorunt</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Cinnabar Island</h4>
+      <p>The volcanic island of secrets — the burned-out <strong>Pokémon Mansion</strong> whose journals reveal a certain legendary's origin, the <strong>fossil-revival lab,</strong> and (in this build) the connection to Blaine's fiery gym over toward the Seafoam side. Even a scorched island rewards exploration: the mansion's basement key opens the way, and the lab turns your Mt. Moon fossils into ancient Pokémon.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;10–43</td><td>Magmar, Magby, Misdreavus, Slugma, Koffing, Graveler, Weezing, Magcargo, Torkoal</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;30–39</td><td>Tentacool, Wailmer, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Chinchou, Shellder, Tentacruel, Lanturn</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-15">
+    <div class="gym-num"><span>Badge</span><b>15</b></div>
+    <div class="boss"><div class="boss-eyebrow">Volcano Badge · Cinnabar / Seafoam</div>
+       <h3 class="boss-name">Blaine <span class="type" style="--tc:#e6602f">FIRE</span></h3><p class="boss-note">A sun-drenched Fire gym — <b>Rapidash, Magmortar, Houndoom,</b> and an Eruption <b>Camerupt.</b> Water and Rock end it fast, but the sun doubles their Fire power, so hit first. A bulky Water with Surf sweeps; keep it off Houndoom's Solar Beam.</p><div class="matchup">
+    <div class="matchup-read">A sun team — which means their Fire moves are boosted 50% and SolarBeam fires instantly, so hit first and hit hard. Water and Rock both crush it, but Houndoom (Dark/Fire) carries SolarBeam for your Waters and Camerupt (Fire/Ground) has Earth Power, so keep your Water-type healthy.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#3d8bd4">Water</span><span class="type" style="--tc:#b09150">Rock</span><span class="type" style="--tc:#c99a45">Ground</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type" style="--tc:#e6602f">Fire</span><span class="type" style="--tc:#4a9d52">Grass</span><span class="type" style="--tc:#5fc4c9">Ice</span><span class="type" style="--tc:#8fa3b0">Steel</span><span class="type" style="--tc:#8aa93a">Bug</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Any bulky Water</b> (Vaporeon, Lapras, Milotic) — Surf ends it</li><li><b>Rhydon/Golem</b> — Rock/Ground tanks the fire and hits back</li><li>A <b>Quagsire</b> ignores the sun and walls Eruption</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Rapidash</span><span class="lvl">Lv 66</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Double-Edge</span><span>Sunny Day</span><span>Fire Blast</span><span>Solarbeam</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Magmortar</span><span class="lvl">Lv 65</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Thunderpunch</span><span>Fire Blast</span><span>Psychic</span><span>Confuse Ray</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Houndoom</span><span class="lvl">Lv 66</span></div><div class="held">@ Miracle Seed</div><div class="moves"><span>Fire Blast</span><span>Sunny Day</span><span>Solarbeam</span><span>Crunch</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Magcargo</span><span class="lvl">Lv 65</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Fire Blast</span><span>Shadow Ball</span><span>Sunny Day</span><span>Hypnosis</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Torkoal</span><span class="lvl">Lv 67</span></div><div class="held">@ White Herb</div><div class="moves"><span>Curse</span><span>Iron Defense</span><span>Withdraw</span><span>Heat Wave</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Camerupt</span><span class="lvl">Lv 67</span></div><div class="held">@ Charcoal</div><div class="moves"><span>Earth Power</span><span>Eruption</span><span>Yawn</span><span>Amnesia</span></div></div></div></div>
+  </section><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 21</h4>
+      <p>The quiet Surf-and-swim route closing the Kanto loop between Cinnabar and Pallet Town. <strong>Tangela</strong> suns itself on the little midway island while <strong>Tentacool</strong> and the odd <strong>Pidgey</strong> flit past. A calm victory lap back to where you landed — and the road home before the League.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;20–35</td><td>Tangela, Mr. Mime, Rattata, Raticate</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;30–39</td><td>Tentacool, Tentacruel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Corphish, Magikarp, Tentacool, Quagsire</td></tr></tbody></table></div></aside>
+  </article><section class="gym" id="gym-16">
+    <div class="gym-num"><span>Badge</span><b>16</b></div>
+    <div class="boss"><div class="boss-eyebrow">Earth Badge · Viridian City</div>
+       <h3 class="boss-name">Blue <span class="type" style="--tc:#888">MIXED (BLUE)</span></h3><p class="boss-note">The sixteenth and final leader — a true rival team with <b>Articuno, Alakazam, Arcanine, Gyarados, Exeggutor,</b> and a Quick Claw <b>Rhydon.</b> There's no single sweep here; you need coverage for all six. Lead with something that pressures Articuno (Rock/Electric), keep an Electric for Gyarados, and save a physical wall for Arcanine's ExtremeSpeed.</p><div class="matchup">
+    <div class="matchup-read">The final leader runs a true rival team with no shared weakness — Articuno, Alakazam, Arcanine, Gyarados, Exeggutor, and Rhydon each want a different answer. This is a coverage check, not a type-check: bring six mons that collectively hit Ice, Fire, Water, Grass, Rock, and Psychic, and pace your healing.</div>
+    <div class="matchup-grid">
+      <div class="mu-row mu-bring"><span class="mu-label">Bring</span><div class="mu-chips"><span class="type" style="--tc:#b09150">Rock</span><span class="type" style="--tc:#e0b62c">Electric</span><span class="type" style="--tc:#c99a45">Ground</span><span class="type" style="--tc:#5fc4c9">Ice</span></div></div>
+      <div class="mu-row mu-avoid"><span class="mu-label">Avoid</span><div class="mu-chips"><span class="type-none">— (no single type covers all six)</span></div></div>
+    </div>
+    <div class="mu-counters"><span class="mu-label">Recommended counters</span><ul><li><b>Rhyperior/Golem</b> — Rock/Ground handles Articuno AND Arcanine</li><li><b>Lanturn/Jolteon</b> — Electric for Gyarados and Articuno</li><li><b>Mamoswine</b> — Ice for Exeggutor, Ground for Arcanine/Rhydon</li></ul></div>
+  </div><div class="team-label">The Roster</div><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Articuno</span><span class="lvl">Lv 69</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Ice Beam</span><span>Sky Attack</span><span>Rest</span><span>Toxic</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Alakazam</span><span class="lvl">Lv 68</span></div><div class="held">@ Twistedspoon</div><div class="moves"><span>Thunderbolt</span><span>Recover</span><span>Psychic</span><span>Shadow Ball</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Rhydon</span><span class="lvl">Lv 67</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Rock Slide</span><span>Earthquake</span><span>Iron Tail</span><span>Crunch</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Exeggutor</span><span class="lvl">Lv 68</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Leech Seed</span><span>Sleep Powder</span><span>Psychic</span><span>Giga Drain</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Gyarados</span><span class="lvl">Lv 68</span></div><div class="held">@ Focus Band</div><div class="moves"><span>Hydro Pump</span><span>Double Team</span><span>Body Slam</span><span>Reversal</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Arcanine</span><span class="lvl">Lv 69</span></div><div class="held">@ Silk Scarf</div><div class="moves"><span>Flamethrower</span><span>Curse</span><span>Crunch</span><span>Extremespeed</span></div></div></div></div>
+  </section></div>
+    <h3 class="sub-head">The Eastern Fishing Coast</h3>
+    <p class="sub-lead">The boardwalk routes running south from Lavender toward Fuchsia — a Snorlax roadblock, endless anglers, and a genuinely absurd amount of wild Chansey for anyone grinding levels.</p>
+    <div class="zones"><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 12</h4>
+      <p>The long fishing pier east of Lavender, a rod-angler's haven where the sleeping <strong>Snorlax</strong> famously blocks the boardwalk until you blast the Poké Flute. The grass hides a wild <strong>Chansey</strong> (jackpot EXP) among <strong>Nidorino/Nidorina, Hoppip,</strong> and <strong>Venonat</strong>. Cast for <strong>Carvanha</strong> and Tentacool off the planks. Bring the Flute and patience.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;23–27</td><td>Chansey, Hoppip, Quagsire, Nidorino, Nidorina, Pidgeotto, Seedot, Venonat, Noctowl, Venomoth</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;25–29</td><td>Tentacool, Carvanha</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Quagsire, Tentacruel</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Spinarak</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 13</h4>
+      <p>The zig-zagging southern extension of the fishing coast, connecting toward the Fuchsia belt. Encounters echo Route 12 — <strong>Chansey, Nidorino/Nidorina, Hoppip,</strong> and <strong>Quagsire</strong> in the grass, Tentacool and Quagsire on the water. A hidden-item-rich verge and a good second shot at that elusive Chansey.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;23–27</td><td>Chansey, Hoppip, Quagsire, Nidorino, Nidorina, Pidgeotto, Seedot, Venonat, Noctowl, Venomoth</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;25–29</td><td>Quagsire, Tentacool</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Quagsire, Tentacruel</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;10</td><td>Ledyba, Pineco, Exeggcute, Seedot</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 14</h4>
+      <p>The trainer-dense road bending south along the eastern seaboard, thick with bikers. The grass upgrades slightly — <strong>Nidorino/Nidorina, Shroomish, Skiploom, Noctowl,</strong> and another <strong>Chansey</strong> — while the water stays Quagsire/Tentacool. Steady mid-Kanto EXP with the occasional big Normal-type payday.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;26–30</td><td>Chansey, Nidorino, Nidorina, Hoppip, Shroomish, Skiploom, Venonat, Noctowl, Venomoth, Pidgeotto, Quagsire</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;25–29</td><td>Quagsire, Tentacool</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Quagsire, Tentacruel</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 15</h4>
+      <p>The gatehouse road completing the loop into Fuchsia from the east. <strong>Chansey, Hoppip, Quagsire, Noctowl,</strong> and the Nidoran lines fill the grass. The west gatehouse has an NPC who checks your dex progress — a nice milestone marker as your Kanto catch-count climbs.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;23–27</td><td>Chansey, Hoppip, Quagsire, Nidorino, Nidorina, Pidgeotto, Venonat, Noctowl, Venomoth, Volbeat, Illumise</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;25–29</td><td>Quagsire, Tentacool</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Magikarp, Tentacool, Quagsire, Tentacruel</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Route 22</h4>
+      <p>The western approach outside Viridian City, leading up toward Victory Road's Kanto mouth — and the traditional site of early rival showdowns. <strong>Rattata, Spearow, Ponyta,</strong> and <strong>Poliwag</strong> roam the grass, with Poliwag/Poliwhirl in the pond. A short but storied stretch of road right at the edge of the region.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;3–7</td><td>Rattata, Spearow, Poliwag, Doduo, Ponyta, Taillow</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–14</td><td>Poliwag, Poliwhirl</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;10–40</td><td>Poliwag, Magikarp, Poliwhirl</td></tr></tbody></table></div></aside>
+  </article></div>
+  </section>
+
+  <section id="league" class="chapter">
+    <div class="chapter-head"><span class="ch-mark">§5</span><h2>The Pokémon League</h2></div>
+    <p class="lead">Will, Koga, Bruno, Karen, then Champion Lance. No healing between them — bring a bag full of Full Restores and Revives, and consider a dedicated Ice or Fairy answer for Lance's dragons.</p>
+    <div class="league"><div class="boss"><div class="boss-eyebrow">Elite Four · Will</div><h3 class="boss-name">Will</h3><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Gardevoir</span><span class="lvl">Lv 66</span></div><div class="moves"><span>Psychic</span><span>Hyper Voice</span><span>Moonblast</span><span>Reflect</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Jynx</span><span class="lvl">Lv 67</span></div><div class="moves"><span>Blizzard</span><span>Psychic</span><span>Perish Song</span><span>Sing</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Exeggutor</span><span class="lvl">Lv 67</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Ancientpower</span><span>Sleep Powder</span><span>Dream Eater</span><span>Softboiled</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Grumpig</span><span class="lvl">Lv 67</span></div><div class="moves"><span>Teeter Dance</span><span>Power Gem</span><span>Snore</span><span>Rest</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Slowbro</span><span class="lvl">Lv 66</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Flamethrower</span><span>Curse</span><span>Earthquake</span><span>Rock Smash</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Xatu</span><span class="lvl">Lv 68</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Future Sight</span><span>Fly</span><span>Confuse Ray</span><span>Protect</span></div></div></div></div><div class="boss"><div class="boss-eyebrow">Elite Four · Koga</div><h3 class="boss-name">Koga</h3><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Tentacruel</span><span class="lvl">Lv 67</span></div><div class="held">@ Chesto Berry</div><div class="moves"><span>Waterfall</span><span>Blizzard</span><span>Giga Drain</span><span>Rest</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Muk</span><span class="lvl">Lv 67</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Minimize</span><span>Fire Blast</span><span>Sludge Bomb</span><span>Toxic</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Swalot</span><span class="lvl">Lv 67</span></div><div class="moves"><span>Swallow</span><span>Stockpile</span><span>Amnesia</span><span>Spit Up</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Nidoking</span><span class="lvl">Lv 67</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Lovely Kiss</span><span>Fire Blast</span><span>Surf</span><span>Earthquake</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Venomoth</span><span class="lvl">Lv 67</span></div><div class="held">@ Brightpowder</div><div class="moves"><span>Silver Wind</span><span>Signal Beam</span><span>Psychic</span><span>Supersonic</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Crobat</span><span class="lvl">Lv 68</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Protect</span><span>Fly</span><span>Toxic</span><span>Confuse Ray</span></div></div></div></div><div class="boss"><div class="boss-eyebrow">Elite Four · Bruno</div><h3 class="boss-name">Bruno</h3><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Steelix</span><span class="lvl">Lv 67</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Crunch</span><span>Earthquake</span><span>Explosion</span><span>Iron Tail</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Poliwrath</span><span class="lvl">Lv 68</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Submission</span><span>Blizzard</span><span>Hydro Pump</span><span>Psychic</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Heracross</span><span class="lvl">Lv 67</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Cross Chop</span><span>Megahorn</span><span>Reversal</span><span>Earthquake</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Hariyama</span><span class="lvl">Lv 68</span></div><div class="moves"><span>Belly Drum</span><span>Smellingsalt</span><span>Focus Punch</span><span>Seismic Toss</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Hitmontop</span><span class="lvl">Lv 67</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Triple Kick</span><span>Double Kick</span><span>Dig</span><span>Pursuit</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Machamp</span><span class="lvl">Lv 68</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Rock Slide</span><span>Earthquake</span><span>Body Slam</span><span>Cross Chop</span></div></div></div></div><div class="boss"><div class="boss-eyebrow">Elite Four · Karen</div><h3 class="boss-name">Karen</h3><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Umbreon</span><span class="lvl">Lv 68</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Growth</span><span>Shadow Ball</span><span>Hidden Power</span><span>Baton Pass</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Weavile</span><span class="lvl">Lv 67</span></div><div class="moves"><span>Faint Attack</span><span>Metal Claw</span><span>Beat Up</span><span>Blizzard</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Persian</span><span class="lvl">Lv 68</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Slash</span><span>Cut</span><span>Iron Tail</span><span>Hypnosis</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Honchkrow</span><span class="lvl">Lv 68</span></div><div class="held">@ Sharp Beak</div><div class="moves"><span>Sky Attack</span><span>Pursuit</span><span>Swagger</span><span>Psych Up</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Absol</span><span class="lvl">Lv 67</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Psycho Cut</span><span>Shadow Claw</span><span>Perish Song</span><span>Slash</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Houndoom</span><span class="lvl">Lv 69</span></div><div class="held">@ Charcoal</div><div class="moves"><span>Flamethrower</span><span>Crunch</span><span>Iron Tail</span><span>Hidden Power</span></div></div></div></div><div class="boss"><div class="boss-eyebrow">Champion</div><h3 class="boss-name">Lance</h3><p class="boss-note">Lance returns with a fully modern dragon armada — Salamence, two Dragonites-worth of firepower, Charizard, Aerodactyl, and a Dragon-Dancing Altaria. Ice and Fairy are your keys; a Mamoswine or a Weavile from the Ice Path shreds most of this team.</p><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Salamence</span><span class="lvl">Lv 69</span></div><div class="moves"><span>Dragon Claw</span><span>Air Slash</span><span>Double-Edge</span><span>Thunderbolt</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Dragonite</span><span class="lvl">Lv 68</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Blizzard</span><span>Extremespeed</span><span>Thunder</span><span>Hyper Beam</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Gyarados</span><span class="lvl">Lv 69</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Hidden Power</span><span>Hyper Beam</span><span>Hydro Pump</span><span>Fire Blast</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Charizard</span><span class="lvl">Lv 68</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Fire Blast</span><span>Crunch</span><span>Earthquake</span><span>Swords Dance</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Aerodactyl</span><span class="lvl">Lv 69</span></div><div class="held">@ Scope Lens</div><div class="moves"><span>Sky Attack</span><span>Rock Slide</span><span>Earthquake</span><span>Iron Tail</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Altaria</span><span class="lvl">Lv 70</span></div><div class="held">@ Silk Scarf</div><div class="moves"><span>Dragon Dance</span><span>Play Rough</span><span>Safeguard</span><span>Sky Attack</span></div></div></div></div></div>
+  </section>
+
+  <section id="red" class="chapter">
+    <div class="chapter-head"><span class="ch-mark">§6</span><h2>Mt. Silver, Red &amp; the Post-Game</h2></div>
+    <p class="lead">The true summit and everything past the credits. Mt. Silver is a level-60s dungeon; the man at the top is level 75–93. Beyond him lie Cerulean Cave's Mewtwo, a Bagon-bearing tower, and the secret starter island — the game's deepest catches for a fully-built team.</p>
+    <div class="zones"><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Mt. Silver</h4>
+      <p>The endgame mountain — a brutal, sprawling cave-and-cliff complex that only opens after you've beaten the Champion. Wild levels rocket into the <strong>60s</strong>: <strong>Golem, Ursaring, Skarmory, Magmar, Golbat,</strong> and <strong>Rapidash</strong> roam the grass, the Surf pools hide <strong>Lapras</strong> and Seaking, and deep chambers hold the <strong>Larvitar</strong> line (your own future Tyranitar). Bring max-level mons, Repels, and healing — and at the frozen summit, the final trainer waits in silence.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;15–69</td><td>Houndoom, Golbat, Ursaring, Onix, Rapidash, Golem, Machoke, Magmar, Skarmory, Golduck, Pupitar, Parasect, Crobat, Venusaur, Quagsire, Graveler, Electabuzz, Mismagius, Weavile, Mamoswine, Piloswine, Charizard, Larvitar, Misdreavus, Blastoise, Annihilape, Donphan</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–65</td><td>Lapras, Pelipper, Poliwag, Seaking, Wingull, Golduck, Tentacool, Seel, Poliwhirl, Goldeen, Quagsire</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Poliwag, Magikarp, Wailmer, Poliwhirl, Tentacool, Sharpedo, Horsea, Qwilfish</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;40</td><td>Scyther, Forretress, Ambipom, Heracross</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Cerulean Cave</h4>
+      <p>The post-game superdungeon beneath Cerulean — the lair of <strong>Mewtwo</strong>, sealed until you've earned the region's respect. Everything inside sits at levels <strong>46–67</strong>: <strong>Ditto, Golbat/Crobat, Kadabra, Electrode, Parasect,</strong> and <strong>Machoke</strong> in the tunnels, wild <strong>Slowking</strong> and <strong>Gyarados</strong> in the flooded lower floor. Only enter with a fully-built, fully-healed team and your best ball reserved for the psychic at the bottom.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;46–67</td><td>Parasect, Ditto, Golbat, Magneton, Machoke, Kadabra, Crobat, Electrode, Wobbuffet, Primeape, Machamp, Alakazam, Magnezone, Annihilape</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;40–67</td><td>Psyduck, Golduck, Slowpoke, Slowbro, Slowking</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;1–67</td><td>Magikarp, Poliwag, Psyduck, Goldeen, Poliwhirl, Gyarados, Slowbro, Slowking</td></tr><tr><th>Rock&nbsp;Smash</th><td class="lv">Lv&nbsp;55</td><td>Geodude, Graveler</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Embedded Tower</h4>
+      <p>An optional expansion-era tower dungeon with a distinctly cosmic wild list — <strong>Solrock</strong> and <strong>Lunatone</strong> patrol the floors alongside Golbat and Crobat, and the real draw is a wild <strong>Bagon</strong> (the Salamence line) plus <strong>Barboach/Whiscash</strong> in the interior water. A pseudo-legendary you can raise from scratch makes this worth the climb for team-builders.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;14–40</td><td>Golbat, Lunatone, Zubat, Solrock, Bagon, Crobat</td></tr><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Solrock, Golbat, Zubat</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Barboach, Whiscash, Magikarp, Goldeen</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Faraway Island</h4>
+      <p>A tiny secret islet that functions as a <strong>baby-and-starter garden</strong> — the grass here quietly holds <strong>Mudkip, Torchic,</strong> and <strong>Treecko</strong> (the Hoenn starters!) plus a nest of babies: <strong>Elekid, Smoochum, Azurill, Pichu,</strong> and <strong>Wynaut</strong>. It's a team-builder's paradise and the game's answer to "where do I get starters I didn't pick." Guard your Poké Balls; these don't appear anywhere else.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Grass</th><td class="lv">Lv&nbsp;5</td><td>Elekid, Azurill, Smoochum, Pichu, Wynaut, Mudkip, Torchic, Treecko, Magby</td></tr></tbody></table></div></aside>
+  </article><article class="zone">
+    <div class="zone-body">
+      <h4 class="zone-name">Contest Hall</h4>
+      <p>A coastal facility better known for its events than its wildlife, but the surrounding water is fishable: <strong>Wingull, Tentacool, Staryu,</strong> and <strong>Slowpoke</strong> off the pier, with Magikarp and Seel deeper. A pleasant stop-off rather than a destination — cast a line while you're passing through.</p>
+    </div><aside class="zone-side"><div class="zone-side-tag">Wild Encounters</div><div class="enc"><table><tbody><tr><th>Surf</th><td class="lv">Lv&nbsp;5–35</td><td>Wingull, Tentacool, Pelipper, Slowpoke, Seel</td></tr><tr><th>Fish</th><td class="lv">Lv&nbsp;5–45</td><td>Wailmer, Magikarp, Tentacool, Staryu, Slowpoke, Seel</td></tr></tbody></table></div></aside>
+  </article><article class="zone zone-notable">
+    <div class="zone-body">
+      <h4 class="zone-name">Southern Island</h4>
+      <p>A small, atmospheric island tied to the roaming Eon-Pokémon lore of the expansion base. Its encounter data is sparse — treat it as a scenic, event-driven stop rather than a farming ground. Worth visiting for the set-piece it hosts rather than anything in the grass.</p>
+    </div>
+  </article></div>
+    <div class="red-fight"><div class="boss"><div class="boss-eyebrow">The Champion of Mt. Silver</div><h3 class="boss-name">Red</h3><p class="boss-note">The hardest fight in the game. Red opens with a Light Ball Pikachu that carries Surf, then rolls out the Kanto starters and Espeon at levels 75–93. There is no type he can't answer. Come at level 80+, pack Full Restores, and lead with something that can eat an Electric hit — a Ground-type neuters his Pikachu entirely.</p><div class="party"><div class="mon"><div class="mon-h"><span class="mon-name">Pikachu</span><span class="lvl">Lv 93</span></div><div class="held">@ Light Ball</div><div class="moves"><span>Thunderbolt</span><span>Surf</span><span>Iron Tail</span><span>Double Team</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Snorlax</span><span class="lvl">Lv 75</span></div><div class="held">@ Leftovers</div><div class="moves"><span>Amnesia</span><span>Curse</span><span>Body Slam</span><span>Earthquake</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Charizard</span><span class="lvl">Lv 77</span></div><div class="held">@ Charcoal</div><div class="moves"><span>Fire Blast</span><span>Wing Attack</span><span>Outrage</span><span>Steel Wing</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Venusaur</span><span class="lvl">Lv 77</span></div><div class="held">@ Miracle Seed</div><div class="moves"><span>Giga Drain</span><span>Body Slam</span><span>Sleep Powder</span><span>Leech Seed</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Blastoise</span><span class="lvl">Lv 77</span></div><div class="held">@ Quick Claw</div><div class="moves"><span>Ice Beam</span><span>Hydro Pump</span><span>Body Slam</span><span>Earthquake</span></div></div><div class="mon"><div class="mon-h"><span class="mon-name">Espeon</span><span class="lvl">Lv 80</span></div><div class="held">@ Sitrus Berry</div><div class="moves"><span>Psychic</span><span>Shadow Ball</span><span>Hidden Power</span><span>Morning Sun</span></div></div></div></div></div>
+    <p class="signoff">That's the whole region — sixteen badges, a modernized League, Red at the roof of the world, and a post-game that hands you pseudo-legendaries and starters if you're willing to hunt. Good luck out there, Trainer. Now go fill that Pokédex.</p>
+  </section>
+
+  <footer class="foot">
+    <p>Field data extracted directly from the <em>Heart &amp; Soul</em> ROM: 462 species, 864 trainers, 577 wild-encounter tables. Encounter lists and leader rosters reflect the game as it currently exists. Location context follows the Johto→Kanto structure the hack is built on.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var map=links.map(function(a){var id=a.getAttribute('href').slice(1);return {a:a,el:document.getElementById(id)};}).filter(function(x){return x.el;});
+  if(!('IntersectionObserver' in window)) return;
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var id=e.target.id;
+        map.forEach(function(m){m.a.classList.toggle('active', m.a.getAttribute('href')==='#'+id);});
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+  map.forEach(function(m){io.observe(m.el);});
+})();
+</script>

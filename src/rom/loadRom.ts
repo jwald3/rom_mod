@@ -8,6 +8,8 @@ import { readMoveIdTable, readAllCompat } from './tables/compat'
 import { readAllWildAreas, type WildArea } from './tables/wild'
 import { readAllEvolutions, readItemNames, type Evolution } from './tables/evolutions'
 import { readAllTrainers, readTrainerClassNames, type Trainer } from './tables/trainers'
+import { readPrizeLists, emptyPrizeLists, type PrizeKind, type PrizeList } from './tables/gameCorner'
+import { readShops, type Shop } from './tables/shops'
 
 export interface LoadedRom {
   fileName: string
@@ -32,6 +34,12 @@ export interface LoadedRom {
   /** NPC trainers and their teams. */
   trainers: Trainer[]
   trainerClassNames: string[]
+  /** Celadon Game Corner prize lists (Pokémon / TM / item). */
+  prizeLists: Record<PrizeKind, PrizeList>
+  /** False when the ROM has no Celadon Game Corner (e.g. Emerald/H&S) → hide the Prizes editor. */
+  gameCornerAvailable: boolean
+  /** Poké Mart shops (item lists) found in the map scripts. */
+  shops: Shop[]
   warnings: string[]
 }
 
@@ -84,6 +92,23 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
   const itemNames = readItemNames(rom, anchors)
   const trainers = readAllTrainers(rom, anchors)
   const trainerClassNames = readTrainerClassNames(rom, anchors)
+  // The Celadon Game Corner is FireRed-specific; anchors set multichoice/gcScript
+  // to 0 (e.g. Emerald/H&S) when it isn't present. Skip the parse entirely there —
+  // reading offset 0 would only yield read-only stubs and a misleading warning.
+  const gcAvailable = anchors.multichoice !== 0 && anchors.gcScript !== 0
+  const prizeLists = gcAvailable ? readPrizeLists(rom, anchors) : emptyPrizeLists()
+  const shops = readShops(rom, anchors)
+
+  if (gcAvailable) {
+    const gcUnsupported = (['pokemon', 'tm', 'item'] as PrizeKind[]).filter(
+      (k) => !prizeLists[k].regenerable,
+    )
+    if (gcUnsupported.length > 0) {
+      warnings.push(
+        `Game Corner ${gcUnsupported.join('/')} prize layout not recognized — that editor will be read-only.`,
+      )
+    }
+  }
 
   if (species[1]?.name !== 'BULBASAUR') {
     warnings.push(
@@ -111,6 +136,9 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
     itemNames,
     trainers,
     trainerClassNames,
+    prizeLists,
+    gameCornerAvailable: gcAvailable,
+    shops,
     warnings,
   }
 }

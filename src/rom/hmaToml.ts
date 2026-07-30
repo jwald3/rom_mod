@@ -93,6 +93,7 @@ const NAME_MAP: Record<string, { addr: keyof AnchorMap; count?: keyof AnchorMap 
   'data.maps.names': { addr: 'mapNames', count: 'mapNameCount' },
   'data.trainers.stats': { addr: 'trainers', count: 'trainerCount' },
   'data.trainers.classes.names': { addr: 'trainerClasses', count: 'trainerClassCount' },
+  'scripts.text.multichoice': { addr: 'multichoice' },
 }
 
 /**

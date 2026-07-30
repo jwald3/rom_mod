@@ -11,6 +11,8 @@ import {
 } from '../rom/tables/wild'
 import { evosEqual, type Evolution } from '../rom/tables/evolutions'
 import { trainersEqual, trainerToEdit, type TrainerEdit } from '../rom/tables/trainers'
+import { prizesEqual, PRIZE_KINDS, type Prize, type PrizeKind } from '../rom/tables/gameCorner'
+import { shopsEqual } from '../rom/tables/shops'
 import type { LoadedRom } from '../rom/loadRom'
 import { useRomStore } from './romStore'
 
@@ -32,6 +34,10 @@ export type EditRecord =
   | { field: 'wild'; species: number; key: string; prev: WildGroupEdit; next: WildGroupEdit }
   /** species carries the trainer index so undo can jump to it. */
   | { field: 'trainer'; species: number; prev: TrainerEdit; next: TrainerEdit }
+  /** Game Corner prize list; species is unused (0). */
+  | { field: 'gamecorner'; species: number; kind: PrizeKind; prev: Prize[]; next: Prize[] }
+  /** Poké Mart shop; species carries the shop's command offset for jump-on-undo. */
+  | { field: 'shop'; species: number; cmdOffset: number; prev: number[]; next: number[] }
 
 const MAX_UNDO = 200
 const MAX_RECENT = 8
@@ -45,6 +51,10 @@ interface EditStore {
   evoDrafts: Record<number, Evolution[]>
   /** Keyed by trainer index. */
   trainerDrafts: Record<number, TrainerEdit>
+  /** Game Corner prize drafts, keyed by list kind. */
+  gcDrafts: Partial<Record<PrizeKind, Prize[]>>
+  /** Poké Mart shop drafts, keyed by the shop's command offset. */
+  shopDrafts: Record<number, number[]>
   undoStack: EditRecord[]
   redoStack: EditRecord[]
   clipboard: LearnsetEntry[] | null
@@ -60,6 +70,10 @@ interface EditStore {
   applyEvos(species: number, next: Evolution[]): void
   /** Replace an NPC trainer (records an undo step). No-op if unchanged. */
   applyTrainer(index: number, next: TrainerEdit): void
+  /** Replace a Game Corner prize list (records an undo step). No-op if unchanged. */
+  applyGameCorner(kind: PrizeKind, next: Prize[]): void
+  /** Replace a Poké Mart shop's item list (records an undo step). No-op if unchanged. */
+  applyShop(cmdOffset: number, next: number[]): void
   /** Returns the applied record (for selection jump), or null. */
   undo(): EditRecord | null
   redo(): EditRecord | null
@@ -98,6 +112,59 @@ function originalWild(key: string): WildGroupEdit | null {
 function originalTrainer(index: number): TrainerEdit | null {
   const trainer = useRomStore.getState().loaded?.trainers[index]
   return trainer ? trainerToEdit(trainer) : null
+}
+
+function originalPrizes(kind: PrizeKind): Prize[] {
+  return useRomStore.getState().loaded?.prizeLists[kind]?.entries ?? []
+}
+
+/** Current prize list for a kind: draft if present, else the ROM original. */
+export function effectivePrizes(
+  gcDrafts: Partial<Record<PrizeKind, Prize[]>>,
+  loaded: LoadedRom,
+  kind: PrizeKind,
+): Prize[] {
+  return gcDrafts[kind] ?? loaded.prizeLists[kind]?.entries ?? []
+}
+
+/** Prize-list kinds whose drafts differ from the ROM. */
+export function computeGcDirty(
+  gcDrafts: Partial<Record<PrizeKind, Prize[]>>,
+  loaded: LoadedRom,
+): Set<PrizeKind> {
+  const dirty = new Set<PrizeKind>()
+  for (const kind of PRIZE_KINDS) {
+    const draft = gcDrafts[kind]
+    if (draft && !prizesEqual(draft, loaded.prizeLists[kind]?.entries ?? [])) dirty.add(kind)
+  }
+  return dirty
+}
+
+function originalShop(cmdOffset: number): number[] {
+  return useRomStore.getState().loaded?.shops.find((s) => s.cmdOffset === cmdOffset)?.items ?? []
+}
+
+/** Current item list for a shop: draft if present, else the ROM original. */
+export function effectiveShop(
+  shopDrafts: Record<number, number[]>,
+  loaded: LoadedRom,
+  cmdOffset: number,
+): number[] {
+  return shopDrafts[cmdOffset] ?? loaded.shops.find((s) => s.cmdOffset === cmdOffset)?.items ?? []
+}
+
+/** Shop command-offsets whose drafts differ from the ROM. */
+export function computeShopDirty(
+  shopDrafts: Record<number, number[]>,
+  loaded: LoadedRom,
+): Set<number> {
+  const dirty = new Set<number>()
+  for (const key of Object.keys(shopDrafts)) {
+    const cmd = Number(key)
+    const orig = loaded.shops.find((s) => s.cmdOffset === cmd)?.items ?? []
+    if (!shopsEqual(shopDrafts[cmd], orig)) dirty.add(cmd)
+  }
+  return dirty
 }
 
 /** Current entries for a species: draft if present, else ROM original. */
@@ -299,11 +366,33 @@ function trainerDraftsWith(
   return next
 }
 
+function gcDraftsWith(
+  drafts: Partial<Record<PrizeKind, Prize[]>>,
+  kind: PrizeKind,
+  prizes: Prize[],
+): Partial<Record<PrizeKind, Prize[]>> {
+  const next = { ...drafts }
+  if (prizesEqual(prizes, originalPrizes(kind))) delete next[kind]
+  else next[kind] = prizes
+  return next
+}
+
+function shopDraftsWith(
+  drafts: Record<number, number[]>,
+  cmdOffset: number,
+  items: number[],
+): Record<number, number[]> {
+  const next = { ...drafts }
+  if (shopsEqual(items, originalShop(cmdOffset))) delete next[cmdOffset]
+  else next[cmdOffset] = items
+  return next
+}
+
 export const useEditStore = create<EditStore>((set, get) => {
   /** Partial state applying `value` as the draft for the record's field/species. */
   function patch(
     record: EditRecord,
-    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[] | TrainerEdit,
+    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[] | TrainerEdit | Prize[] | number[],
   ): Partial<EditStore> {
     const s = get()
     if (record.field === 'learnset') {
@@ -320,6 +409,12 @@ export const useEditStore = create<EditStore>((set, get) => {
     }
     if (record.field === 'trainer') {
       return { trainerDrafts: trainerDraftsWith(s.trainerDrafts, record.species, value as TrainerEdit) }
+    }
+    if (record.field === 'gamecorner') {
+      return { gcDrafts: gcDraftsWith(s.gcDrafts, record.kind, value as Prize[]) }
+    }
+    if (record.field === 'shop') {
+      return { shopDrafts: shopDraftsWith(s.shopDrafts, record.cmdOffset, value as number[]) }
     }
     return { wildDrafts: wildDraftsWith(s.wildDrafts, record.key, value as WildGroupEdit) }
   }
@@ -340,6 +435,8 @@ export const useEditStore = create<EditStore>((set, get) => {
     wildDrafts: {},
     evoDrafts: {},
     trainerDrafts: {},
+    gcDrafts: {},
+    shopDrafts: {},
     undoStack: [],
     redoStack: [],
     clipboard: null,
@@ -376,6 +473,18 @@ export const useEditStore = create<EditStore>((set, get) => {
       const prev = get().trainerDrafts[index] ?? originalTrainer(index)
       if (!prev || trainersEqual(prev, next)) return
       push({ field: 'trainer', species: index, prev, next })
+    },
+
+    applyGameCorner(kind, next) {
+      const prev = get().gcDrafts[kind] ?? originalPrizes(kind)
+      if (prizesEqual(prev, next)) return
+      push({ field: 'gamecorner', species: 0, kind, prev, next })
+    },
+
+    applyShop(cmdOffset, next) {
+      const prev = get().shopDrafts[cmdOffset] ?? originalShop(cmdOffset)
+      if (shopsEqual(prev, next)) return
+      push({ field: 'shop', species: 0, cmdOffset, prev, next })
     },
 
     undo() {
@@ -448,6 +557,8 @@ export const useEditStore = create<EditStore>((set, get) => {
         wildDrafts: {},
         evoDrafts: {},
         trainerDrafts: {},
+        gcDrafts: {},
+        shopDrafts: {},
         undoStack: [],
         redoStack: [],
       })

@@ -19,6 +19,7 @@ import {
   evoParamKind,
   evosEqual,
   readEvolutionsFor,
+  readItemNames,
   serializeEvolutions,
   type Evolution,
 } from './tables/evolutions'
@@ -32,6 +33,15 @@ import {
   trainersEqual,
   type TrainerEdit,
 } from './tables/trainers'
+import { readSpecies } from './tables/species'
+import {
+  buildPrizeListEdit,
+  prizesEqual,
+  readPrizeLists,
+  type Prize,
+  type PrizeKind,
+} from './tables/gameCorner'
+import { buildShopEdit, readShops, shopsEqual } from './tables/shops'
 
 export interface WriteOp {
   /** Species id — or the wild area index for kind 'wild'. */
@@ -46,6 +56,8 @@ export interface WriteOp {
     | 'held-items'
     | 'trainer'
     | 'trainer-repointed'
+    | 'game-corner'
+    | 'shop'
   oldOffset: number // -1 if the original pointer was invalid
   newOffset: number
   byteLength: number
@@ -68,6 +80,10 @@ export interface RomEdits {
   heldItems?: Map<number, HeldItemsEdit>
   /** NPC trainer teams, keyed by trainer index. */
   trainers?: Map<number, TrainerEdit>
+  /** Game Corner prize lists to regenerate (keyed by list kind). */
+  gameCorner?: Map<PrizeKind, Prize[]>
+  /** Poké Mart shops to rewrite, keyed by the shop's command offset. */
+  shops?: Map<number, number[]>
 }
 
 export interface HeldItemsEdit {
@@ -362,6 +378,78 @@ export function applyRomEdits(
     }
   }
 
+  // Game Corner prizes: regenerate each edited list's script + multichoice into
+  // free space and hook the originals. Unlike fixed-size tables this is a script
+  // rewrite, so it's guarded by a signature gate (regenerable) and re-parsed below.
+  if (romEdits.gameCorner && romEdits.gameCorner.size > 0) {
+    const species = readSpecies(rom, anchors)
+    const itemNames = readItemNames(rom, anchors)
+    const lists = readPrizeLists(rom, anchors)
+    for (const [kind, entries] of [...romEdits.gameCorner.entries()].sort(([a], [b]) =>
+      a.localeCompare(b),
+    )) {
+      const list = lists[kind]
+      if (!list.regenerable) {
+        throw new Error(`Game Corner ${kind} prizes: unsupported ROM layout — cannot save`)
+      }
+      // Validate each prize's id against the relevant table.
+      entries.forEach((e, i) => {
+        const max = kind === 'pokemon' ? anchors.speciesCount : anchors.itemCount
+        if (e.id < 0 || e.id >= max) {
+          throw new Error(`Game Corner ${kind} prize ${i + 1}: invalid id #${e.id}`)
+        }
+        if (e.cost < 0 || e.cost > 0xffff) {
+          throw new Error(`Game Corner ${kind} prize ${i + 1}: cost ${e.cost} out of range`)
+        }
+      })
+      const edit = buildPrizeListEdit(list, entries, {
+        allocate: (n) => alloc.allocate(n),
+        speciesName: (id) => species[id]?.name ?? `SPECIES ${id}`,
+        itemName: (id) => itemNames[id] ?? `ITEM ${id}`,
+      })
+      for (const b of edit.blobs) out.set(b.bytes, b.offset)
+      for (const p of edit.pointers) view.setUint32(p.at, (GBA_ROM_BASE + p.target) >>> 0, true)
+      for (const wd of edit.words) view.setUint32(wd.at, wd.value >>> 0, true)
+      ops.push({
+        species: 0,
+        kind: 'game-corner',
+        oldOffset: list.dispatchOffset,
+        newOffset: edit.blobs[0].offset,
+        byteLength: edit.blobs.reduce((s, b) => s + b.bytes.length, 0),
+        erasedOld: false,
+      })
+    }
+  }
+
+  // Poké Mart shops: rewrite each edited item list into free space and repoint the
+  // pokemart command's pointer (the list can grow past its in-place slot).
+  if (romEdits.shops && romEdits.shops.size > 0) {
+    const shops = readShops(rom, anchors)
+    for (const [cmdOffset, items] of [...romEdits.shops.entries()].sort((a, b) => a[0] - b[0])) {
+      const shop = shops.find((s) => s.cmdOffset === cmdOffset)
+      if (!shop) throw new Error(`Shop at 0x${cmdOffset.toString(16)} not found — cannot save`)
+      items.forEach((id, i) => {
+        if (id < 1 || id >= anchors.itemCount) {
+          throw new Error(`Shop 0x${cmdOffset.toString(16)} item ${i + 1}: invalid id #${id}`)
+        }
+      })
+      if (items.length < 1) {
+        throw new Error(`Shop 0x${cmdOffset.toString(16)}: a shop must sell at least one item`)
+      }
+      const { blob, pointer } = buildShopEdit(shop, items, (n) => alloc.allocate(n))
+      out.set(blob.bytes, blob.offset)
+      view.setUint32(pointer.at, (GBA_ROM_BASE + pointer.target) >>> 0, true)
+      ops.push({
+        species: 0,
+        kind: 'shop',
+        oldOffset: shop.listOffset,
+        newOffset: blob.offset,
+        byteLength: blob.bytes.length,
+        erasedOld: false,
+      })
+    }
+  }
+
   // Paranoia: every edit must read back exactly as requested.
   for (const [species, entries] of sortedEdits) {
     const check = readLearnset(rom, anchors, species)
@@ -405,6 +493,32 @@ export function applyRomEdits(
     for (const [index, edit] of romEdits.trainers) {
       if (!trainersEqual(trainerToEdit(readTrainer(rom, anchors, index)), edit)) {
         throw new Error(`Write verification failed for trainer #${index} — aborting save`)
+      }
+    }
+  }
+  if (romEdits.gameCorner && romEdits.gameCorner.size > 0) {
+    // Re-parse the regenerated lists and assert the prize entries round-trip. This is
+    // the script-rewrite equivalent of the fixed-table read-back checks above.
+    const check = readPrizeLists(rom, anchors)
+    for (const [kind, entries] of romEdits.gameCorner) {
+      const got = check[kind]
+      if (!got.regenerable || !prizesEqual(got.entries, entries)) {
+        throw new Error(`Write verification failed for Game Corner ${kind} prizes — aborting save`)
+      }
+      // Menu row count must match (entries + trailing NO THANKS).
+      if (got.mcCount !== entries.length + 1) {
+        throw new Error(
+          `Write verification failed for Game Corner ${kind} menu (rows ${got.mcCount} ≠ ${entries.length + 1}) — aborting save`,
+        )
+      }
+    }
+  }
+  if (romEdits.shops && romEdits.shops.size > 0) {
+    const check = readShops(rom, anchors)
+    for (const [cmdOffset, items] of romEdits.shops) {
+      const got = check.find((s) => s.cmdOffset === cmdOffset)
+      if (!got || !shopsEqual(got.items, items)) {
+        throw new Error(`Write verification failed for shop 0x${cmdOffset.toString(16)} — aborting save`)
       }
     }
   }

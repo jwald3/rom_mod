@@ -9,6 +9,10 @@ import { MapsSidebar } from './components/MapsSidebar'
 import { WildEditor } from './components/WildEditor'
 import { TrainersSidebar } from './components/TrainersSidebar'
 import { TrainerEditor } from './components/TrainerEditor'
+import { GameCornerSidebar } from './components/GameCornerSidebar'
+import { GameCornerEditor } from './components/GameCornerEditor'
+import { ShopsSidebar } from './components/ShopsSidebar'
+import { ShopEditor } from './components/ShopEditor'
 import { StatusBar } from './components/StatusBar'
 import { DiffPanel } from './components/DiffPanel'
 
@@ -32,16 +36,19 @@ export default function App() {
           const rs = useRomStore.getState()
           if (record.field === 'wild') rs.selectArea(record.species)
           else if (record.field === 'trainer') rs.selectTrainer(record.species)
+          else if (record.field === 'gamecorner') rs.selectPrizeKind(record.kind)
+          else if (record.field === 'shop') rs.selectShop(record.cmdOffset)
           else rs.select(record.species)
         }
       } else if (key === 'k') {
         e.preventDefault()
-        const searchId = {
+        const searchId: Partial<Record<string, string>> = {
           maps: 'map-search',
           trainers: 'trainer-search',
           species: 'species-search',
-        }[useRomStore.getState().viewMode]
-        document.getElementById(searchId)?.focus()
+        }
+        const id = searchId[useRomStore.getState().viewMode]
+        if (id) document.getElementById(id)?.focus()
       } else if (key === 's') {
         e.preventDefault()
         if (useRomStore.getState().romHandle) void saveInPlace()
@@ -74,6 +81,18 @@ export default function App() {
           <>
             <MapsSidebar />
             <WildEditor />
+          </>
+        )}
+        {viewMode === 'gamecorner' && loaded.gameCornerAvailable && (
+          <>
+            <GameCornerSidebar />
+            <GameCornerEditor />
+          </>
+        )}
+        {viewMode === 'shops' && (
+          <>
+            <ShopsSidebar />
+            <ShopEditor />
           </>
         )}
         {viewMode === 'trainers' && (

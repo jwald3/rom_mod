@@ -62,6 +62,14 @@ export interface AnchorMap {
    * against garbage method values.
    */
   maxEvoMethod: number
+  /**
+   * Multichoice list table (`scripts.text.multichoice`). Array of sets, each
+   * [optionsPtr u32, count u32]; every option is [textPtr u32, unused u32].
+   * The Game Corner prize menus are sets #14 (Pokémon), #30 (TM), #41 (item).
+   */
+  multichoice: number
+  /** Celadon Game Corner prize-room script entry (Pokémon menu). */
+  gcScript: number
 }
 
 export const SPECIES_NAME_LEN = 11
@@ -111,6 +119,8 @@ export const VANILLA_BPRE: AnchorMap = {
   mapNameStride: 4,
   mapNamePtrOffset: 0,
   mapsecBase: 0x58,
+  multichoice: 0x3e04b0,
+  gcScript: 0x16cb75,
 }
 
 /**
@@ -162,4 +172,6 @@ export const HS_BPEE: AnchorMap = {
   mapNameStride: 8, // Emerald: {u8 x,y,w,h; const u8* name}
   mapNamePtrOffset: 4,
   mapsecBase: 0, // Emerald mapsec ids index the table directly
+  multichoice: 0, // Celadon Game Corner prizes unresolved for H&S (FireRed-specific)
+  gcScript: 0,
 }
