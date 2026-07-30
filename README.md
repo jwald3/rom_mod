@@ -37,6 +37,9 @@ Two things live here:
    names. Verify a build against the ROM with
    `npx tsx scripts/hs-verify.mts <rom> [toml]` (reads) and
    `npx tsx scripts/hs-writetest.mts <rom> [toml]` (write round-trip).
+   Spot-check the `heart-and-soul-guide.html` gym/E4/Red rosters against the
+   ROM with `npm run verify:gyms -- <rom>` (diffs species/level/held-item/moves;
+   `npm run verify:gyms:extract` rebuilds the ground-truth JSON from the guide).
 
 ## Editor usage
 

@@ -8,7 +8,9 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "verify:gyms": "tsx scripts/hs-verify-gyms.mts",
+    "verify:gyms:extract": "tsx scripts/hs-extract-gym-expectations.mts"
   },
   "dependencies": {
     "react": "^18.3.1",
