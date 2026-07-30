@@ -14,6 +14,8 @@ export interface Evolution {
   target: number
 }
 
+/** Default evolution slots per species (vanilla FireRed/Emerald). Profiles
+ *  override via AnchorMap.evosPerSpecies (Heart & Soul = 8). */
 export const EVOS_PER_SPECIES = 5
 const ENTRY_LEN = 8
 const ITEM_STRUCT_LEN = 44
@@ -21,8 +23,9 @@ const ITEM_NAME_LEN = 14
 
 export function readEvolutionsFor(rom: RomBuffer, a: AnchorMap, species: number): Evolution[] {
   const list: Evolution[] = []
-  const base = a.evolutions + species * EVOS_PER_SPECIES * ENTRY_LEN
-  for (let i = 0; i < EVOS_PER_SPECIES; i++) {
+  const slots = a.evosPerSpecies
+  const base = a.evolutions + species * slots * ENTRY_LEN
+  for (let i = 0; i < slots; i++) {
     const o = base + i * ENTRY_LEN
     const method = rom.u16(o)
     if (method === 0) continue
@@ -37,9 +40,10 @@ export function readAllEvolutions(rom: RomBuffer, a: AnchorMap): Evolution[][] {
   return out
 }
 
-/** Serialize a species' evolution list to its fixed 40-byte block (zero-padded). */
-export function serializeEvolutions(evos: Evolution[]): Uint8Array {
-  const out = new Uint8Array(EVOS_PER_SPECIES * ENTRY_LEN)
+/** Serialize a species' evolution list to its fixed block (zero-padded).
+ *  `slots` = the profile's evosPerSpecies (5 vanilla, 8 expansion). */
+export function serializeEvolutions(evos: Evolution[], slots: number = EVOS_PER_SPECIES): Uint8Array {
+  const out = new Uint8Array(slots * ENTRY_LEN)
   const view = new DataView(out.buffer)
   evos.forEach((e, i) => {
     view.setUint16(i * ENTRY_LEN, e.method, true)
@@ -80,10 +84,24 @@ export const EVO_METHOD_LABELS: Record<number, string> = {
   13: 'Level (Ninjask)',
   14: 'Level (Shedinja slot)',
   15: 'Beauty',
+  // pokeemerald-expansion methods used by Heart & Soul (param kind noted).
+  18: 'Level (special)',
+  20: 'Use item (method 20)',
+  21: 'Use item (method 21)',
+  22: 'Knows move',
+  24: 'Use item (method 24)',
+  25: 'Use item (method 25)',
+  26: 'Trade / held item',
+  27: 'Use item (method 27)',
+}
+
+/** Human label for a method, falling back for anything not in the table. */
+export function evoMethodLabel(method: number): string {
+  return EVO_METHOD_LABELS[method] ?? `Method ${method}`
 }
 
 /** What the param field means for a given method — drives the edit control. */
-export function evoParamKind(method: number): 'level' | 'item' | 'beauty' | 'none' {
+export function evoParamKind(method: number): 'level' | 'item' | 'beauty' | 'move' | 'none' {
   switch (method) {
     case 4:
     case 8:
@@ -93,10 +111,19 @@ export function evoParamKind(method: number): 'level' | 'item' | 'beauty' | 'non
     case 12:
     case 13:
     case 14:
+    case 18:
       return 'level'
     case 6:
     case 7:
+    case 20:
+    case 21:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
       return 'item'
+    case 22:
+      return 'move'
     case 15:
       return 'beauty'
     default:
@@ -159,6 +186,18 @@ export function describeEvolution(evo: Evolution, itemNames: string[]): string {
       return `Lv ${evo.param}, empty slot (Shedinja)`
     case 15:
       return `Beauty ≥ ${evo.param}`
+    case 18:
+      return `Lv ${evo.param}`
+    case 20:
+    case 21:
+    case 24:
+    case 25:
+    case 27:
+      return item()
+    case 26:
+      return `Trade / ${item()}`
+    case 22:
+      return `Knows move #${evo.param}`
     default:
       return `method ${evo.method} (${evo.param})`
   }

@@ -1,5 +1,5 @@
 import { RomBuffer } from './buffer'
-import { type AnchorMap, VANILLA_BPRE } from './anchors'
+import { type AnchorMap, VANILLA_BPRE, HS_BPEE } from './anchors'
 import { anchorsFromToml } from './hmaToml'
 import { readSpecies, readTypeNames, readAbilityNames, type SpeciesInfo } from './tables/species'
 import { readMoves, type MoveInfo } from './tables/moves'
@@ -40,21 +40,30 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
   const warnings: string[] = []
 
   const code = rom.gameCode()
-  if (code !== 'BPRE') {
-    warnings.push(`Game code is “${code}”, expected BPRE (FireRed US). Table offsets may be wrong.`)
+  // Pick the built-in table profile by game code. BPEE selects the Heart & Soul
+  // (pokeemerald-expansion) map; anything else falls back to vanilla FireRed.
+  const isEmerald = code === 'BPEE'
+  const profile = isEmerald ? HS_BPEE : VANILLA_BPRE
+  if (code !== 'BPRE' && code !== 'BPEE') {
+    warnings.push(
+      `Game code is “${code}”, expected BPRE (FireRed) or BPEE (Emerald). Table offsets may be wrong.`,
+    )
   }
 
-  let anchors: AnchorMap = { ...VANILLA_BPRE }
+  let anchors: AnchorMap = { ...profile }
   let anchorSource: 'toml' | 'vanilla' = 'vanilla'
   if (tomlText !== undefined) {
     const { anchors: fromToml, found } = anchorsFromToml(tomlText)
     if (found.length > 0) {
+      // The HMA sidecar can be stale (H&S's describes the vanilla struct sizes),
+      // so it only overrides addresses/counts — the built-in profile keeps
+      // struct strides like baseStatsLen.
       anchors = { ...anchors, ...fromToml }
       anchorSource = 'toml'
-    } else {
+    } else if (!isEmerald) {
       warnings.push('The .toml sidecar contained no recognizable anchors — using vanilla offsets.')
     }
-  } else {
+  } else if (!isEmerald) {
     warnings.push(
       'No HMA .toml sidecar loaded — using vanilla FireRed offsets. ' +
         'If your mod repointed tables, names and movesets may look wrong.',

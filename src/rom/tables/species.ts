@@ -1,11 +1,5 @@
 import type { RomBuffer } from '../buffer'
-import {
-  type AnchorMap,
-  SPECIES_NAME_LEN,
-  TYPE_NAME_LEN,
-  ABILITY_NAME_LEN,
-  BASE_STATS_LEN,
-} from '../anchors'
+import { type AnchorMap, SPECIES_NAME_LEN, TYPE_NAME_LEN, ABILITY_NAME_LEN } from '../anchors'
 
 export interface SpeciesStats {
   hp: number
@@ -41,7 +35,7 @@ const ABILITY2_OFFSET = 23
 export function readSpecies(rom: RomBuffer, a: AnchorMap): SpeciesInfo[] {
   const out: SpeciesInfo[] = []
   for (let i = 0; i < a.speciesCount; i++) {
-    const s = a.baseStats + i * BASE_STATS_LEN
+    const s = a.baseStats + i * a.baseStatsLen
     out.push({
       id: i,
       name: rom.text(a.speciesNames + i * SPECIES_NAME_LEN, SPECIES_NAME_LEN),

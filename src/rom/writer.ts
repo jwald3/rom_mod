@@ -1,5 +1,5 @@
 import { RomBuffer, GBA_ROM_BASE } from './buffer'
-import { BASE_STATS_LEN, type AnchorMap } from './anchors'
+import { type AnchorMap } from './anchors'
 import {
   entriesEqual,
   readLearnset,
@@ -276,7 +276,7 @@ export function applyRomEdits(
           throw new Error(`Species #${species}: invalid held ${label} #${id}`)
         }
       }
-      const offset = anchors.baseStats + species * BASE_STATS_LEN + HELD_ITEMS_OFFSET
+      const offset = anchors.baseStats + species * anchors.baseStatsLen + HELD_ITEMS_OFFSET
       view.setUint16(offset, items.item1, true)
       view.setUint16(offset + 2, items.item2, true)
       ops.push({
@@ -389,7 +389,7 @@ export function applyRomEdits(
   }
   if (romEdits.heldItems) {
     for (const [species, items] of romEdits.heldItems) {
-      const offset = anchors.baseStats + species * BASE_STATS_LEN + HELD_ITEMS_OFFSET
+      const offset = anchors.baseStats + species * anchors.baseStatsLen + HELD_ITEMS_OFFSET
       if (rom.u16(offset) !== items.item1 || rom.u16(offset + 2) !== items.item2) {
         throw new Error(`Write verification failed for species #${species} (held items) — aborting save`)
       }

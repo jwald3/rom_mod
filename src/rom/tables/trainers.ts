@@ -211,7 +211,11 @@ export function serializeTrainerRecord(e: TrainerEdit, partyPtr: number, classCo
   if (e.party.length < 1 || e.party.length > MAX_PARTY) {
     throw new Error(`party size ${e.party.length} out of range (1–${MAX_PARTY})`)
   }
-  if (e.cls < 0 || e.cls >= classCount) throw new Error(`invalid class #${e.cls}`)
+  // Trainer class is a raw u8 index. Some ROMs (e.g. Heart & Soul) use class
+  // values beyond the named-class table, so only the byte range is enforced;
+  // classCount bounds the picker/display, not the stored value.
+  void classCount
+  if (e.cls < 0 || e.cls > 0xff) throw new Error(`invalid class #${e.cls} (must be 0–255)`)
   for (const it of e.items) {
     if (it < 0 || it >= itemCount) throw new Error(`invalid trainer item #${it}`)
   }

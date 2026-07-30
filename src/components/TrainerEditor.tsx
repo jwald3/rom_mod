@@ -181,6 +181,10 @@ export function TrainerEditor() {
               {name.trim() || `class #${id}`}
             </option>
           ))}
+          {edit.cls >= loaded.trainerClassNames.length && (
+            // Preserve a class byte that lies beyond the named-class table.
+            <option value={edit.cls}>class #{edit.cls}</option>
+          )}
         </select>
         <NameInput name={edit.name} onCommit={(name) => update((t) => ({ ...t, name }))} />
         {dirty && (

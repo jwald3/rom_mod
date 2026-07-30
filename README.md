@@ -17,7 +17,8 @@ Two things live here:
    - Regenerate the patch after new edits: `npx tsx scripts/make-patch.mts`
 
 2. **The editor** — a browser-based editor for Hex Maniac Advance–modified
-   Pokémon FireRed (BPRE) ROMs. Everything runs client-side; the ROM never
+   Pokémon FireRed (BPRE) ROMs, plus the **Pokémon Heart & Soul** Emerald hack
+   (BPEE, pokéemerald-expansion). Everything runs client-side; the ROM never
    leaves your machine. Edits level-up movesets, TM/HM + tutor compatibility,
    evolutions (all 15 methods), wild encounters (grass/surf/rock-smash/
    fishing, rates, levels, species), and NPC trainer teams (class, name,
@@ -26,6 +27,16 @@ Two things live here:
    and in-place saving with free-space repointing, backups, and write
    verification.
 
+   The editor picks its table layout from the ROM's game code. Heart & Soul
+   repointed every table into expanded space and ships a stale `.toml`, so its
+   addresses are **built in** (`HS_BPEE` in `src/rom/anchors.ts`, reverse-
+   engineered and verified by `scripts/hs-locate.mjs`); base-stats structs are
+   40 bytes there vs. 28 in FireRed, and its Emerald-style region-map name table
+   (8-byte entries) resolves wild-area labels to the Johto/Kanto town and route
+   names. Verify a build against the ROM with
+   `npx tsx scripts/hs-verify.mts <rom> [toml]` (reads) and
+   `npx tsx scripts/hs-writetest.mts <rom> [toml]` (write round-trip).
+
 ## Editor usage
 
 ```sh
@@ -33,9 +44,10 @@ npm install
 npm run dev
 ```
 
-Open the printed URL, then load the `.gba` **and** its `.toml` together via
-"Open files…" (grants the file handle so Ctrl+S saves in place). Without the
-toml, vanilla FireRed 1.0 offsets are used as a fallback.
+Open the printed URL, then load the `.gba` (and, for FireRed mods, its `.toml`)
+together via "Open files…" (grants the file handle so Ctrl+S saves in place).
+Without a toml, FireRed ROMs fall back to vanilla 1.0 offsets; Heart & Soul
+(BPEE) uses its built-in profile and needs no toml.
 
 ## Tests
 

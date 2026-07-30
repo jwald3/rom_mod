@@ -52,11 +52,12 @@ export function OpenScreen() {
         }`}
       >
         <div className="text-5xl">🎮</div>
-        <h1 className="text-xl font-semibold text-slate-100">FireRed Moveset Editor</h1>
+        <h1 className="text-xl font-semibold text-slate-100">FireRed / Emerald Moveset Editor</h1>
         <p className="text-sm text-slate-400">
-          Drop your <span className="font-mono text-slate-300">.gba</span> ROM here — include the
-          matching <span className="font-mono text-slate-300">.toml</span> (Hex Maniac Advance
-          sidecar) so repointed tables are found automatically.
+          Drop your <span className="font-mono text-slate-300">.gba</span> ROM here — FireRed (BPRE)
+          or the Heart &amp; Soul Emerald hack (BPEE). Include the matching{' '}
+          <span className="font-mono text-slate-300">.toml</span> (Hex Maniac Advance sidecar) when
+          you have one; for Heart &amp; Soul the table locations are already built in.
         </p>
         <button
           onClick={openPicker}

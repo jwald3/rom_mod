@@ -71,8 +71,7 @@ export interface WildGroupEdit {
 
 const HEADER_LEN = 20
 const MAX_AREAS = 1024
-const MAPSEC_BASE = 0x58 // FR region-map sections start here
-const MAPSEC_OFFSET_IN_HEADER = 0x14
+const MAPSEC_OFFSET_IN_HEADER = 0x14 // regionMapSectionId — same offset in FireRed and Emerald
 
 export function wildAreaCount(rom: RomBuffer, a: AnchorMap): number {
   let n = 0
@@ -96,13 +95,16 @@ function readGroup(rom: RomBuffer, headerOffset: number, slotCount: number): Wil
 /** Resolve a display name for bank/map via the map header's mapsec byte. */
 export function resolveMapName(rom: RomBuffer, a: AnchorMap, bank: number, map: number): string {
   const fallback = `Map ${bank}.${map}`
+  // Profiles without a resolved region-map table (e.g. Heart & Soul) label
+  // wild areas by bank.map rather than name.
+  if (a.mapNameCount <= 0 || a.mapBanks <= 0) return fallback
   const bankPtr = rom.pointer(a.mapBanks + bank * 4)
   if (bankPtr === null) return fallback
   const headerPtr = rom.pointer(bankPtr + map * 4)
   if (headerPtr === null) return fallback
-  const nameIndex = rom.u8(headerPtr + MAPSEC_OFFSET_IN_HEADER) - MAPSEC_BASE
+  const nameIndex = rom.u8(headerPtr + MAPSEC_OFFSET_IN_HEADER) - a.mapsecBase
   if (nameIndex < 0 || nameIndex >= a.mapNameCount) return fallback
-  const namePtr = rom.pointer(a.mapNames + nameIndex * 4)
+  const namePtr = rom.pointer(a.mapNames + nameIndex * a.mapNameStride + a.mapNamePtrOffset)
   if (namePtr === null) return fallback
   const name = rom.text(namePtr, 32)
   return name.length > 0 ? name : fallback
