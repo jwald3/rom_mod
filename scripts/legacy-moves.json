@@ -1,0 +1,940 @@
+[
+  {
+    "name": "Barrage",
+    "power": "20 (+5)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Bind",
+    "power": "35 (+20)",
+    "acc": "100 (+25)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Comet Punch",
+    "power": "25 (+7)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "25 (+10)"
+  },
+  {
+    "name": "Constrict",
+    "power": "40 (+30)",
+    "acc": "100",
+    "effect": "30%(+20) chance to lower Speed.",
+    "pp": "35"
+  },
+  {
+    "name": "Covet",
+    "power": "60 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "10 (-30)"
+  },
+  {
+    "name": "Crush Claw",
+    "power": "80 (+5)",
+    "acc": "95",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Disable",
+    "power": "0",
+    "acc": "85 (+30)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Dizzy Punch",
+    "power": "70",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Double Slap",
+    "power": "20 (+5)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "35 (+25)"
+  },
+  {
+    "name": "Extremespeed",
+    "power": "80",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+10)"
+  },
+  {
+    "name": "Flash",
+    "power": "0",
+    "acc": "100 (+30)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Fury Attack",
+    "power": "18 (+3)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Fury Swipes",
+    "power": "20 (+2)",
+    "acc": "100 (+20)",
+    "effect": "",
+    "pp": "20 (+5)"
+  },
+  {
+    "name": "Glare",
+    "power": "0",
+    "acc": "90 (+15)",
+    "effect": "",
+    "pp": "30"
+  },
+  {
+    "name": "Hyper Voice",
+    "power": "100 (+10)",
+    "acc": "100",
+    "effect": "30% Confusion Chance",
+    "pp": "10"
+  },
+  {
+    "name": "Mega Kick",
+    "power": "120",
+    "acc": "85 (+10)",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Mega Punch",
+    "power": "90 (+10)",
+    "acc": "95 (+10)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Milk Drink",
+    "power": "0",
+    "acc": "0",
+    "effect": "",
+    "pp": "5 (-5)"
+  },
+  {
+    "name": "Pay Day",
+    "power": "60 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Recover",
+    "power": "0",
+    "acc": "0",
+    "effect": "",
+    "pp": "5 (-15)"
+  },
+  {
+    "name": "Skull Bash",
+    "power": "130 (+30)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Slam",
+    "power": "80",
+    "acc": "100 (+25)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Smellingsalt",
+    "power": "75 (+15)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Snore",
+    "power": "60 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20 (+5)"
+  },
+  {
+    "name": "Softboiled",
+    "power": "0",
+    "acc": "0",
+    "effect": "",
+    "pp": "5 (-5)"
+  },
+  {
+    "name": "Sonicboom",
+    "power": "1",
+    "acc": "100 (+10)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Supersonic",
+    "power": "0",
+    "acc": "70 (+15)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Stockpile",
+    "power": "0",
+    "acc": "0",
+    "effect": "Raises Defense and Special Defense by one stage. This stays after the Stockpile is used.",
+    "pp": "10"
+  },
+  {
+    "name": "Tackle",
+    "power": "35",
+    "acc": "100 (+5)",
+    "effect": "",
+    "pp": "35"
+  },
+  {
+    "name": "Takedown",
+    "power": "95 (+5)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Thrash",
+    "power": "100 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Tri Attack",
+    "power": "85 (+5)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Uproar",
+    "power": "65 (+15)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25 (+15)"
+  },
+  {
+    "name": "Vicegrip",
+    "power": "55",
+    "acc": "100",
+    "effect": "20% chance to lower Attack.",
+    "pp": "30"
+  },
+  {
+    "name": "Weather Ball",
+    "power": "50",
+    "acc": "100",
+    "effect": "",
+    "pp": "30 (+20)"
+  },
+  {
+    "name": "Wrap",
+    "power": "30 (+15)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Blaze Kick",
+    "power": "80 (-5)",
+    "acc": "100 (+10)",
+    "effect": "20%(+10) chance to Burn or Flinch",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Fire Spin",
+    "power": "35 (+20)",
+    "acc": "100 (+30)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Flame Wheel",
+    "power": "65 (+5)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25"
+  },
+  {
+    "name": "Heat Wave",
+    "power": "100 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "10"
+  },
+  {
+    "name": "Sacred Fire",
+    "power": "100",
+    "acc": "95",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Sunny Day",
+    "power": "0",
+    "acc": "0",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Will-O-Wisp",
+    "power": "0",
+    "acc": "85 (+10)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Hail",
+    "power": "0",
+    "acc": "0",
+    "effect": "Boosts Ice Types’ Def by 50% and makes Blizzard 100% accurate, while dealing minor damage to non-Ice types.",
+    "pp": ""
+  },
+  {
+    "name": "Ice Beam",
+    "power": "95",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Icicle Spear",
+    "power": "25 (+15)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25 (-5)"
+  },
+  {
+    "name": "Icy Wind",
+    "power": "55",
+    "acc": "95",
+    "effect": "",
+    "pp": "20 (+5)"
+  },
+  {
+    "name": "Zap Cannon",
+    "power": "100",
+    "acc": "70 (+20)",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Aeroblast",
+    "power": "100",
+    "acc": "95",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Aircutter",
+    "power": "65 (+10)",
+    "acc": "95",
+    "effect": "",
+    "pp": "25"
+  },
+  {
+    "name": "Bounce",
+    "power": "85",
+    "acc": "90 (+5)",
+    "effect": "",
+    "pp": "15 (+10)"
+  },
+  {
+    "name": "Fly",
+    "power": "70",
+    "acc": "100 (+5)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Razor Wind",
+    "power": "35 (-45)",
+    "acc": "100",
+    "effect": "Now Flying Type Move, Traps Opponent 2-5 turns",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Sky Attack",
+    "power": "120 (-20)",
+    "acc": "85 (-5)",
+    "effect": "No Longer a 2 turn Charge. Chance to Flinch or Crit.",
+    "pp": "5"
+  },
+  {
+    "name": "Cut",
+    "power": "55 (+5)",
+    "acc": "95",
+    "effect": "Bug Type, High Crit Chance",
+    "pp": "30"
+  },
+  {
+    "name": "Leech Life",
+    "power": "40 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25 (+10)"
+  },
+  {
+    "name": "Pin Missile",
+    "power": "25 (+11)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "30 (+10)"
+  },
+  {
+    "name": "Signal Beam",
+    "power": "85 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Silverwind",
+    "power": "60",
+    "acc": "100",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Twineedle",
+    "power": "40 (+15)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Absorb",
+    "power": "30 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25 (+5)"
+  },
+  {
+    "name": "Bullet Seed",
+    "power": "15 (+5)",
+    "acc": "100",
+    "effect": "",
+    "pp": "30"
+  },
+  {
+    "name": "Egg Bomb",
+    "power": "100",
+    "acc": "90 (+15)",
+    "effect": "Now a Grass Type Move",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Giga Drain",
+    "power": "75 (+15)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+10)"
+  },
+  {
+    "name": "Grasswhistle",
+    "power": "0",
+    "acc": "75 (+20)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Leaf Blade",
+    "power": "80 (+10)",
+    "acc": "100",
+    "effect": "High Crit Chance, 50% Chance to boost Crit Chance",
+    "pp": "15"
+  },
+  {
+    "name": "Mega Drain",
+    "power": "50 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25 (+15)"
+  },
+  {
+    "name": "Needle Arm",
+    "power": "80 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Petal Dance",
+    "power": "100 (+30)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Vine Whip",
+    "power": "40 (+5)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25 (+15)"
+  },
+  {
+    "name": "Ghost Type now Special",
+    "power": "",
+    "acc": "",
+    "effect": "No longer a physical type",
+    "pp": ""
+  },
+  {
+    "name": "Astonish",
+    "power": "50 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Lick",
+    "power": "40 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "30"
+  },
+  {
+    "name": "Shadow Punch",
+    "power": "80 (+20)",
+    "acc": "--%",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Ancient Power",
+    "power": "60",
+    "acc": "100",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Rock Blast",
+    "power": "25",
+    "acc": "90 (+10)",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Rock Slde",
+    "power": "80 (+5)",
+    "acc": "95 (+5)",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Rock Throw",
+    "power": "50",
+    "acc": "95 (+5)",
+    "effect": "",
+    "pp": "25 (+10)"
+  },
+  {
+    "name": "Rock Tomb",
+    "power": "50",
+    "acc": "95 (+15)",
+    "effect": "",
+    "pp": "25 (+15)"
+  },
+  {
+    "name": "Bone Club",
+    "power": "65",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "25 (+5)"
+  },
+  {
+    "name": "Bone Rush",
+    "power": "25",
+    "acc": "100 (+20)",
+    "effect": "",
+    "pp": "20 (+10)"
+  },
+  {
+    "name": "Bonemerang",
+    "power": "50",
+    "acc": "90",
+    "effect": "",
+    "pp": "20 (+10)"
+  },
+  {
+    "name": "Dig",
+    "power": "70 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20 (+10)"
+  },
+  {
+    "name": "Mud Slap",
+    "power": "30 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Sand Tomb",
+    "power": "35 (+20)",
+    "acc": "100 (+30)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Sandstorm",
+    "power": "0",
+    "acc": "0",
+    "effect": "Deals minor damage to everything but Steel, Rock, and Ground. Boosts Sp.Def of those types by 50%.",
+    "pp": ""
+  },
+  {
+    "name": "Bubble",
+    "power": "30 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "30"
+  },
+  {
+    "name": "Clamp",
+    "power": "35",
+    "acc": "100 (+25)",
+    "effect": "",
+    "pp": "10"
+  },
+  {
+    "name": "Crabhammer",
+    "power": "110 (+20)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "10"
+  },
+  {
+    "name": "Dive",
+    "power": "80 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Hydro Pump",
+    "power": "120",
+    "acc": "85 (+5)",
+    "effect": "",
+    "pp": "5"
+  },
+  {
+    "name": "Muddy Water",
+    "power": "85 (-10)",
+    "acc": "95 (+10)",
+    "effect": "50% chance to lower Speed",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Octazooka",
+    "power": "70 (+5)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Rain Dance",
+    "power": "0",
+    "acc": "0",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Waterfall",
+    "power": "70 (-10)",
+    "acc": "100",
+    "effect": "30% Chance to Flinch",
+    "pp": "15"
+  },
+  {
+    "name": "Whirlpool",
+    "power": "35 (+20)",
+    "acc": "100 (+30)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Arm Thrust",
+    "power": "18 (+3)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Cross Chop",
+    "power": "100",
+    "acc": "90 (+10)",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Dynamic Punch",
+    "power": "100",
+    "acc": "70 (+20)",
+    "effect": "",
+    "pp": "10 (+5)"
+  },
+  {
+    "name": "Hi Jump Kick",
+    "power": "120 (+35)",
+    "acc": "90",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Jump Kick",
+    "power": "90 (+20)",
+    "acc": "95",
+    "effect": "",
+    "pp": "25"
+  },
+  {
+    "name": "Rock Smash",
+    "power": "60 (+40)",
+    "acc": "100",
+    "effect": "20% (-30) chance to lower Defense",
+    "pp": "15"
+  },
+  {
+    "name": "Rolling Kick",
+    "power": "70 (+10)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "25 (+10)"
+  },
+  {
+    "name": "Sky Uppercut",
+    "power": "90 (+5)",
+    "acc": "95 (+5)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Submission",
+    "power": "90 (+10)",
+    "acc": "100 (+20)",
+    "effect": "",
+    "pp": "25"
+  },
+  {
+    "name": "Triple Kick",
+    "power": "30 (+20)",
+    "acc": "100 (+10)",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Vital Throw",
+    "power": "70",
+    "acc": "100",
+    "effect": "",
+    "pp": "20 (+10)"
+  },
+  {
+    "name": "Dark now a physical type",
+    "power": "",
+    "acc": "",
+    "effect": "No longer a special type",
+    "pp": ""
+  },
+  {
+    "name": "Beat Up",
+    "power": "20 (+10)",
+    "acc": "100%",
+    "effect": "",
+    "pp": "10"
+  },
+  {
+    "name": "Faint Attack",
+    "power": "70 (+10)",
+    "acc": "--%",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Knock Off",
+    "power": "50 (+30)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Thief",
+    "power": "60 (+20)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Future Sight",
+    "power": "120 (+40)",
+    "acc": "100 (+10)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Luster Purge",
+    "power": "70",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+10)"
+  },
+  {
+    "name": "Mist Ball",
+    "power": "70",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+10)"
+  },
+  {
+    "name": "Psychic",
+    "power": "90",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Psywave",
+    "power": "--",
+    "acc": "95 (+15)",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Poison Fang",
+    "power": "60 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Poison Gas",
+    "power": "0",
+    "acc": "70 (+15)",
+    "effect": "",
+    "pp": "40"
+  },
+  {
+    "name": "Poison Sting",
+    "power": "30 (+15)",
+    "acc": "100",
+    "effect": "",
+    "pp": "35"
+  },
+  {
+    "name": "Poison Tail",
+    "power": "80 (+30)",
+    "acc": "100",
+    "effect": "",
+    "pp": "25"
+  },
+  {
+    "name": "Poison Powder",
+    "power": "0",
+    "acc": "85 (+10)",
+    "effect": "",
+    "pp": "35"
+  },
+  {
+    "name": "Sludge Bomb",
+    "power": "95 (+5)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15 (+5)"
+  },
+  {
+    "name": "Smog",
+    "power": "20",
+    "acc": "100 (+30)",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Dragon Claw",
+    "power": "90 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Dragonbreath",
+    "power": "70 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Outrage",
+    "power": "110 (+20)",
+    "acc": "90",
+    "effect": "",
+    "pp": "15"
+  },
+  {
+    "name": "Twister",
+    "power": "50 (+10)",
+    "acc": "100",
+    "effect": "",
+    "pp": "20"
+  },
+  {
+    "name": "Doom Desire",
+    "power": "150 (+30)",
+    "acc": "100 (+15)",
+    "effect": "",
+    "pp": "5"
+  },
+  {
+    "name": "Iron Tail",
+    "power": "100",
+    "acc": "90 (+15)",
+    "effect": "20% (-10) chance to lower Defense",
+    "pp": "10"
+  },
+  {
+    "name": "Metal Claw",
+    "power": "60 (+10)",
+    "acc": "95",
+    "effect": "20% (+10) chance to raise Attack",
+    "pp": "35"
+  },
+  {
+    "name": "Meteor Mash",
+    "power": "100",
+    "acc": "90 (+5)",
+    "effect": "",
+    "pp": "10"
+  },
+  {
+    "name": "Spike Cannon",
+    "power": "30 (+10)",
+    "acc": "100",
+    "effect": "Now a Steel Type Move",
+    "pp": "25"
+  },
+  {
+    "name": "Steel Wing",
+    "power": "70",
+    "acc": "95 (+5)",
+    "effect": "",
+    "pp": "25"
+  }
+]

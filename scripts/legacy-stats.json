@@ -1,0 +1,938 @@
+[
+  {
+    "name": "Ekans",
+    "hp": 40,
+    "atk": 65,
+    "def": 44,
+    "spe": 60,
+    "spa": 40,
+    "spd": 54
+  },
+  {
+    "name": "Arbok",
+    "hp": 62,
+    "atk": 95,
+    "def": 85,
+    "spe": 90,
+    "spa": 65,
+    "spd": 79
+  },
+  {
+    "name": "Pikachu",
+    "hp": 35,
+    "atk": 55,
+    "def": 40,
+    "spe": 90,
+    "spa": 50,
+    "spd": 50
+  },
+  {
+    "name": "Clefable",
+    "hp": 95,
+    "atk": 70,
+    "def": 73,
+    "spe": 60,
+    "spa": 95,
+    "spd": 90
+  },
+  {
+    "name": "Vulpix",
+    "hp": 45,
+    "atk": 41,
+    "def": 40,
+    "spe": 75,
+    "spa": 55,
+    "spd": 70
+  },
+  {
+    "name": "Ninetales",
+    "hp": 78,
+    "atk": 71,
+    "def": 80,
+    "spe": 100,
+    "spa": 86,
+    "spd": 100
+  },
+  {
+    "name": "Wigglytuff",
+    "hp": 140,
+    "atk": 70,
+    "def": 55,
+    "spe": 45,
+    "spa": 85,
+    "spd": 55
+  },
+  {
+    "name": "Oddish",
+    "hp": 50,
+    "atk": 50,
+    "def": 55,
+    "spe": 30,
+    "spa": 75,
+    "spd": 65
+  },
+  {
+    "name": "Gloom",
+    "hp": 70,
+    "atk": 65,
+    "def": 70,
+    "spe": 40,
+    "spa": 85,
+    "spd": 75
+  },
+  {
+    "name": "Vileplume",
+    "hp": 90,
+    "atk": 80,
+    "def": 85,
+    "spe": 50,
+    "spa": 100,
+    "spd": 90
+  },
+  {
+    "name": "Venomoth",
+    "hp": 70,
+    "atk": 75,
+    "def": 60,
+    "spe": 100,
+    "spa": 90,
+    "spd": 95
+  },
+  {
+    "name": "Dugtrio",
+    "hp": 35,
+    "atk": 90,
+    "def": 50,
+    "spe": 120,
+    "spa": 50,
+    "spd": 70
+  },
+  {
+    "name": "Ponyta",
+    "hp": 50,
+    "atk": 85,
+    "def": 55,
+    "spe": 100,
+    "spa": 65,
+    "spd": 65
+  },
+  {
+    "name": "Rapidash",
+    "hp": 65,
+    "atk": 100,
+    "def": 70,
+    "spe": 115,
+    "spa": 80,
+    "spd": 80
+  },
+  {
+    "name": "Dewgong",
+    "hp": 90,
+    "atk": 60,
+    "def": 80,
+    "spe": 70,
+    "spa": 80,
+    "spd": 95
+  },
+  {
+    "name": "Grimer",
+    "hp": 80,
+    "atk": 80,
+    "def": 50,
+    "spe": 25,
+    "spa": 40,
+    "spd": 75
+  },
+  {
+    "name": "Shellder",
+    "hp": 35,
+    "atk": 65,
+    "def": 100,
+    "spe": 40,
+    "spa": 45,
+    "spd": 25
+  },
+  {
+    "name": "Marowak",
+    "hp": 65,
+    "atk": 80,
+    "def": 110,
+    "spe": 45,
+    "spa": 50,
+    "spd": 80
+  },
+  {
+    "name": "Hitmonlee",
+    "hp": 50,
+    "atk": 120,
+    "def": 58,
+    "spe": 87,
+    "spa": 35,
+    "spd": 110
+  },
+  {
+    "name": "Hitmonchan",
+    "hp": 50,
+    "atk": 105,
+    "def": 79,
+    "spe": 81,
+    "spa": 35,
+    "spd": 110
+  },
+  {
+    "name": "Lickitung",
+    "hp": 95,
+    "atk": 70,
+    "def": 85,
+    "spe": 30,
+    "spa": 75,
+    "spd": 85
+  },
+  {
+    "name": "Weezing",
+    "hp": 75,
+    "atk": 90,
+    "def": 120,
+    "spe": 60,
+    "spa": 85,
+    "spd": 70
+  },
+  {
+    "name": "Seaking",
+    "hp": 80,
+    "atk": 100,
+    "def": 65,
+    "spe": 68,
+    "spa": 65,
+    "spd": 80
+  },
+  {
+    "name": "Magmar",
+    "hp": 75,
+    "atk": 95,
+    "def": 57,
+    "spe": 93,
+    "spa": 100,
+    "spd": 85
+  },
+  {
+    "name": "Flareon",
+    "hp": 65,
+    "atk": 130,
+    "def": 60,
+    "spe": 65,
+    "spa": 110,
+    "spd": 95
+  },
+  {
+    "name": "Porygon",
+    "hp": 75,
+    "atk": 70,
+    "def": 70,
+    "spe": 40,
+    "spa": 85,
+    "spd": 75
+  },
+  {
+    "name": "Furret",
+    "hp": 85,
+    "atk": 76,
+    "def": 64,
+    "spe": 90,
+    "spa": 55,
+    "spd": 55
+  },
+  {
+    "name": "Ledian",
+    "hp": 75,
+    "atk": 35,
+    "def": 50,
+    "spe": 85,
+    "spa": 55,
+    "spd": 110
+  },
+  {
+    "name": "Ariados",
+    "hp": 70,
+    "atk": 90,
+    "def": 70,
+    "spe": 80,
+    "spa": 70,
+    "spd": 70
+  },
+  {
+    "name": "Togetic",
+    "hp": 85,
+    "atk": 50,
+    "def": 85,
+    "spe": 40,
+    "spa": 80,
+    "spd": 105
+  },
+  {
+    "name": "Bellossom",
+    "hp": 90,
+    "atk": 80,
+    "def": 95,
+    "spe": 50,
+    "spa": 90,
+    "spd": 110
+  },
+  {
+    "name": "Marill",
+    "hp": 70,
+    "atk": 20,
+    "def": 50,
+    "spe": 40,
+    "spa": 40,
+    "spd": 50
+  },
+  {
+    "name": "Azumarill",
+    "hp": 100,
+    "atk": 50,
+    "def": 80,
+    "spe": 50,
+    "spa": 70,
+    "spd": 80
+  },
+  {
+    "name": "Sudowoodo",
+    "hp": 80,
+    "atk": 100,
+    "def": 115,
+    "spe": 30,
+    "spa": 30,
+    "spd": 85
+  },
+  {
+    "name": "Aipom",
+    "hp": 70,
+    "atk": 90,
+    "def": 65,
+    "spe": 90,
+    "spa": 40,
+    "spd": 65
+  },
+  {
+    "name": "Sunflora",
+    "hp": 75,
+    "atk": 75,
+    "def": 55,
+    "spe": 30,
+    "spa": 125,
+    "spd": 85
+  },
+  {
+    "name": "Yanma",
+    "hp": 75,
+    "atk": 105,
+    "def": 65,
+    "spe": 95,
+    "spa": 65,
+    "spd": 45
+  },
+  {
+    "name": "Quagsire",
+    "hp": 95,
+    "atk": 85,
+    "def": 85,
+    "spe": 35,
+    "spa": 75,
+    "spd": 75
+  },
+  {
+    "name": "Murkrow",
+    "hp": 70,
+    "atk": 105,
+    "def": 52,
+    "spe": 95,
+    "spa": 76,
+    "spd": 52
+  },
+  {
+    "name": "Misdreavus",
+    "hp": 60,
+    "atk": 60,
+    "def": 60,
+    "spe": 90,
+    "spa": 95,
+    "spd": 95
+  },
+  {
+    "name": "Gligar",
+    "hp": 70,
+    "atk": 85,
+    "def": 105,
+    "spe": 90,
+    "spa": 35,
+    "spd": 65
+  },
+  {
+    "name": "Qwilfish",
+    "hp": 75,
+    "atk": 95,
+    "def": 85,
+    "spe": 85,
+    "spa": 65,
+    "spd": 75
+  },
+  {
+    "name": "Sneasel",
+    "hp": 55,
+    "atk": 95,
+    "def": 55,
+    "spe": 115,
+    "spa": 70,
+    "spd": 75
+  },
+  {
+    "name": "Slugma",
+    "hp": 50,
+    "atk": 70,
+    "def": 60,
+    "spe": 20,
+    "spa": 70,
+    "spd": 60
+  },
+  {
+    "name": "Magcargo",
+    "hp": 60,
+    "atk": 80,
+    "def": 130,
+    "spe": 30,
+    "spa": 90,
+    "spd": 90
+  },
+  {
+    "name": "Swinub",
+    "hp": 80,
+    "atk": 65,
+    "def": 40,
+    "spe": 50,
+    "spa": 65,
+    "spd": 40
+  },
+  {
+    "name": "Piloswine",
+    "hp": 100,
+    "atk": 100,
+    "def": 80,
+    "spe": 50,
+    "spa": 80,
+    "spd": 70
+  },
+  {
+    "name": "Corsola",
+    "hp": 85,
+    "atk": 55,
+    "def": 95,
+    "spe": 35,
+    "spa": 65,
+    "spd": 95
+  },
+  {
+    "name": "Delibird",
+    "hp": 60,
+    "atk": 75,
+    "def": 55,
+    "spe": 80,
+    "spa": 85,
+    "spd": 45
+  },
+  {
+    "name": "Mantine",
+    "hp": 65,
+    "atk": 50,
+    "def": 70,
+    "spe": 70,
+    "spa": 80,
+    "spd": 140
+  },
+  {
+    "name": "Hitmontop",
+    "hp": 50,
+    "atk": 95,
+    "def": 95,
+    "spe": 75,
+    "spa": 35,
+    "spd": 110
+  },
+  {
+    "name": "Entei",
+    "hp": 115,
+    "atk": 90,
+    "def": 85,
+    "spe": 100,
+    "spa": 115,
+    "spd": 75
+  },
+  {
+    "name": "Sceptile",
+    "hp": 70,
+    "atk": 85,
+    "def": 65,
+    "spe": 120,
+    "spa": 110,
+    "spd": 85
+  },
+  {
+    "name": "Blaziken",
+    "hp": 80,
+    "atk": 120,
+    "def": 70,
+    "spe": 85,
+    "spa": 110,
+    "spd": 70
+  },
+  {
+    "name": "Mightyena",
+    "hp": 75,
+    "atk": 95,
+    "def": 75,
+    "spe": 80,
+    "spa": 60,
+    "spd": 60
+  },
+  {
+    "name": "Linoone",
+    "hp": 78,
+    "atk": 80,
+    "def": 61,
+    "spe": 100,
+    "spa": 50,
+    "spd": 61
+  },
+  {
+    "name": "Beautifly",
+    "hp": 60,
+    "atk": 80,
+    "def": 50,
+    "spe": 75,
+    "spa": 100,
+    "spd": 50
+  },
+  {
+    "name": "Dustox",
+    "hp": 70,
+    "atk": 50,
+    "def": 80,
+    "spe": 65,
+    "spa": 50,
+    "spd": 100
+  },
+  {
+    "name": "Ludicolo",
+    "hp": 90,
+    "atk": 70,
+    "def": 70,
+    "spe": 70,
+    "spa": 100,
+    "spd": 100
+  },
+  {
+    "name": "Shiftry",
+    "hp": 90,
+    "atk": 110,
+    "def": 60,
+    "spe": 85,
+    "spa": 95,
+    "spd": 60
+  },
+  {
+    "name": "Shedinja",
+    "hp": 1,
+    "atk": 90,
+    "def": 45,
+    "spe": 40,
+    "spa": 75,
+    "spd": 30
+  },
+  {
+    "name": "Pelipper",
+    "hp": 70,
+    "atk": 50,
+    "def": 100,
+    "spe": 65,
+    "spa": 95,
+    "spd": 70
+  },
+  {
+    "name": "Masquerain",
+    "hp": 79,
+    "atk": 60,
+    "def": 62,
+    "spe": 80,
+    "spa": 100,
+    "spd": 82
+  },
+  {
+    "name": "Wailord",
+    "hp": 170,
+    "atk": 90,
+    "def": 50,
+    "spe": 60,
+    "spa": 100,
+    "spd": 50
+  },
+  {
+    "name": "Delcatty",
+    "hp": 75,
+    "atk": 70,
+    "def": 70,
+    "spe": 95,
+    "spa": 75,
+    "spd": 65
+  },
+  {
+    "name": "Kecleon",
+    "hp": 75,
+    "atk": 90,
+    "def": 70,
+    "spe": 40,
+    "spa": 70,
+    "spd": 120
+  },
+  {
+    "name": "Nosepass",
+    "hp": 45,
+    "atk": 45,
+    "def": 135,
+    "spe": 30,
+    "spa": 70,
+    "spd": 105
+  },
+  {
+    "name": "Torkoal",
+    "hp": 70,
+    "atk": 85,
+    "def": 140,
+    "spe": 20,
+    "spa": 95,
+    "spd": 70
+  },
+  {
+    "name": "Sableye",
+    "hp": 70,
+    "atk": 75,
+    "def": 95,
+    "spe": 40,
+    "spa": 65,
+    "spd": 95
+  },
+  {
+    "name": "Luvdisc",
+    "hp": 58,
+    "atk": 30,
+    "def": 75,
+    "spe": 102,
+    "spa": 70,
+    "spd": 75
+  },
+  {
+    "name": "Crawdaunt",
+    "hp": 63,
+    "atk": 120,
+    "def": 85,
+    "spe": 55,
+    "spa": 100,
+    "spd": 55
+  },
+  {
+    "name": "Sharpedo",
+    "hp": 80,
+    "atk": 120,
+    "def": 40,
+    "spe": 105,
+    "spa": 95,
+    "spd": 40
+  },
+  {
+    "name": "Vibrava",
+    "hp": 60,
+    "atk": 80,
+    "def": 60,
+    "spe": 80,
+    "spa": 60,
+    "spd": 60
+  },
+  {
+    "name": "Flygon",
+    "hp": 80,
+    "atk": 100,
+    "def": 80,
+    "spe": 100,
+    "spa": 90,
+    "spd": 80
+  },
+  {
+    "name": "Makuhita",
+    "hp": 82,
+    "atk": 60,
+    "def": 40,
+    "spe": 25,
+    "spa": 20,
+    "spd": 40
+  },
+  {
+    "name": "Camerupt",
+    "hp": 90,
+    "atk": 105,
+    "def": 70,
+    "spe": 30,
+    "spa": 110,
+    "spd": 75
+  },
+  {
+    "name": "Cacnea",
+    "hp": 50,
+    "atk": 85,
+    "def": 50,
+    "spe": 25,
+    "spa": 85,
+    "spd": 40
+  },
+  {
+    "name": "Cacturne",
+    "hp": 100,
+    "atk": 90,
+    "def": 90,
+    "spe": 35,
+    "spa": 115,
+    "spd": 70
+  },
+  {
+    "name": "Snorunt",
+    "hp": 60,
+    "atk": 60,
+    "def": 60,
+    "spe": 60,
+    "spa": 60,
+    "spd": 60
+  },
+  {
+    "name": "Glalie",
+    "hp": 85,
+    "atk": 85,
+    "def": 85,
+    "spe": 85,
+    "spa": 85,
+    "spd": 85
+  },
+  {
+    "name": "Lunatone",
+    "hp": 90,
+    "atk": 65,
+    "def": 65,
+    "spe": 70,
+    "spa": 95,
+    "spd": 85
+  },
+  {
+    "name": "Solrock",
+    "hp": 70,
+    "atk": 95,
+    "def": 85,
+    "spe": 90,
+    "spa": 65,
+    "spd": 65
+  },
+  {
+    "name": "Spoink",
+    "hp": 60,
+    "atk": 25,
+    "def": 40,
+    "spe": 65,
+    "spa": 70,
+    "spd": 80
+  },
+  {
+    "name": "Grumpig",
+    "hp": 90,
+    "atk": 35,
+    "def": 70,
+    "spe": 85,
+    "spa": 90,
+    "spd": 110
+  },
+  {
+    "name": "Plusle",
+    "hp": 60,
+    "atk": 70,
+    "def": 40,
+    "spe": 105,
+    "spa": 95,
+    "spd": 65
+  },
+  {
+    "name": "Minun",
+    "hp": 70,
+    "atk": 40,
+    "def": 80,
+    "spe": 85,
+    "spa": 65,
+    "spd": 95
+  },
+  {
+    "name": "Mawile",
+    "hp": 70,
+    "atk": 105,
+    "def": 105,
+    "spe": 50,
+    "spa": 55,
+    "spd": 55
+  },
+  {
+    "name": "Meditite",
+    "hp": 30,
+    "atk": 40,
+    "def": 55,
+    "spe": 60,
+    "spa": 60,
+    "spd": 55
+  },
+  {
+    "name": "Medicham",
+    "hp": 60,
+    "atk": 60,
+    "def": 75,
+    "spe": 80,
+    "spa": 90,
+    "spd": 75
+  },
+  {
+    "name": "Dusclops",
+    "hp": 65,
+    "atk": 60,
+    "def": 130,
+    "spe": 25,
+    "spa": 75,
+    "spd": 130
+  },
+  {
+    "name": "Roselia",
+    "hp": 55,
+    "atk": 65,
+    "def": 50,
+    "spe": 75,
+    "spa": 115,
+    "spd": 95
+  },
+  {
+    "name": "Gulpin",
+    "hp": 85,
+    "atk": 43,
+    "def": 53,
+    "spe": 40,
+    "spa": 43,
+    "spd": 53
+  },
+  {
+    "name": "Swalot",
+    "hp": 115,
+    "atk": 73,
+    "def": 83,
+    "spe": 55,
+    "spa": 73,
+    "spd": 83
+  },
+  {
+    "name": "Tropius",
+    "hp": 120,
+    "atk": 65,
+    "def": 83,
+    "spe": 51,
+    "spa": 85,
+    "spd": 87
+  },
+  {
+    "name": "Loudred",
+    "hp": 84,
+    "atk": 76,
+    "def": 43,
+    "spe": 48,
+    "spa": 71,
+    "spd": 43
+  },
+  {
+    "name": "Exploud",
+    "hp": 114,
+    "atk": 101,
+    "def": 73,
+    "spe": 68,
+    "spa": 91,
+    "spd": 73
+  },
+  {
+    "name": "Absol",
+    "hp": 65,
+    "atk": 130,
+    "def": 60,
+    "spe": 95,
+    "spa": 75,
+    "spd": 60
+  },
+  {
+    "name": "Banette",
+    "hp": 64,
+    "atk": 103,
+    "def": 65,
+    "spe": 75,
+    "spa": 115,
+    "spd": 63
+  },
+  {
+    "name": "Relicanth",
+    "hp": 100,
+    "atk": 110,
+    "def": 130,
+    "spe": 55,
+    "spa": 45,
+    "spd": 65
+  },
+  {
+    "name": "Castform",
+    "hp": 75,
+    "atk": 70,
+    "def": 75,
+    "spe": 90,
+    "spa": 85,
+    "spd": 75
+  },
+  {
+    "name": "Volbeat",
+    "hp": 70,
+    "atk": 88,
+    "def": 55,
+    "spe": 85,
+    "spa": 87,
+    "spd": 65
+  },
+  {
+    "name": "Illumise",
+    "hp": 80,
+    "atk": 73,
+    "def": 75,
+    "spe": 85,
+    "spa": 47,
+    "spd": 90
+  },
+  {
+    "name": "Kirlia",
+    "hp": 38,
+    "atk": 35,
+    "def": 35,
+    "spe": 50,
+    "spa": 75,
+    "spd": 65
+  },
+  {
+    "name": "Chimecho",
+    "hp": 75,
+    "atk": 50,
+    "def": 80,
+    "spe": 65,
+    "spa": 95,
+    "spd": 90
+  }
+]
