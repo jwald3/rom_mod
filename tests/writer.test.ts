@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { RomBuffer, GBA_ROM_BASE } from '../src/rom/buffer'
 import { VANILLA_BPRE, type AnchorMap } from '../src/rom/anchors'
 import { readLearnset, type LearnsetEntry } from '../src/rom/tables/learnsets'
-import { readCompatRow } from '../src/rom/tables/compat'
+import { readCompatRow, readMoveIdTable } from '../src/rom/tables/compat'
 import { readEvolutionsFor } from '../src/rom/tables/evolutions'
 import { readTrainer, trainerToEdit } from '../src/rom/tables/trainers'
 import { applyLearnsetEdits, applyRomEdits } from '../src/rom/writer'
@@ -33,14 +33,19 @@ function syntheticRom(): { rom: RomBuffer; anchors: AnchorMap } {
   // TM compat rows (8 bytes × 4 species) at 0x200; tutor rows (2 × 4) at 0x240.
   bytes[0x200 + 8] = 0b0000_0001 // species 1 knows TM01 only
 
+  // Tutor move-id table: 15 slots (VANILLA_BPRE tutorCount) of u16 at 0x280.
+  for (let i = 0; i < 15; i++) view.setUint16(0x280 + i * 2, 20 + i, true)
+
   bytes.fill(0xff, FLOOR)
 
   const anchors: AnchorMap = {
     ...VANILLA_BPRE,
     learnsets: 0x10,
     speciesCount: 4,
+    moveCount: 400,
     tmCompat: 0x200,
     tutorCompat: 0x240,
+    tutors: 0x280,
     evolutions: 0x300, // 4 species × 40 bytes, all zero (no evolutions)
   }
   return { rom: new RomBuffer(bytes), anchors }
@@ -310,6 +315,47 @@ function trainerRom(): { rom: RomBuffer; anchors: AnchorMap } {
   }
   return { rom: new RomBuffer(bytes), anchors }
 }
+
+describe('tutor move roster', () => {
+  const roster = () => Array.from({ length: 15 }, (_, i) => 20 + i)
+
+  it('rewrites the tutor move-id table in place', () => {
+    const { rom, anchors } = syntheticRom()
+    const next = roster()
+    next[0] = 99 // change slot 0
+    next[14] = 264 // and the last slot
+    const { bytes, ops } = applyRomEdits(rom, anchors, { tutorMoves: next }, opts)
+
+    expect(ops).toEqual([
+      { species: -1, kind: 'tutor-moves', oldOffset: 0x280, newOffset: 0x280, byteLength: 30, erasedOld: false },
+    ])
+    const out = new RomBuffer(bytes)
+    expect(readMoveIdTable(out, anchors.tutors, anchors.tutorCount)).toEqual(next)
+  })
+
+  it('rejects a wrong-length list', () => {
+    const { rom, anchors } = syntheticRom()
+    expect(() => applyRomEdits(rom, anchors, { tutorMoves: [1, 2, 3] }, opts)).toThrow(
+      /got 3 entries, expected 15/,
+    )
+  })
+
+  it('rejects an out-of-range move id', () => {
+    const { rom, anchors } = syntheticRom()
+    const bad = roster()
+    bad[3] = 9999
+    expect(() => applyRomEdits(rom, anchors, { tutorMoves: bad }, opts)).toThrow(/invalid move #9999/)
+  })
+
+  it('never mutates the source buffer', () => {
+    const { rom, anchors } = syntheticRom()
+    const before = rom.bytes.slice()
+    const next = roster()
+    next[0] = 50
+    applyRomEdits(rom, anchors, { tutorMoves: next }, opts)
+    expect(rom.bytes).toEqual(before)
+  })
+})
 
 describe('trainer writes', () => {
   it('writes a same-size team in place and updates the record', () => {

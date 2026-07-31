@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { entriesEqual, type Learnset, type LearnsetEntry } from '../rom/tables/learnsets'
-import { flagsEqual } from '../rom/tables/compat'
+import { flagsEqual, moveIdsEqual } from '../rom/tables/compat'
 import {
   parseWildKey,
   wildGroupsEqual,
@@ -29,6 +29,8 @@ export type EditRecord =
   | { field: 'learnset'; species: number; prev: LearnsetEntry[]; next: LearnsetEntry[] }
   | { field: 'tm'; species: number; prev: boolean[]; next: boolean[] }
   | { field: 'tutor'; species: number; prev: boolean[]; next: boolean[] }
+  /** The global tutor move-id list (which move each tutor slot teaches). species unused (0). */
+  | { field: 'tutor-moves'; species: number; prev: number[]; next: number[] }
   | { field: 'evo'; species: number; prev: Evolution[]; next: Evolution[] }
   /** species carries the wild area index so undo can jump to it. */
   | { field: 'wild'; species: number; key: string; prev: WildGroupEdit; next: WildGroupEdit }
@@ -46,6 +48,8 @@ interface EditStore {
   drafts: Record<number, LearnsetEntry[]>
   tmDrafts: Record<number, boolean[]>
   tutorDrafts: Record<number, boolean[]>
+  /** The global tutor move-id list draft, or null when unmodified. */
+  tutorMovesDraft: number[] | null
   /** Keyed by wildKey(areaIndex, kind). */
   wildDrafts: Record<string, WildGroupEdit>
   evoDrafts: Record<number, Evolution[]>
@@ -64,6 +68,8 @@ interface EditStore {
   apply(species: number, next: LearnsetEntry[]): void
   /** Replace a species' TM/HM or tutor flags (records an undo step). No-op if unchanged. */
   applyCompat(field: CompatField, species: number, next: boolean[]): void
+  /** Replace the global tutor move-id list (records an undo step). No-op if unchanged. */
+  applyTutorMoves(next: number[]): void
   /** Replace one wild encounter group (records an undo step). No-op if unchanged. */
   applyWild(areaIndex: number, kind: WildKind, next: WildGroupEdit): void
   /** Replace a species' evolution list (records an undo step). No-op if unchanged. */
@@ -97,6 +103,20 @@ function originalFlags(field: CompatField, species: number): boolean[] {
   const loaded = useRomStore.getState().loaded
   const table = field === 'tm' ? loaded?.tmCompat : loaded?.tutorCompat
   return table?.[species] ?? []
+}
+
+function originalTutorMoves(): number[] {
+  return useRomStore.getState().loaded?.tutorMoves ?? []
+}
+
+/** Current tutor move-id list: draft if present, else the ROM original. */
+export function effectiveTutorMoves(draft: number[] | null, loaded: LoadedRom): number[] {
+  return draft ?? loaded.tutorMoves
+}
+
+/** True when the tutor move-id draft differs from the ROM. */
+export function isTutorMovesDirty(draft: number[] | null, loaded: LoadedRom): boolean {
+  return draft !== null && !moveIdsEqual(draft, loaded.tutorMoves)
 }
 
 function originalEvos(species: number): Evolution[] {
@@ -404,6 +424,10 @@ export const useEditStore = create<EditStore>((set, get) => {
     if (record.field === 'tutor') {
       return { tutorDrafts: compatDraftsWith('tutor', s.tutorDrafts, record.species, value as boolean[]) }
     }
+    if (record.field === 'tutor-moves') {
+      const moves = value as number[]
+      return { tutorMovesDraft: moveIdsEqual(moves, originalTutorMoves()) ? null : moves }
+    }
     if (record.field === 'evo') {
       return { evoDrafts: evoDraftsWith(s.evoDrafts, record.species, value as Evolution[]) }
     }
@@ -432,6 +456,7 @@ export const useEditStore = create<EditStore>((set, get) => {
     drafts: {},
     tmDrafts: {},
     tutorDrafts: {},
+    tutorMovesDraft: null,
     wildDrafts: {},
     evoDrafts: {},
     trainerDrafts: {},
@@ -454,6 +479,12 @@ export const useEditStore = create<EditStore>((set, get) => {
       const prev = drafts[species] ?? originalFlags(field, species)
       if (flagsEqual(prev, next)) return
       push({ field, species, prev, next })
+    },
+
+    applyTutorMoves(next) {
+      const prev = get().tutorMovesDraft ?? originalTutorMoves()
+      if (moveIdsEqual(prev, next)) return
+      push({ field: 'tutor-moves', species: 0, prev, next })
     },
 
     applyWild(areaIndex, kind, next) {
@@ -554,6 +585,7 @@ export const useEditStore = create<EditStore>((set, get) => {
         drafts: {},
         tmDrafts: {},
         tutorDrafts: {},
+        tutorMovesDraft: null,
         wildDrafts: {},
         evoDrafts: {},
         trainerDrafts: {},

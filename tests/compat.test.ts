@@ -6,6 +6,9 @@ import {
   serializeCompatRow,
   flagsEqual,
   tmSlotLabel,
+  readMoveIdTable,
+  serializeMoveIdTable,
+  moveIdsEqual,
 } from '../src/rom/tables/compat'
 import { diffLearnsetPair } from '../src/lib/diff'
 
@@ -44,6 +47,36 @@ describe('compat bitfields', () => {
     expect(tmSlotLabel(49)).toBe('TM50')
     expect(tmSlotLabel(50)).toBe('HM01')
     expect(tmSlotLabel(57)).toBe('HM08')
+  })
+})
+
+describe('move-id tables (TM / tutor rosters)', () => {
+  it('round-trips serialize → read as little-endian u16', () => {
+    const ids = [33, 264, 355, 1, 0]
+    const data = serializeMoveIdTable(ids)
+    expect(data.length).toBe(ids.length * 2)
+    // low byte first
+    expect(data[0]).toBe(33 & 0xff)
+    expect(data[1]).toBe(33 >> 8)
+    expect(data[2]).toBe(264 & 0xff)
+    expect(data[3]).toBe(264 >> 8)
+
+    const bytes = new Uint8Array(0x40)
+    bytes.set(data, 0x10)
+    const rom = new RomBuffer(bytes)
+    expect(readMoveIdTable(rom, 0x10, ids.length)).toEqual(ids)
+  })
+
+  it('masks ids to 16 bits', () => {
+    const data = serializeMoveIdTable([0x1_2345])
+    const rom = new RomBuffer(data)
+    expect(readMoveIdTable(rom, 0, 1)).toEqual([0x2345])
+  })
+
+  it('compares move-id lists by value', () => {
+    expect(moveIdsEqual([1, 2, 3], [1, 2, 3])).toBe(true)
+    expect(moveIdsEqual([1, 2, 3], [1, 2, 4])).toBe(false)
+    expect(moveIdsEqual([1, 2], [1, 2, 3])).toBe(false)
   })
 })
 

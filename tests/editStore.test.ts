@@ -6,6 +6,8 @@ import {
   effectiveEntries,
   computeDirtySet,
   computeAllDirty,
+  effectiveTutorMoves,
+  isTutorMovesDirty,
 } from '../src/state/editStore'
 import type { LoadedRom } from '../src/rom/loadRom'
 import type { LearnsetEntry } from '../src/rom/tables/learnsets'
@@ -27,6 +29,7 @@ function fakeLoaded(): LoadedRom {
     ],
     tmCompat: [[false, false, false], TM_ROW_1, [false, false, false]],
     tutorCompat: [[false], [true], [false]],
+    tutorMoves: [33, 45, 20],
     evolutions: [[], [{ method: 4, param: 16, target: 2 }], []],
     wildAreas: [
       {
@@ -225,5 +228,30 @@ describe('editStore', () => {
     state().noteRecentMove(2)
     state().noteRecentMove(1)
     expect(state().recentMoves).toEqual([1, 2])
+  })
+
+  it('edits, undoes, and reverts the global tutor move roster', () => {
+    const loaded = () => useRomStore.getState().loaded!
+    expect(effectiveTutorMoves(state().tutorMovesDraft, loaded())).toEqual([33, 45, 20])
+    expect(isTutorMovesDirty(state().tutorMovesDraft, loaded())).toBe(false)
+
+    state().applyTutorMoves([33, 99, 20]) // change slot 1
+    expect(effectiveTutorMoves(state().tutorMovesDraft, loaded())).toEqual([33, 99, 20])
+    expect(isTutorMovesDirty(state().tutorMovesDraft, loaded())).toBe(true)
+
+    // no-op apply records nothing
+    state().applyTutorMoves([33, 99, 20])
+    expect(state().undoStack).toHaveLength(1)
+
+    // returning to the original drops the draft
+    state().applyTutorMoves([33, 45, 20])
+    expect(state().tutorMovesDraft).toBeNull()
+    expect(isTutorMovesDirty(state().tutorMovesDraft, loaded())).toBe(false)
+
+    // undo brings the edit back, undo again clears it
+    expect(state().undo()).not.toBeNull()
+    expect(effectiveTutorMoves(state().tutorMovesDraft, loaded())).toEqual([33, 99, 20])
+    expect(state().undo()).not.toBeNull()
+    expect(state().tutorMovesDraft).toBeNull()
   })
 })

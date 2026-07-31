@@ -8,6 +8,7 @@ import {
   computeTrainerDirtySet,
   computeGcDirty,
   computeShopDirty,
+  isTutorMovesDirty,
 } from '../state/editStore'
 import { applyRomEdits, type RomEdits } from '../rom/writer'
 import { loadRom } from '../rom/loadRom'
@@ -24,7 +25,7 @@ function setSaveState(saveState: SaveState) {
 
 function buildEdits(): { edits: RomEdits; count: number } {
   const { loaded } = useRomStore.getState()
-  const { drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, trainerDrafts, gcDrafts, shopDrafts } =
+  const { drafts, tmDrafts, tutorDrafts, tutorMovesDraft, wildDrafts, evoDrafts, trainerDrafts, gcDrafts, shopDrafts } =
     useEditStore.getState()
   const learnsets = new Map<number, LearnsetEntry[]>()
   const tmCompat = new Map<number, boolean[]>()
@@ -34,12 +35,14 @@ function buildEdits(): { edits: RomEdits; count: number } {
   const trainers = new Map<number, TrainerEdit>()
   const gameCorner = new Map<PrizeKind, Prize[]>()
   const shops = new Map<number, number[]>()
+  let tutorMoves: number[] | undefined
   if (loaded) {
     for (const s of computeDirtySet(drafts, loaded.learnsets)) learnsets.set(s, drafts[s])
     for (const s of computeCompatDirtySet(tmDrafts, loaded.tmCompat)) tmCompat.set(s, tmDrafts[s])
     for (const s of computeCompatDirtySet(tutorDrafts, loaded.tutorCompat)) {
       tutorCompat.set(s, tutorDrafts[s])
     }
+    if (isTutorMovesDirty(tutorMovesDraft, loaded)) tutorMoves = tutorMovesDraft!
     for (const key of computeWildDirtyKeys(wildDrafts, loaded)) wild.set(key, wildDrafts[key])
     for (const s of computeEvoDirtySet(evoDrafts, loaded)) evolutions.set(s, evoDrafts[s])
     for (const t of computeTrainerDirtySet(trainerDrafts, loaded)) trainers.set(t, trainerDrafts[t])
@@ -47,11 +50,12 @@ function buildEdits(): { edits: RomEdits; count: number } {
     for (const cmd of computeShopDirty(shopDrafts, loaded)) shops.set(cmd, shopDrafts[cmd])
   }
   return {
-    edits: { learnsets, tmCompat, tutorCompat, wild, evolutions, trainers, gameCorner, shops },
+    edits: { learnsets, tmCompat, tutorCompat, tutorMoves, wild, evolutions, trainers, gameCorner, shops },
     count:
       learnsets.size +
       tmCompat.size +
       tutorCompat.size +
+      (tutorMoves ? 1 : 0) +
       wild.size +
       evolutions.size +
       trainers.size +
@@ -128,6 +132,7 @@ export async function saveInPlace(): Promise<void> {
       drafts: {},
       tmDrafts: {},
       tutorDrafts: {},
+      tutorMovesDraft: null,
       wildDrafts: {},
       evoDrafts: {},
       trainerDrafts: {},
@@ -143,12 +148,14 @@ export async function saveInPlace(): Promise<void> {
     const trainerRepointed = ops.filter((o) => o.kind === 'trainer-repointed').length
     const gcOps = ops.filter((o) => o.kind === 'game-corner').length
     const shopOps = ops.filter((o) => o.kind === 'shop').length
+    const tutorMoveOps = ops.filter((o) => o.kind === 'tutor-moves').length
     const learnsetOps = inPlace + repointed
-    const compat = ops.length - learnsetOps - wildOps - evoOps - trainerOps - gcOps - shopOps
+    const compat = ops.length - learnsetOps - wildOps - evoOps - trainerOps - gcOps - shopOps - tutorMoveOps
     const parts = [
       learnsetOps > 0 ? `Saved ${learnsetOps} learnset${learnsetOps === 1 ? '' : 's'}` : null,
       repointed > 0 ? `${repointed} repointed to free space` : null,
       compat > 0 ? `${compat} compatibility row${compat === 1 ? '' : 's'}` : null,
+      tutorMoveOps > 0 ? 'tutor move list' : null,
       wildOps > 0 ? `${wildOps} wild group${wildOps === 1 ? '' : 's'}` : null,
       evoOps > 0 ? `${evoOps} evolution set${evoOps === 1 ? '' : 's'}` : null,
       trainerOps > 0

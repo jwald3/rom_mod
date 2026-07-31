@@ -7,7 +7,7 @@ import {
   type LearnsetEntry,
 } from './tables/learnsets'
 import { FreeSpaceAllocator, FREE_BYTE, DEFAULT_FLOOR } from './freespace'
-import { compatRowBytes, flagsEqual, readCompatRow, serializeCompatRow } from './tables/compat'
+import { compatRowBytes, flagsEqual, readCompatRow, serializeCompatRow, serializeMoveIdTable } from './tables/compat'
 import {
   parseWildKey,
   readWildArea,
@@ -51,6 +51,7 @@ export interface WriteOp {
     | 'repointed'
     | 'tm-compat'
     | 'tutor-compat'
+    | 'tutor-moves'
     | 'wild'
     | 'evolution'
     | 'held-items'
@@ -73,6 +74,8 @@ export interface RomEdits {
   learnsets?: Map<number, LearnsetEntry[]>
   tmCompat?: Map<number, boolean[]>
   tutorCompat?: Map<number, boolean[]>
+  /** The global tutor move-id list (one entry per tutor slot). */
+  tutorMoves?: number[]
   /** Keyed by wildKey(areaIndex, kind). */
   wild?: Map<string, WildGroupEdit>
   evolutions?: Map<number, Evolution[]>
@@ -205,6 +208,29 @@ export function applyRomEdits(
       out.set(serializeCompatRow(flags), offset)
       ops.push({ species, kind, oldOffset: offset, newOffset: offset, byteLength: rowBytes, erasedOld: false })
     }
+  }
+
+  // Tutor move-id list: a fixed-size u16 table (one entry per tutor slot),
+  // written in place. The slot count is immutable — the per-species tutor
+  // compat rows and the tutor menu are keyed by slot index, so we only ever
+  // change *which move* each existing slot teaches, never the number of slots.
+  if (romEdits.tutorMoves) {
+    const moveIds = romEdits.tutorMoves
+    if (moveIds.length !== anchors.tutorCount) {
+      throw new Error(`Tutor moves: got ${moveIds.length} entries, expected ${anchors.tutorCount}`)
+    }
+    for (const id of moveIds) {
+      if (id < 0 || id >= anchors.moveCount) throw new Error(`Tutor moves: invalid move #${id}`)
+    }
+    out.set(serializeMoveIdTable(moveIds), anchors.tutors)
+    ops.push({
+      species: -1,
+      kind: 'tutor-moves',
+      oldOffset: anchors.tutors,
+      newOffset: anchors.tutors,
+      byteLength: moveIds.length * 2,
+      erasedOld: false,
+    })
   }
 
   // Wild encounter groups: fixed-size [u32 rate] + slot arrays, always in place.

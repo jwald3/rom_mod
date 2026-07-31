@@ -17,6 +17,19 @@ export function readMoveIdTable(rom: RomBuffer, offset: number, count: number): 
   return out
 }
 
+/** Serialize a u16 move-id table (little-endian) for write-back. */
+export function serializeMoveIdTable(moveIds: number[]): Uint8Array {
+  const out = new Uint8Array(moveIds.length * 2)
+  const view = new DataView(out.buffer)
+  moveIds.forEach((id, i) => view.setUint16(i * 2, id & 0xffff, true))
+  return out
+}
+
+/** True if two move-id lists are element-wise equal. */
+export function moveIdsEqual(a: number[], b: number[]): boolean {
+  return a.length === b.length && a.every((v, i) => v === b[i])
+}
+
 export function readCompatRow(
   rom: RomBuffer,
   tableOffset: number,

@@ -37,16 +37,19 @@ export function LearnsetEditor() {
   const drafts = useEditStore((s) => s.drafts)
   const tmDrafts = useEditStore((s) => s.tmDrafts)
   const tutorDrafts = useEditStore((s) => s.tutorDrafts)
+  const tutorMovesDraft = useEditStore((s) => s.tutorMovesDraft)
   const wildDrafts = useEditStore((s) => s.wildDrafts)
   const evoDrafts = useEditStore((s) => s.evoDrafts)
   const clipboard = useEditStore((s) => s.clipboard)
   const recentMoves = useEditStore((s) => s.recentMoves)
-  const { apply, applyCompat, applyEvos, revert, copy, paste, noteRecentMove } =
+  const { apply, applyCompat, applyTutorMoves, applyEvos, revert, copy, paste, noteRecentMove } =
     useEditStore.getState()
 
   const [tab, setTab] = useState<Tab>('levelup')
   const [picker, setPicker] = useState<number | 'add' | null>(null)
   const [evoPicker, setEvoPicker] = useState<number | 'add' | null>(null)
+  /** Which tutor slot is having its move reassigned (global roster edit). */
+  const [tutorSlotPicker, setTutorSlotPicker] = useState<number | null>(null)
   const [focusLevel, setFocusLevel] = useState<number | null>(null)
 
   const species = loaded.species[selected]
@@ -61,9 +64,13 @@ export function LearnsetEditor() {
     () => loaded.tmMoves.map((moveId, i) => ({ slotLabel: tmSlotLabel(i), moveId })),
     [loaded],
   )
+  // The tutor roster is global (shared across species). Show the draft when the
+  // move list has been edited, so both the compat grid and the slot editor agree.
+  const effectiveTutorMoveIds = tutorMovesDraft ?? loaded.tutorMoves
+  const tutorRosterDirty = tutorMovesDraft !== null
   const tutorItems = useMemo(
-    () => loaded.tutorMoves.map((moveId) => ({ slotLabel: '', moveId })),
-    [loaded],
+    () => effectiveTutorMoveIds.map((moveId) => ({ slotLabel: '', moveId })),
+    [effectiveTutorMoveIds],
   )
 
   const select = useRomStore((s) => s.select)
@@ -318,6 +325,61 @@ export function LearnsetEditor() {
 
       {tab === 'tutor' && (
         <div className="p-6">
+          <details className="mb-6 rounded-lg border border-slate-700 bg-slate-800/40">
+            <summary className="cursor-pointer select-none px-4 py-2.5 text-sm font-medium text-slate-200">
+              Tutor move roster
+              <span className="ml-2 text-xs text-slate-400">
+                ({effectiveTutorMoveIds.length} slots — sets what every tutor teaches)
+              </span>
+              {tutorRosterDirty && (
+                <span className="ml-2 rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-300">
+                  edited
+                </span>
+              )}
+            </summary>
+            <div className="border-t border-slate-700 px-4 py-3">
+              <p className="mb-3 text-xs text-slate-400">
+                Reassign which move each tutor slot teaches. This is a{' '}
+                <strong className="text-slate-300">global</strong> change — it affects the move
+                offered by that tutor for <em>every</em> species. Slot count is fixed; the per-species
+                checkboxes below decide who can learn each slot.
+              </p>
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-1.5">
+                {effectiveTutorMoveIds.map((moveId, i) => {
+                  const changed = moveId !== (loaded.tutorMoves[i] ?? -1)
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setTutorSlotPicker(i)}
+                      className={`flex items-center gap-2 rounded border px-2 py-1.5 text-left text-sm transition-colors ${
+                        changed
+                          ? 'border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20'
+                          : 'border-slate-700 bg-slate-800/60 hover:border-slate-500 hover:bg-slate-700/60'
+                      }`}
+                      title={changed ? `was ${loaded.moves[loaded.tutorMoves[i]]?.name ?? '—'}` : 'Change this tutor move'}
+                    >
+                      <span className="w-8 shrink-0 font-mono text-[11px] text-slate-500">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span className="truncate text-slate-100">
+                        {loaded.moves[moveId]?.name ?? `#${moveId}`}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+              {tutorRosterDirty && (
+                <button
+                  type="button"
+                  onClick={() => applyTutorMoves([...loaded.tutorMoves])}
+                  className="mt-3 text-xs text-slate-400 underline underline-offset-2 hover:text-slate-200"
+                >
+                  Reset roster to ROM
+                </button>
+              )}
+            </div>
+          </details>
           <CompatGrid
             items={tutorItems}
             moves={loaded.moves}
@@ -647,6 +709,22 @@ export function LearnsetEditor() {
           {entries.length + 1 > loaded.learnsets[selected].origCapacity && ' · will repoint on save'}
         </p>
       </div>
+      )}
+
+      {tutorSlotPicker !== null && (
+        <MovePicker
+          moves={loaded.moves}
+          typeNames={loaded.typeNames}
+          recentMoves={recentMoves}
+          onSelect={(id) => {
+            const next = [...effectiveTutorMoveIds]
+            next[tutorSlotPicker] = id
+            applyTutorMoves(next)
+            noteRecentMove(id)
+            setTutorSlotPicker(null)
+          }}
+          onClose={() => setTutorSlotPicker(null)}
+        />
       )}
     </main>
   )
