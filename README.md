@@ -41,6 +41,35 @@ Two things live here:
    ROM with `npm run verify:gyms -- <rom>` (diffs species/level/held-item/moves;
    `npm run verify:gyms:extract` rebuilds the ground-truth JSON from the guide).
 
+### Heart & Soul base version
+
+The ROM carries no readable version string (only the vanilla
+`"pokemon emerald version"` header), so the base was identified structurally:
+**pokeemerald-expansion, battle-engine-v2 era (~1.x, pre-2.0, roughly 2020)**,
+heavily customized. Fingerprints:
+
+- `struct BaseStats` = **40 bytes** (vanilla Emerald is 28) — expansion battle-engine era
+- Evolutions = **8 slots / 64-byte blocks** per species (vanilla 5)
+- Types = 19, with **Fairy at index 18 and the vanilla `???` slot retained at 9**
+  — this is **pre-2.0** (2.0+ dropped `???` and reordered the type enum)
+- 462 species, 82 abilities, 368 moves — a small hand-curated set, not the
+  modern full dex (abilities end Transistor/Dragon's Maw/Pixilate; moves end
+  Play Rough/Moonblast/Poison Jab)
+
+**In-game trades are not machine-readable from this build.** The
+`InGameTrade` struct is the standard 60 bytes (species@0x0C, heldItem@0x28,
+otName@0x2B, requestedSpecies@0x38), but the hack **relocated `gIngameTrades`**
+out of the vanilla Emerald address (`0x615a08`, now garbage) into expanded ROM
+space, and it can't be isolated by scanning — walking every `0x08` pointer for
+runs of valid records yields only coincidental matches (all with garbage
+charmap nicknames). The trades exist in-game (the guide notes the Cerulean
+gatehouse and Cianwood-area NPC trades), so the guide's **In-Game Trades**
+section uses the canonical HeartGold/SoulSilver list — every species/item in it
+validated to exist in this ROM, and clearly flagged as "confirm in-game."
+Extracting the real table would need the hack's `.sym`/`.map` file, or one
+in-game-confirmed trade (town + give→get + the nickname shown) to seed a
+byte-exact search.
+
 ## Editor usage
 
 ```sh
