@@ -1,7 +1,7 @@
 // Headless smoke test: drives the dev server in system Edge via playwright-core.
 // Usage: node scripts/smoke.mjs  (dev server must be running on :5173)
 import { chromium } from 'playwright-core'
-import { mkdirSync } from 'node:fs'
+import { mkdirSync, statSync } from 'node:fs'
 
 // Drives the Heart & Soul (BPEE) ROM — the build this project actually targets.
 // It's an Emerald hack with table locations built in, so no toml is needed.
@@ -152,15 +152,39 @@ try {
   await page.click('li button:has-text("THUNDERBOLT")')
   await page.waitForSelector('text=tutor roster modified')
   await shot(page, '17-tutor-edited')
-  // Undo — dirty badge clears.
-  await page.keyboard.press('Control+z')
-  await page.waitForSelector('text=No changes')
+
+  // Save: exercise the write-back path via "Download copy" (applyRomEdits on a
+  // copy → blob download). In-place "Save to ROM" needs a File System Access
+  // handle, which setInputFiles doesn't grant — and we wouldn't want a headless
+  // run overwriting the real ROM. Download copy is the non-destructive save path.
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.click('button:has-text("Download copy")'),
+  ])
+  const savedPath = `${OUT}/downloaded.gba`
+  await download.saveAs(savedPath)
+  const { size } = statSync(savedPath)
+  if (size !== 33554432) throw new Error(`downloaded ROM is ${size} bytes, expected 33554432`)
+  await page.waitForSelector('text=Downloaded modified copy')
+  console.log(`💾 saved ${savedPath} (${size} bytes)`)
+  await shot(page, '18-saved-copy')
+
+  // The saved copy must actually contain the edit: reload to the open screen,
+  // reopen the downloaded file, and check tutor slot 1 persisted as THUNDERBOLT.
+  await page.reload()
+  await page.waitForSelector('text=Moveset Editor')
+  await page.setInputFiles('input[type=file]', [savedPath])
+  await page.waitForSelector('h2:has-text("BULBASAUR")')
+  await page.click('nav button:has-text("Tutors")')
+  await page.click('summary:has-text("Tutor move roster")')
+  await page.waitForSelector('details:has(summary:has-text("Tutor move roster")) .grid > button:has-text("THUNDERBOLT")')
+  await shot(page, '19-reopened-saved')
 
   if (errors.length > 0) {
     console.error('❌ console errors:\n' + errors.join('\n'))
     process.exit(1)
   }
-  console.log('✅ smoke passed: load → search → tabs → fuzzy add → undo, no console errors')
+  console.log('✅ smoke passed: load → edit (moves/wild/evo/trainer/tutor) → download copy → reopen, no console errors')
 } finally {
   await browser.close()
 }
