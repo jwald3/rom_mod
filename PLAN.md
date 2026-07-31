@@ -325,7 +325,35 @@ Verified ground truth (recon against the real ROM, reading real bytes):
   save round-trip growing TERRY's team 1→2 (repoint) then reload; smoke
   extended to 15 steps (edit LORELEI's lead → MEW, add a 6th mon, undo)
 
+### Phase 8 — Tutor move-slot editor  *(requested 2026-07-30)* — **DONE 2026-07-30**
+Reassign *which move* each tutor slot teaches — a global edit to the `tutorMoves`
+u16 id table (`anchors.tutors`), distinct from the existing per-species tutor
+**compatibility** grid.
+
+- Writer `'tutor-moves'` edit-kind writes the fixed-size u16 table in place
+  (validates length == `tutorCount`, every id < `moveCount`); mirrors the
+  compat-row in-place pattern, no repointing.
+- editStore: a single global `tutorMovesDraft` (not per-species) on the shared
+  undo stack; `applyTutorMoves`, `effectiveTutorMoves`/`isTutorMovesDirty`.
+- UI: "Tutor move roster" panel in the Tutors tab (click a slot → MovePicker;
+  edited slots highlighted; reset-to-ROM). StatusBar counts it toward the dirty
+  total so Save is enabled for a roster-only edit. 8 new tests (118 total).
+
+**Slot count stays fixed** — the per-species compat rows and the in-ROM tutor
+menu are both keyed by slot *index*, so we only change what an existing slot
+teaches, never the number of slots. Growing the roster would need the ROM's
+tutor-menu scripts, which this data-editor doesn't touch.
+
+⚠️ **Menu cost/label caveat.** Editing `tutorMoves` changes the move the tutor
+actually *teaches*, but each tutor NPC's **displayed move name and BP/coin cost**
+live in **map/menu scripts**, not this table. A reassigned slot can still show
+the *old* move name and price in the tutor's dialogue while correctly teaching
+the new move. The taught move is right; only the cosmetic menu text can lag.
+Fixing the label/cost is script-side work, out of scope for the table editor.
+
 ## Out of scope (deliberately)
 
 Egg moves (separate packed table, low value for this workflow), evolution editing,
 writing back to the HMA toml (HMA re-derives everything from ROM bytes), non-BPRE ROMs.
+**Adding** tutor slots or changing a tutor's menu cost/label (both live in ROM
+scripts, not data tables — see the Phase 8 caveat).
