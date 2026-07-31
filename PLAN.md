@@ -338,6 +338,14 @@ u16 id table (`anchors.tutors`), distinct from the existing per-species tutor
 - UI: "Tutor move roster" panel in the Tutors tab (click a slot → MovePicker;
   edited slots highlighted; reset-to-ROM). StatusBar counts it toward the dirty
   total so Save is enabled for a roster-only edit. 8 new tests (118 total).
+- Smoke retargeted to the **Heart & Soul (BPEE)** ROM (env-overridable via
+  `SMOKE_ROM`; H&S needs no toml) and grown to 19 steps: reassign tutor slot 1
+  Mega Punch → Thunderbolt, then a **save step** — "Download copy" runs the full
+  `applyRomEdits` write-back to a blob (in-place save needs a File System Access
+  handle `setInputFiles` can't grant, and a headless run shouldn't clobber the
+  real ROM), asserts the download is the exact 32 MB size, then reopens the
+  saved `.gba` and confirms slot 1 persisted as Thunderbolt — proving the edit
+  was written, not just held in memory.
 
 **Slot count stays fixed** — the per-species compat rows and the in-ROM tutor
 menu are both keyed by slot *index*, so we only change what an existing slot
