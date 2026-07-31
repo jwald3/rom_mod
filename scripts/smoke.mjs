@@ -3,9 +3,14 @@
 import { chromium } from 'playwright-core'
 import { mkdirSync } from 'node:fs'
 
-const ROM_DIR = 'C:/Users/Waldo/Downloads/Pokemon - Fire Red Version [a1] (U) (Squirrels) (2)'
-const ROM = `${ROM_DIR}/20260426__GPT_Mods.gba`
-const TOML = `${ROM_DIR}/20260426__GPT_Mods.toml`
+// Drives the Heart & Soul (BPEE) ROM — the build this project actually targets.
+// It's an Emerald hack with table locations built in, so no toml is needed.
+// Overridable via env so the test isn't pinned to one machine's folder:
+// SMOKE_ROM (and optional SMOKE_TOML for FireRed ROMs).
+const ROM =
+  process.env.SMOKE_ROM ??
+  'C:/Users/Jordan/Downloads/Pokemon H&S/Pokemon Heart & Soul (no-fairy).gba'
+const TOML = process.env.SMOKE_TOML ?? null // H&S needs none; set for FireRed ROMs
 const OUT = 'smoke'
 
 mkdirSync(OUT, { recursive: true })
@@ -22,11 +27,11 @@ page.on('pageerror', (e) => errors.push(String(e)))
 
 try {
   await page.goto('http://localhost:5173/')
-  await page.waitForSelector('text=FireRed Moveset Editor')
+  await page.waitForSelector('text=Moveset Editor')
   await shot(page, '01-open-screen')
 
-  // Load ROM + toml through the hidden file input (same path as the picker).
-  await page.setInputFiles('input[type=file]', [ROM, TOML])
+  // Load the ROM (+ toml if provided) through the hidden file input.
+  await page.setInputFiles('input[type=file]', TOML ? [ROM, TOML] : [ROM])
   await page.waitForSelector('h2:has-text("BULBASAUR")')
   await shot(page, '02-bulbasaur-loaded')
 
@@ -87,11 +92,11 @@ try {
   await page.waitForSelector('text=No changes')
   await shot(page, '10-wild-undone')
 
-  // No-wild-location filter: Charizard (never wild) stays, Pidgey (Route 1) filtered out.
+  // No-wild-location filter: Meganium (starter, never wild) stays, Pidgey filtered out.
   await page.click('aside button:has-text("Pokémon")')
   await page.fill('#species-search', '')
   await page.click('text=only no-wild-location')
-  await page.waitForSelector('aside button:has-text("CHARIZARD")')
+  await page.waitForSelector('aside button:has-text("MEGANIUM")')
   await page.waitForSelector('aside button:has-text("PIDGEY")', { state: 'detached' })
   await shot(page, '11-no-wild-filter')
 
@@ -108,31 +113,46 @@ try {
   await page.keyboard.press('Control+z')
   await page.waitForSelector('text=No changes')
 
-  // Trainers view: edit an NPC team — change LORELEI's lead species, then undo.
+  // Trainers view: edit an NPC team — change the lead species, then undo.
+  // KAREN (the Dark-type Elite Four member) exists in the Heart & Soul roster.
   await page.click('aside button:has-text("Trainers")')
-  await page.fill('#trainer-search', 'lorelei')
-  await page.click('aside button:has-text("LORELEI")')
-  await page.waitForSelector('h2, header:has-text("LORELEI")').catch(() => {})
-  await page.waitForSelector('input[value="LORELEI"]')
-  await shot(page, '13-trainer-lorelei')
-  // Open the first Pokémon's species picker and switch it to MEW.
-  await page.click('main section:first-of-type button:has-text("DEWGONG")')
+  await page.fill('#trainer-search', 'karen')
+  await page.click('aside button:has-text("KAREN")')
+  await page.waitForSelector('input[value="KAREN"]')
+  await shot(page, '13-trainer-karen')
+  // Open the first party member's species picker and switch it to MEW
+  // (ROM-neutral: the species button is the fixed-width .w-52 control).
+  await page.click('main button.w-52 >> nth=0')
   await page.fill('input[placeholder^="Search species"]', 'mew')
   await page.waitForSelector('li button:has-text("MEW")')
   await page.keyboard.press('Enter')
   await page.waitForSelector('text=● modified')
   await page.waitForSelector('text=1 trainer modified')
   await shot(page, '14-trainer-edited')
-  // Add a Pokémon to the team.
-  await page.click('button:has-text("Add Pokémon")')
-  await page.waitForSelector('text=6/6 Pokémon')
-  await shot(page, '15-trainer-added')
   // Trainer details: AI items, sprite, music, gender.
   await page.click('button:has-text("Trainer details")')
   await page.waitForSelector('text=AI battle items')
-  await shot(page, '16-trainer-details')
-  // Undo twice — back to clean.
+  await shot(page, '15-trainer-details')
+  // Undo — back to clean.
   await page.keyboard.press('Control+z')
+  await page.waitForSelector('text=No changes')
+
+  // Tutor move roster: reassign a tutor slot's move (global edit), then undo.
+  await page.click('aside button:has-text("Pokémon")')
+  await page.fill('#species-search', '1')
+  await page.click('aside button:has-text("BULBASAUR")')
+  await page.click('nav button:has-text("Tutors")')
+  await page.click('summary:has-text("Tutor move roster")')
+  await page.waitForSelector('text=sets what every tutor teaches')
+  await shot(page, '16-tutor-roster')
+  // Open the first tutor slot's move picker (slot 0 = MEGA PUNCH) and switch it
+  // to THUNDERBOLT — a move no tutor teaches, so it's a genuine change.
+  await page.click('details:has(summary:has-text("Tutor move roster")) .grid > button >> nth=0')
+  await page.fill('input[placeholder^="Search moves"]', 'thunderbolt')
+  await page.click('li button:has-text("THUNDERBOLT")')
+  await page.waitForSelector('text=tutor roster modified')
+  await shot(page, '17-tutor-edited')
+  // Undo — dirty badge clears.
   await page.keyboard.press('Control+z')
   await page.waitForSelector('text=No changes')
 
