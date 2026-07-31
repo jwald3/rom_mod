@@ -323,7 +323,8 @@ Verified ground truth (recon against the real ROM, reading real bytes):
 - [x] Tests: 103 total; unit round-trips per struct layout, writer in-place +
   repoint + validation, real-ROM reads (743 trainers, TERRY/LORELEI) and a
   save round-trip growing TERRY's team 1→2 (repoint) then reload; smoke
-  extended to 15 steps (edit LORELEI's lead → MEW, add a 6th mon, undo)
+  extended to 15 steps with a trainer edit (later retargeted to the Heart &
+  Soul roster in Phase 8 — LORELEI/DEWGONG are FireRed-only)
 
 ### Phase 8 — Tutor move-slot editor  *(requested 2026-07-30)* — **DONE 2026-07-30**
 Reassign *which move* each tutor slot teaches — a global edit to the `tutorMoves`
