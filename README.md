@@ -19,7 +19,8 @@ Two things live here:
 2. **The editor** — a browser-based editor for Hex Maniac Advance–modified
    Pokémon FireRed (BPRE) ROMs, plus the **Pokémon Heart & Soul** Emerald hack
    (BPEE, pokéemerald-expansion). Everything runs client-side; the ROM never
-   leaves your machine. Edits level-up movesets, TM/HM + tutor compatibility,
+   leaves your machine. Edits level-up movesets, TM/HM + tutor compatibility
+   (and the tutor move roster itself — which move each tutor slot teaches),
    evolutions (vanilla's 15 methods plus expansion's such as "knows move"; up
    to 8 branches per species on Heart & Soul), wild encounters (grass/surf/rock-smash/
    fishing, rates, levels, species), and NPC trainer teams (class, name,
