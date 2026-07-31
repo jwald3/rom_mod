@@ -26,6 +26,36 @@ All of the following was confirmed by reading real bytes, not assumed:
 
 Companion baseline ROM `GPT_Fresh.gba` (+ its toml) sits in the same folder — usable for diffing.
 
+## Heart & Soul ground truth (BPEE, recon against `Pokemon Heart & Soul (no-fairy).gba`)
+
+A separate target: the **Pokémon Heart & Soul** Emerald hack (`BPEE`, 32 MB). Its
+tables are repointed into expanded space and it ships a stale `.toml`, so the
+addresses are built into `HS_BPEE` in `src/rom/anchors.ts`. The **base version
+carries no readable string** (only the vanilla `"pokemon emerald version"`
+header), so it was identified structurally:
+
+| Fact | Value |
+|---|---|
+| Base | **pokeemerald-expansion, battle-engine-v2 era (~1.x, pre-2.0, ~2020)**, heavily customized |
+| `struct BaseStats` | **40 bytes** (vanilla Emerald 28) — expansion battle-engine era |
+| Evolutions | **8 slots / 64-byte blocks** per species (vanilla 5); methods used ≤ 27 |
+| Types | 19 — **Fairy at index 18, vanilla `???` retained at 9** → pre-2.0 (2.0+ dropped `???`, reordered) |
+| Counts | 462 species, 82 abilities, 368 moves — small hand-curated set, not the modern full dex |
+| Sanity check | Bulbasaur base stats decode 45/49/49/45(spe)/65/65, types 12/3 (Grass/Poison) ✓ |
+| Region-map names | Emerald-style 8-byte entries (`0x96db40`), resolves wild areas to Johto/Kanto town/route labels |
+
+**In-game trades are not machine-readable here.** The `InGameTrade` struct is
+the standard 60 bytes (species@`0x0C`, heldItem@`0x28`, otName@`0x2B`,
+requestedSpecies@`0x38`), but `gIngameTrades` was **relocated** out of the
+vanilla Emerald address (`0x615a08`, now garbage) into expanded space and can't
+be isolated by scanning — walking every `0x08` pointer for runs of valid records
+yields only coincidental matches (garbage charmap nicknames). The trades exist
+in-game (guide notes the Cerulean gatehouse + Cianwood-area NPC trades), so the
+guide's **In-Game Trades** section uses the canonical HG/SS list, every
+species/item ROM-validated and flagged "confirm in-game." Real extraction needs
+the hack's `.sym`/`.map`, or one in-game-confirmed trade (town + give→get +
+nickname) to seed a byte-exact search.
+
 ## Architecture
 
 - **Fully client-side SPA. No backend.** The ROM never leaves the machine.
