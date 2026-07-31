@@ -11,7 +11,6 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 import { loadRom } from '../src/rom/loadRom'
-import { describeShop } from '../src/rom/tables/shops'
 import { readMoveIdTable, tmSlotLabel } from '../src/rom/tables/compat'
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -55,8 +54,38 @@ function categorize(name: string): string {
 
 // ── invert shops: item id → set of shop descriptor labels ──
 const shopSell = new Map<number, Set<string>>()
+// Give each shop a clean, town-agnostic label from its contents. The ROM has
+// no town names for shops, so we name them by the kind of counter they are.
+// describeShop covers the common marts; this fills the specialty stands it
+// leaves as a raw item preview.
+function shopLabel(s: { items: number[] }): string {
+  const names = s.items.map((id) => (r.itemNames[id] ?? '').toUpperCase())
+  const has = (re: RegExp) => names.some((n) => re.test(n))
+  const count = (re: RegExp) => names.filter((n) => re.test(n)).length
+  // Specialty stands first (most specific), then fall back to describeShop's tag.
+  if (count(/BALL$/) >= 2 && !has(/POTION|STONE|^TM/)) return 'Poké Balls & goods'
+  if (count(/STONE/) >= 2) return 'Evolution-stone counter'
+  if (count(/^TM\d/) >= 2) return 'TM counter'
+  if (count(/^X |GUARD SPEC|DIRE HIT/) >= 2) return 'Battle-item stand'
+  if (count(/PROTEIN|IRON|CALCIUM|ZINC|CARBOS|HP UP|PP UP|RARE CANDY/) >= 2) return 'Vitamin counter'
+  if (has(/BIG MUSHROOM|TINYMUSHROOM|PEARL|STARDUST|NUGGET/)) return 'Mushroom & pearl vendor'
+  if (count(/MAIL$/) >= 1 && count(/MAIL$/) === names.filter(Boolean).length) return 'Mail stand'
+  if (has(/ENERGYPOWDER|ENERGY ROOT|HEAL POWDER|REVIVAL HERB/)) return 'Herbal-medicine stall'
+  if (has(/METAL COAT|DRAGON SCALE|KING’S ROCK|UP-GRADE/)) return 'Trade-evolution item counter'
+  if (has(/SEA INCENSE|LAX INCENSE/) && names.filter(Boolean).length <= 2) return 'Incense stand'
+  if (has(/MOON STONE|FRESH WATER|SODA POP|LEMONADE/)) return 'Rooftop drinks & goods stand'
+  if (has(/POTION|HEAL|ANTIDOTE|REVIVE|RESTORE|REPEL/)) return 'Poké Mart medicine counter'
+  if (has(/SAFARI BALL|MAX REVIVE|ETHER|PP UP/)) return 'Safari-goods counter'
+  if (has(/HARBOR MAIL|EXP\. SHARE/)) return 'Harbor goods stand'
+  if (has(/POKé DOLL/) && has(/BALL$/)) return 'Convenience counter'
+  if (has(/^X /) || (names.length === 1 && has(/X SPEED/))) return 'Battle-item stand'
+  // last resort: short content preview (kept truthful)
+  const preview = s.items.slice(0, 2).map((id) => r.itemNames[id] ?? `#${id}`)
+  return preview.join(', ') + (s.items.length > 2 ? ' …' : '')
+}
+
 for (const s of r.shops) {
-  const label = describeShop(s, r.itemNames)
+  const label = shopLabel(s)
   for (const id of s.items) {
     if (!shopSell.has(id)) shopSell.set(id, new Set())
     shopSell.get(id)!.add(label)

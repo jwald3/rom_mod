@@ -43,14 +43,11 @@ const CAT_ORDER = [
   'Valuables', 'Mail', 'Other items',
 ]
 
-// Shorten a shop descriptor to its leading category tag (before the "—"),
-// falling back to a compact contents preview. The ROM has no town names.
+// The data extractor already emits clean, correctly-cased counter labels
+// (e.g. "Battle-item stand", "TM counter"). Pass them through verbatim; only
+// title-case a bare ALLCAPS item-name fallback if one ever slips through.
 function shortShop(desc: string): string {
-  const dash = desc.indexOf('—')
-  if (dash > 0) return desc.slice(0, dash).trim()
-  // no category prefix: use first two item names
-  const parts = desc.split(',').map((s) => s.trim())
-  return parts.slice(0, 2).map(tcase).join(', ') + (parts.length > 2 ? ' …' : '')
+  return /[a-z]/.test(desc) ? desc : desc.split(',').slice(0, 2).map(tcase).join(', ')
 }
 
 function priceStr(p: number): string {
