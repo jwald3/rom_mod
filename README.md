@@ -86,8 +86,8 @@ Without a toml, FireRed ROMs fall back to vanilla 1.0 offsets; Heart & Soul
 ## Tests
 
 ```sh
-npm test                    # 103 tests incl. real-ROM integration (skipped if ROM absent)
-node scripts/smoke.mjs      # headless browser drive of the running dev server
+npm test                    # 118 tests incl. real-ROM integration (skipped if ROM absent)
+node scripts/smoke.mjs      # 19-step headless drive of the Heart & Soul ROM (dev server must be up)
 ```
 
 `PLAN.md` documents the architecture, the ROM's verified table layout, and the
