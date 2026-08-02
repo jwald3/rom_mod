@@ -44,17 +44,23 @@ header), so it was identified structurally:
 | Sanity check | Bulbasaur base stats decode 45/49/49/45(spe)/65/65, types 12/3 (Grass/Poison) ✓ |
 | Region-map names | Emerald-style 8-byte entries (`0x96db40`), resolves wild areas to Johto/Kanto town/route labels |
 
-**In-game trades are not machine-readable here.** The `InGameTrade` struct is
-the standard 60 bytes (species@`0x0C`, heldItem@`0x28`, otName@`0x2B`,
-requestedSpecies@`0x38`), but `gIngameTrades` was **relocated** out of the
-vanilla Emerald address (`0x615a08`, now garbage) into expanded space and can't
-be isolated by scanning — walking every `0x08` pointer for runs of valid records
-yields only coincidental matches (garbage charmap nicknames). The trades exist
-in-game (guide notes the Cerulean gatehouse + Cianwood-area NPC trades), so the
-guide's **In-Game Trades** section uses the canonical HG/SS list, every
-species/item ROM-validated and flagged "confirm in-game." Real extraction needs
-the hack's `.sym`/`.map`, or one in-game-confirmed trade (town + give→get +
-nickname) to seed a byte-exact search.
+**In-game trades: located at `0xD1C104`, 64-byte records.** Seeded by one
+in-game-confirmed trade (Violet City: Bellsprout → Onix "ROCKY", OT "RUDY"). The
+record is 4 bytes wider than vanilla's 60 — the gap sits in the middle block, so
+the tail shifts: species@`0x0C`, ivs@`0x0E`, heldItem@`0x2C`, otName@`0x2F`,
+requestedSpecies@`0x3C`. That width is why earlier 60-byte pointer-walks found
+only coincidental matches. 13 records (all 31 IVs); 6 are triggered by a script
+(`setvar VAR_0x8008,<idx>` → `copyvar VAR_0x8004` → `special 0xA8`) and 4 of
+those are on live Johto/Kanto maps — Violet, Goldenrod, Olivine, Blackthorn. The
+rest are authored but unwired. Reader: `src/rom/tables/ingameTrades.ts`;
+extractor: `scripts/gen-trades-data.mts` → `scripts/trades-data.json` → the
+guide's **In-Game Trades** section.
+
+**Egg moves at `0x749188`** — vanilla `gEggMoves` layout (`species + 20000`
+markers + move ids, no count field): 166 species, 991 moves. Reader:
+`src/rom/tables/eggMoves.ts`; backs the guide's **Day-Care & Breeding** section,
+along with the finding that no Destiny Knot / Power items / Oval Charm exist in
+this ROM's item table (so egg IVs can't be steered).
 
 ## Architecture
 

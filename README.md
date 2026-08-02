@@ -57,19 +57,29 @@ heavily customized. Fingerprints:
   modern full dex (abilities end Transistor/Dragon's Maw/Pixilate; moves end
   Play Rough/Moonblast/Poison Jab)
 
-**In-game trades are not machine-readable from this build.** The
-`InGameTrade` struct is the standard 60 bytes (species@0x0C, heldItem@0x28,
-otName@0x2B, requestedSpecies@0x38), but the hack **relocated `gIngameTrades`**
-out of the vanilla Emerald address (`0x615a08`, now garbage) into expanded ROM
-space, and it can't be isolated by scanning — walking every `0x08` pointer for
-runs of valid records yields only coincidental matches (all with garbage
-charmap nicknames). The trades exist in-game (the guide notes the Cerulean
-gatehouse and Cianwood-area NPC trades), so the guide's **In-Game Trades**
-section uses the canonical HeartGold/SoulSilver list — every species/item in it
-validated to exist in this ROM, and clearly flagged as "confirm in-game."
-Extracting the real table would need the hack's `.sym`/`.map` file, or one
-in-game-confirmed trade (town + give→get + the nickname shown) to seed a
-byte-exact search.
+**In-game trades: found and extracted.** `gIngameTrades` sits at
+**`0xD1C104`** with **64-byte records** — not the vanilla 60, which is why every
+earlier pointer-walk for 60-byte runs missed it. The extra 4 bytes land in the
+middle block, shifting the tail: species@`0x0C`, ivs@`0x0E`, heldItem@`0x2C`,
+otName@`0x2F`, requestedSpecies@`0x3C`. The table was located by seeding a byte
+search with one in-game-confirmed trade (Violet City: Bellsprout → an Onix
+nicknamed "ROCKY" from OT "RUDY"), exactly the seed this section used to call
+for. See `src/rom/tables/ingameTrades.ts`.
+
+13 records are authored, every one with flawless 31 IVs, but only **6 are wired
+to a script** and only **4 of those sit on a live Johto/Kanto map** (Violet,
+Goldenrod, Olivine, Blackthorn — the other two are triggered by NPCs left over
+from the Emerald base). NPC scripts stage the index in `VAR_0x8008`, copy it to
+`VAR_0x8004`, then call `special 0xA8`; gym scripts reuse `VAR_0x8008` as a
+leader index, so the copyvar+special pair is the discriminator.
+`scripts/gen-trades-data.mts` writes the table plus its per-trade town to
+`scripts/trades-data.json`, which feeds the guide's **In-Game Trades** section.
+
+**Egg moves** are at **`0x749188`** in the vanilla `gEggMoves` shape — a flat
+u16 array of `species + 20000` markers followed by move ids, with no count
+field, so the reader stops on the first word that is neither a valid marker nor
+a valid move. Heart & Soul has **166 species / 991 moves**
+(`src/rom/tables/eggMoves.ts`).
 
 ## Editor usage
 
@@ -86,7 +96,7 @@ Without a toml, FireRed ROMs fall back to vanilla 1.0 offsets; Heart & Soul
 ## Tests
 
 ```sh
-npm test                    # 118 tests incl. real-ROM integration (skipped if ROM absent)
+npm test                    # 132 tests incl. real-ROM integration (skipped if ROM absent)
 node scripts/smoke.mjs      # 19-step headless drive of the Heart & Soul ROM (dev server must be up)
 ```
 
