@@ -71,6 +71,14 @@ export interface AnchorMap {
   /** Celadon Game Corner prize-room script entry (Pokémon menu). */
   gcScript: number
   /**
+   * `gIngameTrades` table offset, or 0 when it isn't known for this profile.
+   * Records are 64 bytes in Heart & Soul (vanilla is 60) — see tables/ingameTrades.
+   */
+  ingameTrades: number
+  ingameTradeCount: number
+  /** `gEggMoves` table offset (species-marker + move-id array), or 0 if unknown. */
+  eggMoves: number
+  /**
    * ROM offset range to scan for `pokemart` script commands (shop editor).
    * FireRed keeps all map scripts in a narrow window; pokeemerald-expansion
    * (Heart & Soul) scatters them across the whole 32 MB image, so BPEE scans
@@ -129,6 +137,9 @@ export const VANILLA_BPRE: AnchorMap = {
   mapsecBase: 0x58,
   multichoice: 0x3e04b0,
   gcScript: 0x16cb75,
+  ingameTrades: 0, // vanilla FireRed's table uses the 60-byte layout; not read yet
+  ingameTradeCount: 0,
+  eggMoves: 0,
   scriptScanStart: 0x140000, // FireRed map scripts live in this window
   scriptScanEnd: 0x1c0000,
 }
@@ -184,6 +195,11 @@ export const HS_BPEE: AnchorMap = {
   mapsecBase: 0, // Emerald mapsec ids index the table directly
   multichoice: 0, // Celadon Game Corner prizes unresolved for H&S (FireRed-specific)
   gcScript: 0,
+  // Relocated out of vanilla Emerald's 0x615a08 and widened to 64-byte records.
+  // Seeded by the Violet City trade (nickname "ROCKY", OT "RUDY", Onix ← Bellsprout).
+  ingameTrades: 0xd1c104,
+  ingameTradeCount: 13,
+  eggMoves: 0x749188, // 166 species / 991 moves, vanilla layout
   // Expansion scatters pokemart commands across the whole 32 MB ROM (marts run
   // from ~0x83f00 up past 0x400000), so scan the entire image (end = 0).
   scriptScanStart: 0,

@@ -10,6 +10,8 @@ import { readAllEvolutions, readItemNames, type Evolution } from './tables/evolu
 import { readAllTrainers, readTrainerClassNames, type Trainer } from './tables/trainers'
 import { readPrizeLists, emptyPrizeLists, type PrizeKind, type PrizeList } from './tables/gameCorner'
 import { readShops, type Shop } from './tables/shops'
+import { readIngameTrades, type IngameTrade } from './tables/ingameTrades'
+import { readEggMoves, type EggMoveTable } from './tables/eggMoves'
 
 export interface LoadedRom {
   fileName: string
@@ -40,6 +42,10 @@ export interface LoadedRom {
   gameCornerAvailable: boolean
   /** Poké Mart shops (item lists) found in the map scripts. */
   shops: Shop[]
+  /** NPC trade offers (`gIngameTrades`); empty when the profile has no anchor. */
+  ingameTrades: IngameTrade[]
+  /** Egg moves per species id; empty when the profile has no anchor. */
+  eggMoves: EggMoveTable
   warnings: string[]
 }
 
@@ -98,6 +104,8 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
   const gcAvailable = anchors.multichoice !== 0 && anchors.gcScript !== 0
   const prizeLists = gcAvailable ? readPrizeLists(rom, anchors) : emptyPrizeLists()
   const shops = readShops(rom, anchors)
+  const ingameTrades = readIngameTrades(rom, anchors)
+  const eggMoves = readEggMoves(rom, anchors)
 
   if (gcAvailable) {
     const gcUnsupported = (['pokemon', 'tm', 'item'] as PrizeKind[]).filter(
@@ -139,6 +147,8 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
     prizeLists,
     gameCornerAvailable: gcAvailable,
     shops,
+    ingameTrades,
+    eggMoves,
     warnings,
   }
 }
