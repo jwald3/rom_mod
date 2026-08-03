@@ -97,14 +97,21 @@ function ownersOf(off: number): Site[] {
   return sites.filter((s) => s.off === start)
 }
 
-// Banks 0–20 hold the live Johto/Kanto maps; the higher banks are leftover
-// Hoenn maps whose mapsec bytes resolve to misleading Johto names.
-const LIVE_BANK_MAX = 20
+// A handful of high map banks are leftover Emerald-base maps carried into the
+// hack but never wired into the world. They're distinguished by their sheer
+// size (110–200 maps each, vs 5–30 for a real Johto/Kanto bank) and by mapsec
+// bytes that resolve to *misleading* Johto town names — e.g. bank 28.18 reports
+// "Cherrygrove City" but its mapdata pointer is a different region entirely from
+// the real Cherrygrove (bank 2). The live route/dungeon banks (22–26 = routes,
+// S.S. Aqua; 29 = Embedded Tower) are NOT leftovers, so this is an explicit set
+// rather than a "bank > N" cutoff, which would wrongly kill those.
+const LEFTOVER_BANKS = new Set([27, 28, 30, 31])
+const isLive = (bank: number) => !LEFTOVER_BANKS.has(bank)
 
 const scriptHits = findTradeScriptIndices(rom, r.ingameTrades.length)
 const out = r.ingameTrades.map((t) => {
   const owners = (scriptHits.get(t.index) ?? []).flatMap((off) => ownersOf(off))
-  const live = owners.filter((s) => s.bank <= LIVE_BANK_MAX)
+  const live = owners.filter((s) => isLive(s.bank))
   const pick = live[0] ?? owners[0] ?? null
   return {
     index: t.index,
@@ -119,7 +126,7 @@ const out = r.ingameTrades.map((t) => {
     npcMap: pick ? `${pick.bank}.${pick.map}` : null,
     npcObject: pick ? pick.obj : null,
     reachable: owners.length > 0,
-    /** True only when the NPC sits on a live Johto/Kanto map, not a leftover Hoenn one. */
+    /** True only when the NPC sits on a live Johto/Kanto map, not a leftover Emerald-base one. */
     live: live.length > 0,
   }
 })
@@ -134,6 +141,6 @@ for (const t of out) {
   console.log(
     `  ${String(t.index).padStart(2)}  ${t.give} → ${t.get} “${t.nickname}” (OT ${t.otName})` +
       `${t.heldItem ? `, holds ${t.heldItem}` : ''} — ` +
-      `${t.location ?? 'no NPC in this build'}${t.reachable && !t.live ? ' (leftover Hoenn map)' : ''}`,
+      `${t.location ?? 'no NPC in this build'}${t.reachable && !t.live ? ' (leftover Emerald-base map)' : ''}`,
   )
 }

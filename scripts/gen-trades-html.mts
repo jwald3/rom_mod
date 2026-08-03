@@ -7,7 +7,8 @@
  *   • trades whose NPC sits on a live Johto/Kanto map (`live: true`)
  *   • records that exist in the table but nothing in this build triggers, either
  *     because no script sets their index or because the only script that does
- *     lives on a leftover Hoenn map
+ *     lives on a leftover Emerald-base map (mapsec resolves to a misleading
+ *     Johto town name, but it isn't a place you can actually reach)
  *
  * Sprites are reused from the guide where present (same harvest as the Pokédex).
  *
@@ -79,7 +80,8 @@ function note(t: TradeRow): string {
     return `Authored in the trade table but nothing in this build asks for it — the original trainer (<em>${esc(t.otName)}</em>) reads like a planned partner that never got wired up.`
   }
   if (!t.live) {
-    return `The only script that triggers this trade sits on a leftover Hoenn map (${esc(t.npcMap ?? '')}) carried over from the Emerald base, so you can't reach the partner in a normal run.`
+    const claims = t.location ? ` — its map data reports “${esc(t.location)}”, but that's a stray mapsec byte, not the town you actually visit` : ''
+    return `The only script that triggers this trade sits on a leftover map carried over from the Emerald base (${esc(t.npcMap ?? '')})${claims}, so you can't reach the partner in a normal run.`
   }
   return `Give a ${esc(t.give)}, get “${esc(t.nickname)}” the ${esc(t.get)}${held}. ${alternative(t.get)}`
 }
