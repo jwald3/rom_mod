@@ -21,6 +21,13 @@ const r = loadRom(new Uint8Array(readFileSync(romPath)), romPath.split(/[\\/]/).
 
 const isGap = (n: string) => !n || /^\?+$/.test(n)
 
+// Post-Gen-4 species removed from this build (unobtainable — see
+// apply-remove-postgen4-species.mts). Don't credit them as held-item sources.
+const EXCLUDED_SPECIES = new Set([
+  'REGIDRAGO', 'REGIELEKI', 'SYLVEON', 'ANNIHILAPE', 'FARIGIRAF',
+  'DUDUNSPARC', 'WYRDEER', 'URSALUNA', 'KLEAVOR',
+])
+
 // ── item struct: price is a u16 at +0x10 (Emerald item layout) ──
 const ITEM_STRUCT_LEN = 44
 const PRICE_OFF = 0x10
@@ -95,7 +102,7 @@ for (const s of r.shops) {
 // ── wild-held: item id → set of species names ──
 const heldBy = new Map<number, Set<string>>()
 for (const sp of r.species) {
-  if (isGap(sp.name)) continue
+  if (isGap(sp.name) || EXCLUDED_SPECIES.has(sp.name)) continue
   for (const h of [sp.heldItem1, sp.heldItem2]) {
     if (!h) continue
     if (!heldBy.has(h)) heldBy.set(h, new Set())
