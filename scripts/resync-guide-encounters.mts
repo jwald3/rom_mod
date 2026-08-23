@@ -1,11 +1,12 @@
 /**
  * Rewrite the guide's per-zone encounter tables (level range + species list)
- * from the ROM, for the zones named on the command line (or every Kanto zone
- * with --kanto). Companion to verify-guide-encounters.mts, which only reports
+ * from the ROM, for the zones named on the command line (every zone with --all,
+ * or every Kanto zone with --kanto). Companion to verify-guide-encounters.mts, which only reports
  * species mismatches; this one fixes the tables after an encounter edit.
  *
+ *   npx tsx scripts/resync-guide-encounters.mts --all "<rom.gba>"
  *   npx tsx scripts/resync-guide-encounters.mts --kanto "<rom.gba>"
- *   npx tsx scripts/resync-guide-encounters.mts --dry-run --kanto "<rom.gba>"
+ *   npx tsx scripts/resync-guide-encounters.mts --dry-run --all "<rom.gba>"
  *   npx tsx scripts/resync-guide-encounters.mts "<rom.gba>" "Route 12" "Mt. Moon"
  *
  * A zone is only rewritten when every part of its (possibly combined, e.g.
@@ -32,10 +33,9 @@ const KANTO = new Set(
 
 /**
  * Gen-5+ species the guide deliberately doesn't document (see
- * apply-remove-postgen4-species.mts). A few are still live wild slots in the
- * ROM — Annihilape in Cerulean Cave / Mt. Silver — which that purge missed;
- * until the ROM side is fixed, keep them out of the tables rather than
- * documenting content the project treats as removed.
+ * apply-remove-postgen4-species.mts). The ROM no longer spawns any of them, so
+ * this is a backstop: if one ever reappears in a wild slot, the tables stay
+ * clean and the discrepancy shows up in verify-guide-encounters instead.
  */
 const POST_GEN4_NAMES = new Set(
   ['REGIDRAGO', 'REGIELEKI', 'SYLVEON', 'ANNIHILAPE', 'FARIGIRAF', 'DUDUNSPARC', 'WYRDEER', 'URSALUNA', 'KLEAVOR'],
@@ -50,10 +50,12 @@ const KIND: Record<string, WildKind> = {
 const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
 const kantoMode = args.includes('--kanto')
+const allMode = args.includes('--all')
 const positional = args.filter((a) => !a.startsWith('--'))
 const romPath = positional[0]
 const onlyZones = positional.slice(1)
-if (!romPath) { console.error('usage: npx tsx scripts/resync-guide-encounters.mts [--dry-run] [--kanto] "<rom.gba>" [zone...]'); process.exit(2) }
+if (!romPath) { console.error('usage: npx tsx scripts/resync-guide-encounters.mts [--dry-run] [--all|--kanto] "<rom.gba>" [zone...]'); process.exit(2) }
+if (!allMode && !kantoMode && !positional.slice(1).length) { console.error('nothing selected: pass --all, --kanto, or zone names'); process.exit(2) }
 
 const r = loadRom(new Uint8Array(readFileSync(romPath)), romPath.split(/[\\/]/).pop()!, undefined)
 if (r.warnings.length) throw new Error(`ROM warnings: ${r.warnings.join('; ')}`)
@@ -142,7 +144,7 @@ html = html.replace(zoneRe, (whole, head, zoneName: string, body: string, tail) 
   const name = zoneName.trim()
   const wanted = onlyZones.length
     ? onlyZones.some((z) => norm(z) === norm(name) || partsOf(name).some((p) => norm(p) === norm(z)))
-    : kantoMode && partsOf(name).every((p) => KANTO.has(norm(p)))
+    : allMode || (kantoMode && partsOf(name).every((p) => KANTO.has(norm(p))))
   if (!wanted) return whole
   const rec = romRecordFor(name)
   if (!rec) { skipped.push(`${name} (no ROM area)`); return whole }
