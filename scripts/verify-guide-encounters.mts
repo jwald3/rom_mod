@@ -71,9 +71,10 @@ function romRecordFor(name: string): Record<string, Set<string>> | null {
   if (direct) return direct
   const parts = name.split('/').map((p) => p.trim())
   if (parts.length < 2) return null
-  // "Route 24 / 25" → ["Route 24", "Route 25"]; "Route 8 / 7" likewise.
-  const base = (parts[0].match(/^(.*?)(\d+|[A-Za-z].*)$/) || [])[1] ?? ''
-  const expanded = parts.map((p) => (/^\d+$/.test(p) ? base + p : p))
+  // "Route 24 / 25" → ["Route 24", "Route 25"]; "Route 8 / 7" likewise. The base
+  // is the first part's non-numeric prefix, so a bare "25" inherits "Route ".
+  const base = (parts[0].match(/^(.*?)\d+\s*$/) || [])[1] ?? ''
+  const expanded = parts.map((p) => (/^\d+$/.test(p) && base ? base + p : p))
   const recs = expanded.map((p) => romByZone.get(norm(p))).filter(Boolean) as Record<string, Set<string>>[]
   if (!recs.length) return null
   const merged: Record<string, Set<string>> = { grass: new Set(), surf: new Set(), fish: new Set(), tree: new Set() }
