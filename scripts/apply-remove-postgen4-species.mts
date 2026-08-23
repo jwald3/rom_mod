@@ -13,8 +13,11 @@
  *   2. Every evolution that TARGETS a Gen-5+ species is removed, so the pre-evo
  *      (Primeape, Scyther, Eevee, Girafarig, Dunsparce, Ursaring, Stantler)
  *      becomes the final form and the Gen-5+ mon is unreachable.
- * No wild slot uses any of them (checked). Regidrago/Regieleki have no pre-evo
- * and nothing references them, so their dormant slots are left as-is.
+ *   3. Wild slots holding a Gen-5+ species are swapped to the same pre-evolution.
+ *      (An earlier revision of this script claimed no wild slot used one; that was
+ *      wrong — Annihilape spawns in Cerulean Cave and on Mt. Silver.)
+ * Regidrago/Regieleki have no pre-evo and nothing references them, so their
+ * dormant slots are left as-is.
  *
  *   npx tsx scripts/apply-remove-postgen4-species.mts "<rom.gba>" [toml]
  *   npx tsx scripts/apply-remove-postgen4-species.mts --dry-run "<rom.gba>" [toml]
@@ -28,6 +31,7 @@ import { loadRom } from '../src/rom/loadRom'
 import { applyRomEdits } from '../src/rom/writer'
 import { readTrainer, partyEntryLen } from '../src/rom/tables/trainers'
 import { readEvolutionsFor, type Evolution } from '../src/rom/tables/evolutions'
+import { WILD_KINDS } from '../src/rom/tables/wild'
 
 const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
@@ -96,9 +100,24 @@ for (let s = 0; s < loaded.species.length; s++) {
   console.log(`  evolution ${sp(s)}: drop → ${dropped.map((e) => sp(e.target)).join(', ')} (now ${kept.length ? kept.map((e) => sp(e.target)).join('/') : 'final form'})`)
 }
 
-console.log(`\ntrainer mons patched: ${speciesPatches.size} across ${trainerCount} trainers | evolution lists edited: ${evolutions.size}`)
+// ── 3) Wild slots holding a removed species → the same pre-evo ────────────
+const wildPatches = new Map<number, number>() // byteOffset → new species id
+for (const area of loaded.wildAreas) {
+  for (const kind of WILD_KINDS) {
+    const group = area.groups[kind]
+    if (!group) continue
+    group.slots.forEach((slot, i) => {
+      const rep = replForId.get(slot.species)
+      if (rep === undefined) return
+      wildPatches.set(group.listOffset + i * 4 + 2, rep) // species u16 at slot+2
+      console.log(`  wild ${area.name} (${area.bank}.${area.map}) ${kind} slot ${i}: ${sp(slot.species)}→${sp(rep)} Lv ${slot.low}-${slot.high}`)
+    })
+  }
+}
+
+console.log(`\ntrainer mons patched: ${speciesPatches.size} across ${trainerCount} trainers | evolution lists edited: ${evolutions.size} | wild slots patched: ${wildPatches.size}`)
 if (dryRun) { console.log('\n--dry-run: no changes written.'); process.exit(0) }
-if (!speciesPatches.size && !evolutions.size) { console.log('Nothing referenced the removed species.'); process.exit(0) }
+if (!speciesPatches.size && !evolutions.size && !wildPatches.size) { console.log('Nothing referenced the removed species.'); process.exit(0) }
 
 // Evolutions through the writer; trainer species byte-patched on top.
 const { bytes: out } = evolutions.size
@@ -106,8 +125,9 @@ const { bytes: out } = evolutions.size
   : { bytes: loaded.rom.bytes.slice() }
 const view = new DataView(out.buffer, out.byteOffset, out.byteLength)
 for (const [off, id] of speciesPatches) view.setUint16(off, id, true)
+for (const [off, id] of wildPatches) view.setUint16(off, id, true)
 
-// ── verify: no trainer party or evolution target references a removed species
+// ── verify: no trainer party, evolution target or wild slot references one
 const check = loadRom(out, 'check.gba', toml)
 if (check.warnings.length) throw new Error(`Output warnings: ${check.warnings.join('; ')}`)
 let remain = 0
@@ -116,6 +136,9 @@ for (let t = 0; t < (check.anchors as any).trainerCount; t++) {
 }
 for (let s = 0; s < check.species.length; s++)
   for (const e of readEvolutionsFor(check.rom, check.anchors, s)) if (REMOVE.has(e.target)) remain++
+for (const area of check.wildAreas)
+  for (const kind of WILD_KINDS)
+    for (const slot of area.groups[kind]?.slots ?? []) if (REMOVE.has(slot.species)) remain++
 if (remain) throw new Error(`Post-check failed: ${remain} references to removed species remain`)
 
 let diff = 0
@@ -124,5 +147,5 @@ const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
 const backup = romPath.replace(/\.gba$/i, '') + `.pre-postgen4-species-${stamp}.gba`
 fs.copyFileSync(romPath, backup)
 fs.writeFileSync(romPath, out)
-console.log(`\n✅ Post-Gen-4 species no longer appear in any trainer party or evolution (${diff} bytes changed).`)
+console.log(`\n✅ Post-Gen-4 species no longer appear in any trainer party, evolution or wild slot (${diff} bytes changed).`)
 console.log(`   backup: ${backup.split(/[\\/]/).pop()}`)
