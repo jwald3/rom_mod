@@ -1,0 +1,53 @@
+# Publish the Heart & Soul guide to GitHub Pages.
+#
+# One-time setup: repo Settings → Pages → Build and deployment → Source:
+# "GitHub Actions". Until that's switched on, this workflow fails at the deploy
+# step (it has nowhere to publish to) — that's expected, not a broken workflow.
+#
+# The guide is a single self-contained HTML file, so the "build" is a copy:
+#   heart-and-soul-guide.html → /            (the site root)
+#   hgss-encounter-audit.html → /encounter-audit.html
+# Nothing is duplicated in the repo, and the Vite app's index.html is left out
+# of the site (it points at /src/main.tsx and only works under `npm run dev`).
+name: Deploy guide to Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - heart-and-soul-guide.html
+      - hgss-encounter-audit.html
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp heart-and-soul-guide.html _site/index.html
+          cp hgss-encounter-audit.html _site/encounter-audit.html
+          ls -lh _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
