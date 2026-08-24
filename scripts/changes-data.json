@@ -1,0 +1,144 @@
+{
+  "itemEvos": [
+    {
+      "from": "CLAMPERL",
+      "to": "HUNTAIL",
+      "item": "DEEPSEATOOTH"
+    },
+    {
+      "from": "CLAMPERL",
+      "to": "GOREBYSS",
+      "item": "DEEPSEASCALE"
+    },
+    {
+      "from": "MAGNETON",
+      "to": "MAGNEZONE",
+      "item": "METAL COAT"
+    },
+    {
+      "from": "ONIX",
+      "to": "STEELIX",
+      "item": "METAL COAT"
+    },
+    {
+      "from": "POLIWHIRL",
+      "to": "POLITOED",
+      "item": "KING’S ROCK"
+    },
+    {
+      "from": "PORYGON",
+      "to": "PORYGON2",
+      "item": "UP-GRADE"
+    },
+    {
+      "from": "PORYGON2",
+      "to": "PORYGON Z",
+      "item": "UP-GRADE"
+    },
+    {
+      "from": "RHYDON",
+      "to": "RHYPERIOR",
+      "item": "METAL COAT"
+    },
+    {
+      "from": "SCYTHER",
+      "to": "SCIZOR",
+      "item": "METAL COAT"
+    },
+    {
+      "from": "SEADRA",
+      "to": "KINGDRA",
+      "item": "DRAGON SCALE"
+    },
+    {
+      "from": "SLOWPOKE",
+      "to": "SLOWKING",
+      "item": "KING’S ROCK"
+    }
+  ],
+  "levelEvos": [
+    {
+      "from": "GRAVELER",
+      "to": "GOLEM",
+      "level": 38
+    },
+    {
+      "from": "HAUNTER",
+      "to": "GENGAR",
+      "level": 42
+    },
+    {
+      "from": "KADABRA",
+      "to": "ALAKAZAM",
+      "level": 42
+    },
+    {
+      "from": "MACHOKE",
+      "to": "MACHAMP",
+      "level": 38
+    }
+  ],
+  "vitaminPrices": [
+    {
+      "name": "HP UP",
+      "price": 9800
+    },
+    {
+      "name": "PROTEIN",
+      "price": 9800
+    },
+    {
+      "name": "IRON",
+      "price": 9800
+    },
+    {
+      "name": "CARBOS",
+      "price": 9800
+    },
+    {
+      "name": "CALCIUM",
+      "price": 9800
+    },
+    {
+      "name": "ZINC",
+      "price": 9800
+    }
+  ],
+  "removedSpecies": [
+    "SYLVEON",
+    "ANNIHILAPE",
+    "WYRDEER",
+    "URSALUNA",
+    "KLEAVOR",
+    "FARIGIRAF",
+    "DUDUNSPARC",
+    "REGIELEKI",
+    "REGIDRAGO"
+  ],
+  "removedSpeciesStillPresent": [
+    "SYLVEON",
+    "ANNIHILAPE",
+    "WYRDEER",
+    "URSALUNA",
+    "KLEAVOR",
+    "FARIGIRAF",
+    "DUDUNSPARC",
+    "REGIELEKI",
+    "REGIDRAGO"
+  ],
+  "removedMoves": [
+    "PLAY ROUGH",
+    "MOONBLAST"
+  ],
+  "tm26": {
+    "tm": "TM26",
+    "move": "Earthquake",
+    "brockNow": "TM39 (Rock Tomb)",
+    "where": "Rocket Hideout B3F (floor item ball)"
+  },
+  "kanto": {
+    "lo": 45,
+    "hi": 58,
+    "oldCeiling": 34
+  }
+}
