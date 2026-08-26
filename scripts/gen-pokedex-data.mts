@@ -13,6 +13,7 @@ import { loadRom } from '../src/rom/loadRom'
 import { readEvolutionsFor, describeEvolution } from '../src/rom/tables/evolutions'
 import { readLearnset } from '../src/rom/tables/learnsets'
 import { WILD_KIND_LABELS, type WildKind } from '../src/rom/tables/wild'
+import { isExcludedSpecies } from './lib/excluded-species'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const romPath = process.argv[2]
@@ -22,13 +23,7 @@ const r = loadRom(new Uint8Array(readFileSync(romPath)), romPath.split(/[\\/]/).
 const sp = (id: number) => r.species[id]?.name ?? `#${id}`
 const isGap = (n: string) => !n || /^\?+$/.test(n)
 
-// Post-Gen-4 species removed from this build (their slots still exist but nothing
-// wild/trainer/evolution reaches them — see apply-remove-postgen4-species.mts).
-// Exclude them from the Pokédex so the guide only lists obtainable Pokémon.
-const EXCLUDED = new Set([
-  'REGIDRAGO', 'REGIELEKI', 'SYLVEON', 'ANNIHILAPE', 'FARIGIRAF',
-  'DUDUNSPARC', 'WYRDEER', 'URSALUNA', 'KLEAVOR',
-])
+// Exclude the purged post-Gen-4 species so the Pokédex only lists obtainable Pokémon.
 
 // ── location index: species → { zoneName → Set(methods) } ──
 const loc = new Map<number, Map<string, Set<WildKind>>>()
@@ -56,7 +51,7 @@ for (let s = 0; s < r.species.length; s++) {
 const out: any[] = []
 for (let id = 0; id < r.species.length; id++) {
   const s = r.species[id]
-  if (isGap(s.name) || EXCLUDED.has(s.name)) continue
+  if (isGap(s.name) || isExcludedSpecies(s.name)) continue
   const st = s.stats
   const bst = st.hp + st.atk + st.def + st.spa + st.spd + st.spe
   const evos = readEvolutionsFor(r.rom, r.anchors, id).filter((e) => e.target > 0).map((e) => ({

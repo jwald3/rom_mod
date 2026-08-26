@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "balance": "tsx scripts/balance.mts",
     "verify:gyms": "tsx scripts/hs-verify-gyms.mts",
     "verify:gyms:extract": "tsx scripts/hs-extract-gym-expectations.mts"
   },

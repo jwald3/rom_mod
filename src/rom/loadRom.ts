@@ -12,6 +12,7 @@ import { readPrizeLists, emptyPrizeLists, type PrizeKind, type PrizeList } from 
 import { readShops, type Shop } from './tables/shops'
 import { readIngameTrades, type IngameTrade } from './tables/ingameTrades'
 import { readEggMoves, type EggMoveTable } from './tables/eggMoves'
+import { readTypeChart, type TypeChart } from './tables/typeChart'
 
 export interface LoadedRom {
   fileName: string
@@ -21,6 +22,8 @@ export interface LoadedRom {
   species: SpeciesInfo[]
   moves: MoveInfo[]
   typeNames: string[]
+  /** Non-neutral type matchups; backs the balance simulator's damage math. */
+  typeChart: TypeChart
   abilityNames: string[]
   learnsets: Learnset[]
   /** Move ids of TM01–50 + HM01–08 / the 15 tutors. */
@@ -87,6 +90,7 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
   const species = readSpecies(rom, anchors)
   const moves = readMoves(rom, anchors)
   const typeNames = readTypeNames(rom, anchors)
+  const typeChart = readTypeChart(rom, anchors)
   const abilityNames = readAbilityNames(rom, anchors)
   const learnsets = readAllLearnsets(rom, anchors)
   const tmMoves = readMoveIdTable(rom, anchors.tms, anchors.tmCount)
@@ -133,6 +137,7 @@ export function loadRom(bytes: Uint8Array, fileName: string, tomlText?: string):
     species,
     moves,
     typeNames,
+    typeChart,
     abilityNames,
     learnsets,
     tmMoves,

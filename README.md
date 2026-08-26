@@ -42,6 +42,51 @@ Two things live here:
    ROM with `npm run verify:gyms -- <rom>` (diffs species/level/held-item/moves;
    `npm run verify:gyms:extract` rebuilds the ground-truth JSON from the guide).
 
+### Balance harness (`scripts/balance.mts`)
+
+A read-only simulator for answering "is this Pokémon any good, and would this
+change help?" without playing the game. Two layers over the same ROM readers
+the editor uses: a deterministic matchup calculator (damage both ways, turns to
+KO, speed) and a seeded Monte Carlo 1v1 battle sim on top of it.
+
+```sh
+npm run balance -- "<rom.gba>" --mon Feraligatr
+npm run balance -- "<rom.gba>" --mon Typhlosion --gyms "Bugsy,Pryce" --no-mc
+npm run balance -- "<rom.gba>" --mon Ampharos --overrides whatif.json --html report.html
+```
+
+The default cohort is the gym leaders, Elite Four and Red, read out of the
+ROM's own trainer table at their real levels and movesets; `--cohort band|dex`
+swaps in BST neighbours or the fully-evolved dex. `--overrides` takes a
+name-keyed JSON of hypothetical stat/type/ability/move/learnset changes,
+applies them to an **in-memory** copy, and prints baseline → modified with the
+per-matchup delta — so a change can be judged before an `apply-*` script
+commits it to the ROM:
+
+```json
+{
+  "species": { "AMPHAROS": { "stats": { "spe": 95 }, "addMoves": ["40:THUNDER WAVE"] } },
+  "moves": { "THUNDERBOLT": { "power": 105 } }
+}
+```
+
+Runs are reproducible: same seed and same inputs give byte-identical output.
+The engine (`src/sim/`) is pure — no filesystem, no argv, no console — so the
+React editor can drive it later. It models the Gen-3 damage formula with the
+engine's integer truncation, stat stages, status, crits, accuracy, PP and
+Struggle, plus the abilities and held items listed in `src/sim/abilities.ts` and
+`src/sim/items.ts`; every report footer states its move-effect coverage and what
+it didn't model (weather, screens, Protect/Counter, switching, natures, badge
+boosts).
+
+The type chart it needs isn't in the HMA sidecar — it was located structurally
+at `0x6E13BC` (120 rows). Heart & Soul carries **two** such tables, both
+referenced from adjacent literal-pool words; the neighbour at `0x6E1258` is
+missing six standard matchups (Ground→Rock ×2, Rock→Ground ×½, Ice→Water ×½,
+Steel→Ice ×2, Bug→Ghost ×½, Bug→Fairy ×½) and adds a non-canonical
+Rock→Rock ×½, so the reader validates the canonical matchups before trusting an
+address and scans nearby if they fail.
+
 ### Heart & Soul base version
 
 The ROM carries no readable version string (only the vanilla

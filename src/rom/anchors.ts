@@ -9,6 +9,12 @@ export interface AnchorMap {
   baseStats: number
   typeNames: number
   typeCount: number
+  /**
+   * `gTypeEffectiveness` — {attackType, defendType, multiplier} byte triples.
+   * 0 when the location isn't known for the profile; readers then fall back to
+   * an all-neutral chart and warn.
+   */
+  typeChart: number
   abilityNames: number
   abilityCount: number
   /** TM01–50 + HM01–08 move-id table (58 u16 entries). */
@@ -110,6 +116,8 @@ export const VANILLA_BPRE: AnchorMap = {
   baseStats: 0x254784,
   typeNames: 0x24f1a0,
   typeCount: 18,
+  typeChart: 0, // not located for vanilla BPRE — the sim only targets BPEE
+
   abilityNames: 0x24fc40,
   abilityCount: 78,
   tms: 0x45a80c,
@@ -168,6 +176,10 @@ export const HS_BPEE: AnchorMap = {
   baseStats: 0x93bd40,
   typeNames: 0x6e152c,
   typeCount: 19, // adds FAIRY at 18; index 9 is the vanilla ??? slot
+  // Canonically complete copy; a second, incomplete table sits at 0x6e1258 —
+  // see tables/typeChart.ts. Runs right up to typeNames, as in the decomp's
+  // link order.
+  typeChart: 0x6e13bc,
   abilityNames: 0x6e1e90,
   abilityCount: 82,
   tms: 0x91b450,

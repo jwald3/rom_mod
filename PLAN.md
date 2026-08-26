@@ -366,6 +366,80 @@ the *old* move name and price in the tutor's dialogue while correctly teaching
 the new move. The taught move is right; only the cosmetic menu text can lag.
 Fixing the label/cost is script-side work, out of scope for the table editor.
 
+### Phase 9 — Balance-testing harness  *(requested 2026-08-26)* — **DONE 2026-08-26**
+A read-only simulator that answers "is this Pokémon viable, and would this
+change help?" without playing the game. Layered: a deterministic matchup
+calculator, plus a seeded Monte Carlo 1v1 battle sim on top.
+
+**Two reader gaps filled first:**
+- **Type chart.** Not in the toml and not previously located. Found
+  structurally at **`0x6E13BC`** (120 rows, `FE FE 00` Foresight marker + the
+  two Ghost immunities, `FF FF 00` terminator ending just before
+  `typeNames @ 0x6E152C` — the decomp's link order). Heart & Soul carries a
+  **second** chart at `0x6E1258`, referenced from the adjacent literal-pool
+  word; it is missing six canonical matchups (Ground→Rock ×2, Rock→Ground ×½,
+  Ice→Water ×½, Steel→Ice ×2, Bug→Ghost ×½, Bug→Fairy ×½) and adds a
+  non-canonical Rock→Rock ×½, so `tables/typeChart.ts` validates 18 canonical
+  matchups before trusting an address and scans ±0x1000 if they fail. (The
+  plan's `0x6E13B9` was 3 bytes early — that's the array's alignment padding.)
+- **`effectAccuracy`** (move-struct byte 5, the secondary-effect chance) — now
+  read into `MoveInfo`.
+
+**Effect enum pinned against this ROM, not assumed.** The vanilla Gen-3
+`EFFECT_*` positions were checked move-by-move: 152/156 probed moves land on
+the expected id, and all four misses are this hack's own balance edits
+(Double-Edge on the 1/3-recoil variant 198, String Shot at −2 Speed, Crunch
+lowering Defense, Night Shade reworked to a plain hit). Every effect id present
+in the ROM has a handler or a documented degrade-to-plain-hit.
+
+**Engine (`src/sim/`, pure — no fs/argv/console):**
+- [x] `types.ts` · `rng.ts` (seeded mulberry32) · `statCalc.ts` (Gen-3 stat and
+  stage tables, trainer difficulty-byte → IV) · `damage.ts` (Gen-3 formula with
+  per-step truncation, crit stage-ignore, burn halving, item/STAB/type/roll)
+- [x] `effects.ts` (the `EFFECT_*` table → executable `SimEffect`s; unknown
+  effects degrade to a plain hit and are counted by `coverage()`)
+- [x] `abilities.ts` (name-keyed — this build's 82 abilities put Transistor,
+  Dragon's Maw, Multitype and Pixilate above the vanilla range) · `items.ts`
+  (type boosters, Leftovers, the healing berries the leaders actually hold)
+- [x] `matchup.ts` (per-pairing best move, %/turn, turns-to-KO both ways,
+  speed, −1…+1 score) · `battle.ts` (full 1v1 loop: priority/speed order,
+  accuracy, crits, stat stages, sleep/freeze/para/burn/poison/toxic/confusion,
+  PP and Struggle, Leftovers/berries, Speed Boost, Intimidate)
+- [x] `ai.ts` (greedy, with use-setup/status-once and heal-when-low heuristics)
+- [x] `movesets.ts` (level-up pool → greedy marginal-coverage pick, utility
+  slot swap, `--tm` widens to TM/HM + tutors) · `cohorts.ts` · `overrides.ts`
+- [x] `build.ts` bridges `loadRom()` → `SimContext`; `index.ts` is the barrel
+
+**CLI `scripts/balance.mts`** — console table + optional `--html` / `--json`.
+Default cohort is the 22 benchmark trainers (gyms, E4, Red) read from the ROM's
+trainer table at their real levels; `--cohort band|dex` gives BST neighbours or
+the fully-evolved dex. `--overrides` applies a name-keyed what-if to an
+in-memory copy and prints baseline → modified with per-matchup deltas.
+Reproducible: same seed + same inputs ⇒ identical output.
+
+**Shared helpers factored out:** `src/lib/names.ts` (the `norm()` fold five
+scripts had re-derived, plus name-index/resolve-with-suggestion) re-exported
+from `scripts/lib/names.ts`; `scripts/lib/excluded-species.ts` (the purge list
+that `gen-pokedex-data` and `gen-items-data` each carried a copy of — both now
+import it, and the cohorts honour it).
+
+**Trainer-matching bug found and fixed:** matching a leader by substring gave
+Red the team of a trainer named **ALFRED** (and would have given Will
+**WILLIAM**'s). `matchTrainers` now takes exact name matches when any exist and
+only falls back to substring for keys like SURGE → "LT. SURGE".
+
+- [x] 67 new tests (185 total): synthetic-chart parse/markers/validation,
+  hand-computed damage goldens (STAB 69 · crit 135 · 85% roll 58 · ×2 type ·
+  immunity · min-1 clamp), stat/stage goldens, seed determinism, mirror-match
+  ≈50%, level-gap 100/0, Struggle breaking a PP stalemate, and a real-ROM suite
+  (22/22 cohorts resolve, Red's real team, Falkner's Noctowl L11 + Sitrus,
+  Fire-beats-Bugsy/loses-to-Pryce, end-to-end determinism, a pure-buff
+  monotonicity smoke, ROM bytes untouched)
+
+**Not modeled (stated in every report):** weather, screens, Protect/Counter,
+switching/team battles, natures, EV spreads beyond a flat value,
+semi-invulnerable turns, badge boosts.
+
 ## Out of scope (deliberately)
 
 Egg moves (separate packed table, low value for this workflow), evolution editing,

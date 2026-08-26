@@ -9,6 +9,8 @@ export interface MoveInfo {
   type: number
   accuracy: number
   pp: number
+  /** Chance % that the move's secondary effect fires (0 when it always does). */
+  effectAccuracy: number
   priority: number
 }
 
@@ -26,6 +28,7 @@ export function readMoves(rom: RomBuffer, a: AnchorMap): MoveInfo[] {
       type: rom.u8(s + 2),
       accuracy: rom.u8(s + 3),
       pp: rom.u8(s + 4),
+      effectAccuracy: rom.u8(s + 5),
       priority: rom.i8(s + 7),
     })
   }
