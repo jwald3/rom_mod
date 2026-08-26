@@ -28,9 +28,22 @@ const KIND: Record<string, 'grass' | 'surf' | 'fish' | 'tree'> = {
   ROCKSMASH: 'tree', HEADBUTT: 'tree',
 }
 
+/**
+ * Wild areas that exist in the ROM but sit on maps no warp or connection can
+ * reach: the vanilla-Emerald Hoenn Safari Zone, kept in place and re-speciesed
+ * but never wired into the live map graph (its only door is the leftover Hoenn
+ * Route 121 entrance, itself unreachable). They still carry MAPSEC "SAFARI
+ * ZONE", so counting them would bury the real Safari Zone — Baoba's, west of
+ * Cianwood, maps 26.11–26.17 — under species you can never catch. Other Hoenn
+ * leftovers feed their zone's table too, but this is the only zone where the
+ * dead maps outnumber the live ones.
+ */
+export const UNREACHABLE_AREAS = new Set(['29.76', '30.60', '30.61', '30.62', '30.63', '30.71', '30.72', '30.73'])
+
 // ── ROM: aggregate species per zone-name, per kind (all banks + times) ──
 const romByZone = new Map<string, Record<string, Set<string>>>()
 for (const a of r.wildAreas) {
+  if (UNREACHABLE_AREAS.has(`${a.bank}.${a.map}`)) continue
   const key = norm(a.name)
   if (!romByZone.has(key)) romByZone.set(key, { grass: new Set(), surf: new Set(), fish: new Set(), tree: new Set() })
   const rec = romByZone.get(key)!

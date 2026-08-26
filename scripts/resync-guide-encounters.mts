@@ -61,10 +61,19 @@ const r = loadRom(new Uint8Array(readFileSync(romPath)), romPath.split(/[\\/]/).
 if (r.warnings.length) throw new Error(`ROM warnings: ${r.warnings.join('; ')}`)
 const norm = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, '')
 
+/**
+ * Wild areas on maps no warp or connection can reach: the vanilla-Emerald Hoenn
+ * Safari Zone, re-speciesed but never wired into the live map graph. They carry
+ * MAPSEC "SAFARI ZONE" and would otherwise bury the real one — Baoba's, west of
+ * Cianwood, maps 26.11–26.17. Kept in step with verify-guide-encounters.mts.
+ */
+const UNREACHABLE_AREAS = new Set(['29.76', '30.60', '30.61', '30.62', '30.63', '30.71', '30.72', '30.73'])
+
 // ── ROM: per zone name, per kind → species (slot order) + level span ───────────
 interface KindData { species: string[]; lo: number; hi: number }
 const romByZone = new Map<string, Partial<Record<WildKind, KindData>>>()
 for (const area of r.wildAreas) {
+  if (UNREACHABLE_AREAS.has(`${area.bank}.${area.map}`)) continue
   const key = norm(area.name)
   if (!romByZone.has(key)) romByZone.set(key, {})
   const rec = romByZone.get(key)!
