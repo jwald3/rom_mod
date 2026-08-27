@@ -72,6 +72,8 @@ export interface SimEffect {
   healPercent?: number
   /** Confusion, on top of whatever else the move does. */
   confuses?: boolean
+  /** Dream Eater: the move fails unless the target is asleep. */
+  requiresSleep?: boolean
   /** False when the engine had no handler for the ROM's effect id. */
   modeled: boolean
   /** Human-readable label for reports ("30% burn", "lowers Speed"). */

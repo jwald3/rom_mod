@@ -550,8 +550,10 @@ export function classifyEffect(move: MoveInfo): SimEffect {
 
     // ── hp movement ─────────────────────────────────────────────────────
     case EFFECT.ABSORB:
-    case EFFECT.DREAM_EATER:
       return { kind: 'drain', fraction: 50, modeled: true, label: 'drains 50% of damage' }
+    case EFFECT.DREAM_EATER:
+      // Only works on a sleeping target — fails outright otherwise.
+      return { kind: 'drain', fraction: 50, requiresSleep: true, modeled: true, label: 'only vs. sleeping; drains 50%' }
     case EFFECT.RECOIL:
     case EFFECT.RECOIL_IF_MISS:
       return { kind: 'recoil', fraction: 25, modeled: true, label: '1/4 recoil' }

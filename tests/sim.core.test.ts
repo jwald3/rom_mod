@@ -56,6 +56,7 @@ const MOVES: MoveInfo[] = [
   move({ id: 8, name: 'SONICBOOM', power: 0, type: TYPE.NORMAL, effect: EFFECT.SONICBOOM }),
   move({ id: 9, name: 'SLASH', power: 70, type: TYPE.NORMAL, effect: EFFECT.HIGH_CRITICAL }),
   move({ id: 10, name: 'EXPLOSION', power: 250, type: TYPE.NORMAL, effect: EFFECT.EXPLOSION }),
+  move({ id: 11, name: 'DREAM EATER', power: 100, type: TYPE.NORMAL, effect: EFFECT.DREAM_EATER }),
 ]
 
 const CHART = typeChartFromRows([
@@ -342,6 +343,16 @@ describe('move selection', () => {
     expect(pickBestMoves(ctx, physMon, [2, 6], [grassFoe], { slots: 1, allowUtility: false })[0].name).toBe('FLAMETHROWER')
   })
 
+  it('scores Dream Eater as zero and never picks it over a real move', () => {
+    // Dream Eater only works on a sleeping target, which the picker's view never
+    // assumes — so it's worth nothing and can't take a slot from TACKLE.
+    const self = buildCombatant(ctx, TESTMON, { level: 50, moves: [] })
+    const foe = buildCombatant(ctx, FOEMON, { level: 50, moves: [1] })
+    expect(expectedDamage(ctx, self, foe, toSimMove(MOVES[11]))).toBe(0)
+    const picked = pickBestMoves(ctx, self, [1, 11], [foe], { slots: 1, allowUtility: false })
+    expect(picked.map((m) => m.name)).toEqual(['TACKLE'])
+  })
+
   it('does not pick a self-KO move when a real move already KOs the foe', () => {
     // The Feraligatr case: a high-Attack user where EXPLOSION out-damages the
     // real move by a wide margin, but both one-shot the foe. A flat fractional
@@ -411,6 +422,16 @@ describe('battle simulation', () => {
     expect(result.winner).toBe('a')
     expect(result.winnerHpPercent).toBeGreaterThan(50)
     expect(result.turns).toBeGreaterThan(0)
+  })
+
+  it('Dream Eater does no damage to an awake target', () => {
+    // A Dream-Eater-only mon can't scratch a foe that never sleeps: the move
+    // fails every turn, so within the cap neither side falls — a draw. (Both
+    // have 20 PP of their move, so this happens before any Struggle.)
+    const dreamer = buildCombatant(ctx, TESTMON, { level: 50, moves: [11] })
+    const passive = buildCombatant(ctx, FOEMON, { level: 50, moves: [4] }) // GROWL
+    const result = simulateBattle(ctx, dreamer, passive, makeRng(1), { maxTurns: 10 })
+    expect(result.winner).toBe('draw')
   })
 
   it('keeps a log only when asked', () => {

@@ -310,6 +310,12 @@ function takeTurn(
     return
   }
 
+  // Dream Eater fails unless the target is asleep.
+  if (effect.requiresSleep && defender.status !== 'slp') {
+    say(`${move.name} failed (target isn't asleep)`)
+    return
+  }
+
   let dealt = 0
   const fixed = fixedDamage(attacker, defender, move, rng)
   if (fixed !== null) {

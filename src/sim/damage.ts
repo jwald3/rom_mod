@@ -236,6 +236,11 @@ export function expectedDamage(
 
   if (move.power <= 0) return 0
 
+  // Dream Eater does nothing unless the foe is asleep. The matchup/picker view
+  // treats opponents as awake — this move can't be relied on to deal damage —
+  // so it's worth zero here, keeping the picker from rating it as a real hit.
+  if (effect.requiresSleep) return 0
+
   const base = calcDamage(ctx, attacker, aState, defender, dState, move, {})
   if (base.immune) return 0
   const crit = calcDamage(ctx, attacker, aState, defender, dState, move, { crit: true })
