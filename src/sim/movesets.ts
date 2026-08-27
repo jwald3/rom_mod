@@ -51,13 +51,19 @@ export interface PickOptions {
 
 /**
  * A self-KO move (Explosion/Self-Destruct) faints the user on use, so it can't
- * repeat and it trades your Pokémon away even when it lands. Its raw power is
- * huge, so scored on damage alone it crowds out real STAB — which is exactly
- * how the picker used to hand Typhlosion an Explosion it blew itself up with.
- * Keep a small fraction of its value (it's still a real finisher against a foe
- * you couldn't otherwise beat) but never let it win a slot on damage.
+ * repeat and it trades your Pokémon away even when it lands — using it is at
+ * best an even trade, never a sweep. Scored on raw damage it crowds out real
+ * STAB, and a flat fractional discount doesn't hold: its power can be >6× a
+ * normal move's, so on a high-Attack user (Feraligatr, 140 Atk) even 15% still
+ * wins a slot and the sim then blows itself up (this is exactly what happened).
+ *
+ * So it isn't scored on damage at all. Its only legitimate value is finishing a
+ * foe *nothing else on the set can KO* — one even trade against a hard wall. We
+ * credit a small fixed amount per such foe, capped, so it can rank above a dead
+ * slot but never above a move that adds real repeatable damage.
  */
-const SELF_KO_DISCOUNT = 0.15
+const SELF_KO_PER_WALL = 0.05
+const SELF_KO_MAX = 0.2
 
 /** Marginal gain, in expected damage, from adding `move` to `chosen`. */
 function marginalValue(
@@ -67,13 +73,21 @@ function marginalValue(
   chosen: readonly SimMove[],
   move: SimMove,
 ): number {
-  const discount = move.effect.kind === 'explosion' ? SELF_KO_DISCOUNT : 1
+  if (move.effect.kind === 'explosion') {
+    // Count foes the current set can't already KO in one hit but Explosion can.
+    let walls = 0
+    for (const foe of opponents) {
+      const best = chosen.reduce((m, c) => Math.max(m, expectedDamage(ctx, self, foe, c)), 0)
+      if (best < foe.stats.hp && expectedDamage(ctx, self, foe, move) >= foe.stats.hp) walls++
+    }
+    return Math.min(SELF_KO_MAX, walls * SELF_KO_PER_WALL)
+  }
   let gain = 0
   for (const foe of opponents) {
     const best = chosen.reduce((m, c) => Math.max(m, expectedDamage(ctx, self, foe, c)), 0)
     const withMove = expectedDamage(ctx, self, foe, move)
     // Normalize by the foe's HP so a 400-HP Snorlax doesn't dominate the sum.
-    if (withMove > best) gain += ((withMove - best) / foe.stats.hp) * discount
+    if (withMove > best) gain += (withMove - best) / foe.stats.hp
   }
   return gain
 }

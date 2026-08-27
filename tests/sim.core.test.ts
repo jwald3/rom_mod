@@ -320,6 +320,17 @@ describe('move selection', () => {
     const two = pickBestMoves(ctx, self, [1, 10], [foe], { slots: 2, allowUtility: false })
     expect(two[0].name).toBe('TACKLE')
   })
+
+  it('does not pick a self-KO move when a real move already KOs the foe', () => {
+    // The Feraligatr case: a high-Attack user where EXPLOSION out-damages the
+    // real move by a wide margin, but both one-shot the foe. A flat fractional
+    // discount still let Explosion win here; it must add NOTHING when its KO
+    // isn't unique. A single frail foe both moves KO → EXPLOSION never chosen.
+    const bruiser = buildCombatant(ctx, species({ ...TESTMON, stats: { hp: 100, atk: 200, def: 100, spa: 100, spd: 100, spe: 100 } }), { level: 50, moves: [] })
+    const frail = buildCombatant(ctx, species({ ...FOEMON, stats: { hp: 40, atk: 60, def: 40, spa: 60, spd: 60, spe: 60 } }), { level: 50, moves: [1] })
+    const picked = pickBestMoves(ctx, bruiser, [1, 10], [frail], { slots: 2, allowUtility: false })
+    expect(picked.map((m) => m.name)).not.toContain('EXPLOSION')
+  })
 })
 
 // ── battle loop ───────────────────────────────────────────────────────────
