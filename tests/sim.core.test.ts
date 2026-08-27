@@ -55,6 +55,7 @@ const MOVES: MoveInfo[] = [
   move({ id: 7, name: 'MYSTERY', power: 80, type: TYPE.NORMAL, effect: 254 }),
   move({ id: 8, name: 'SONICBOOM', power: 0, type: TYPE.NORMAL, effect: EFFECT.SONICBOOM }),
   move({ id: 9, name: 'SLASH', power: 70, type: TYPE.NORMAL, effect: EFFECT.HIGH_CRITICAL }),
+  move({ id: 10, name: 'EXPLOSION', power: 250, type: TYPE.NORMAL, effect: EFFECT.EXPLOSION }),
 ]
 
 const CHART = typeChartFromRows([
@@ -303,6 +304,21 @@ describe('move selection', () => {
     // so the second one earns no marginal damage and shouldn't take a slot.
     const picked = pickBestMoves(ctx, self, [1, 3], [foe], { slots: 4, allowUtility: false })
     expect(picked.map((m) => m.name)).toEqual(['TACKLE'])
+  })
+
+  it('does not let a self-KO move outrank a repeatable attack on raw power', () => {
+    // EXPLOSION hits for 250 BP, far above TACKLE's 100, so scored on damage
+    // alone it would win slot one — but it faints the user, so a repeatable
+    // attack must come first. (Regression: the picker used to hand this out and
+    // the mon blew itself up against everything.)
+    const self = buildCombatant(ctx, TESTMON, { level: 50, moves: [] })
+    const foe = buildCombatant(ctx, FOEMON, { level: 50, moves: [1] })
+    const one = pickBestMoves(ctx, self, [1, 10], [foe], { slots: 1, allowUtility: false })
+    expect(one.map((m) => m.name)).toEqual(['TACKLE'])
+    // With room for both, EXPLOSION can still ride along as a finisher — it just
+    // isn't the primary — so the discount reduces its rank without banning it.
+    const two = pickBestMoves(ctx, self, [1, 10], [foe], { slots: 2, allowUtility: false })
+    expect(two[0].name).toBe('TACKLE')
   })
 })
 
