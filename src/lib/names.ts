@@ -3,18 +3,23 @@
  * harness — every one of those had re-derived `norm` inline.
  *
  * `norm` folds a display name to a comparison key: uppercase, drop everything
- * but A–Z/0–9, so "Mud-Slap" ≡ "MUD-SLAP", "Ancientpower" ≡ "ANCIENTPOWER" and
- * "NIDORAN♀" folds to "NIDORAN".
+ * but A–Z/0–9, so "Mud-Slap" ≡ "MUD-SLAP" and "Ancientpower" ≡ "ANCIENTPOWER".
+ * The ♀/♂ gender symbols are mapped to F/M *before* stripping, so the two
+ * Nidoran forms stay distinct ("NIDORANF" vs "NIDORANM") instead of colliding
+ * on a bare "NIDORAN" — otherwise `--mon Nidoran♂` silently resolves to ♀.
+ * No move or item name carries these symbols, so this only affects the Nidorans.
  */
-export const norm = (s: string): string => s.toUpperCase().replace(/[^A-Z0-9]/g, '')
+export const norm = (s: string): string =>
+  s.replace(/♀/g, 'F').replace(/♂/g, 'M').toUpperCase().replace(/[^A-Z0-9]/g, '')
 
 /** True for the ROM's placeholder slots — blank, or all question marks. */
 export const isGapName = (n: string): boolean => !n || /^\?+$/.test(n)
 
 /**
  * normalized name → id, over a ROM name table (species, moves, items…).
- * Placeholder slots are skipped and the *first* id wins, so a later duplicate
- * (NIDORAN♀ and NIDORAN♂ fold to the same key) can't shadow the earlier one.
+ * Placeholder slots are skipped and the *first* id wins, so any genuine
+ * duplicate keys can't shadow the earlier entry. (The Nidoran forms no longer
+ * collide — see `norm`.)
  */
 export function nameIndex(names: readonly string[]): Map<string, number> {
   const index = new Map<string, number>()
