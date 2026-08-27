@@ -114,24 +114,51 @@ const kanto = { lo: 45, hi: 58, oldCeiling: 34 }
 // vanilla target, so this card can't claim a fix the cartridge didn't make.
 // Emit raw type tokens ("GRASS"); the HTML step handles display casing.
 const typeName = (t: number) => r.typeNames[t] ?? `#${t}`
-// Species → (the type this hack added, the vanilla typing it should read now).
-const REVERT_SPEC: { name: string; added: string; vanilla: string[] }[] = [
-  { name: 'MEGANIUM', added: 'FAIRY', vanilla: ['GRASS'] },
-  { name: 'TYPHLOSION', added: 'GROUND', vanilla: ['FIRE'] },
-  { name: 'FERALIGATR', added: 'DRAGON', vanilla: ['WATER'] },
-  { name: 'GROVYLE', added: 'DRAGON', vanilla: ['GRASS'] },
-  { name: 'SCEPTILE', added: 'DRAGON', vanilla: ['GRASS'] },
-  { name: 'SUNFLORA', added: 'FIRE', vanilla: ['GRASS'] },
-  { name: 'GOLDUCK', added: 'PSYCHC', vanilla: ['WATER'] },
-  { name: 'KINGLER', added: 'STEEL', vanilla: ['WATER'] },
-  { name: 'STANTLER', added: 'PSYCHC', vanilla: ['NORMAL'] },
-  { name: 'GULPIN', added: 'NORMAL', vanilla: ['POISON'] },
-  { name: 'SWALOT', added: 'NORMAL', vanilla: ['POISON'] },
-  { name: 'ELECTIVIRE', added: 'FIGHT', vanilla: ['ELECTR'] },
-  { name: 'PARASECT', added: 'GHOST', vanilla: ['BUG', 'GRASS'] },
-  { name: 'NOCTOWL', added: 'PSYCHC', vanilla: ['NORMAL', 'FLYING'] },
+// Species → (the type the hack added, the target typing it should read now,
+// which group it belongs to). 'invented' = a second type on a species that's
+// single-type in the games; 'gen4' = the dex-wide Fairy pass rolled back.
+type Group = 'invented' | 'gen4'
+const REVERT_SPEC: { name: string; added: string; vanilla: string[]; group: Group }[] = [
+  { name: 'MEGANIUM', added: 'FAIRY', vanilla: ['GRASS'], group: 'invented' },
+  { name: 'TYPHLOSION', added: 'GROUND', vanilla: ['FIRE'], group: 'invented' },
+  { name: 'FERALIGATR', added: 'DRAGON', vanilla: ['WATER'], group: 'invented' },
+  { name: 'GROVYLE', added: 'DRAGON', vanilla: ['GRASS'], group: 'invented' },
+  { name: 'SCEPTILE', added: 'DRAGON', vanilla: ['GRASS'], group: 'invented' },
+  { name: 'SUNFLORA', added: 'FIRE', vanilla: ['GRASS'], group: 'invented' },
+  { name: 'GOLDUCK', added: 'PSYCHC', vanilla: ['WATER'], group: 'invented' },
+  { name: 'KINGLER', added: 'STEEL', vanilla: ['WATER'], group: 'invented' },
+  { name: 'STANTLER', added: 'PSYCHC', vanilla: ['NORMAL'], group: 'invented' },
+  { name: 'GULPIN', added: 'NORMAL', vanilla: ['POISON'], group: 'invented' },
+  { name: 'SWALOT', added: 'NORMAL', vanilla: ['POISON'], group: 'invented' },
+  { name: 'ELECTIVIRE', added: 'FIGHT', vanilla: ['ELECTR'], group: 'invented' },
+  { name: 'PARASECT', added: 'GHOST', vanilla: ['BUG', 'GRASS'], group: 'invented' },
+  { name: 'NOCTOWL', added: 'PSYCHC', vanilla: ['NORMAL', 'FLYING'], group: 'invented' },
+  // Gen-4 rollback of the Fairy pass (whole lines).
+  { name: 'ARBOK', added: 'DARK', vanilla: ['POISON'], group: 'gen4' },
+  { name: 'CLEFFA', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'CLEFAIRY', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'CLEFABLE', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'IGGLYBUFF', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'JIGGLYPUFF', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'WIGGLYTUFF', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'TOGEPI', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'TOGETIC', added: 'FAIRY', vanilla: ['NORMAL', 'FLYING'], group: 'gen4' },
+  { name: 'TOGEKISS', added: 'FAIRY', vanilla: ['NORMAL', 'FLYING'], group: 'gen4' },
+  { name: 'AZURILL', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'MARILL', added: 'FAIRY', vanilla: ['WATER'], group: 'gen4' },
+  { name: 'AZUMARILL', added: 'FAIRY', vanilla: ['WATER'], group: 'gen4' },
+  { name: 'SNUBBULL', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'GRANBULL', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'DELCATTY', added: 'FAIRY', vanilla: ['NORMAL'], group: 'gen4' },
+  { name: 'LUVDISC', added: 'FAIRY', vanilla: ['WATER'], group: 'gen4' },
+  { name: 'MAWILE', added: 'FAIRY', vanilla: ['STEEL'], group: 'gen4' },
+  { name: 'RALTS', added: 'FAIRY', vanilla: ['PSYCHC'], group: 'gen4' },
+  { name: 'KIRLIA', added: 'FAIRY', vanilla: ['PSYCHC'], group: 'gen4' },
+  { name: 'GARDEVOIR', added: 'FAIRY', vanilla: ['PSYCHC'], group: 'gen4' },
+  { name: 'MR. MIME', added: 'FAIRY', vanilla: ['PSYCHC'], group: 'gen4' },
+  { name: 'MIME JR.', added: 'FAIRY', vanilla: ['PSYCHC'], group: 'gen4' },
 ]
-interface TypeRevert { name: string; added: string; now: string[]; starter: boolean }
+interface TypeRevert { name: string; added: string; now: string[]; starter: boolean; group: Group }
 const STARTER_ORDER = ['MEGANIUM', 'TYPHLOSION', 'FERALIGATR', 'GROVYLE', 'SCEPTILE']
 const typeReverts: TypeRevert[] = []
 for (const tr of REVERT_SPEC) {
@@ -141,14 +168,10 @@ for (const tr of REVERT_SPEC) {
   const cur = s.type1 === s.type2 ? [typeName(s.type1)] : [typeName(s.type1), typeName(s.type2)]
   // Only report species whose ROM typing already equals the vanilla target.
   if (cur.length !== tr.vanilla.length || cur.some((t, i) => t !== tr.vanilla[i])) continue
-  typeReverts.push({ name: tr.name, added: tr.added, now: cur, starter: STARTER_ORDER.includes(tr.name) })
+  typeReverts.push({ name: tr.name, added: tr.added, now: cur, starter: STARTER_ORDER.includes(tr.name), group: tr.group })
 }
-typeReverts.sort((a, b) => {
-  const ai = STARTER_ORDER.indexOf(a.name)
-  const bi = STARTER_ORDER.indexOf(b.name)
-  if (ai >= 0 || bi >= 0) return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi)
-  return a.name.localeCompare(b.name)
-})
+// Keep the REVERT_SPEC order (starters lead the invented group; the gen4 group
+// is already listed by evolution family), so no post-hoc sort is needed.
 
 const out = {
   itemEvos,

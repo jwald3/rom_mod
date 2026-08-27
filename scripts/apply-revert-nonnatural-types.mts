@@ -1,21 +1,25 @@
 /**
- * Revert non-natural secondary types the hack added to a handful of species,
- * so (for one) the starters go back to their real single typing.
+ * Revert species to their Gen-4 typings, undoing type changes the hack made.
  *
  *   npx tsx scripts/apply-revert-nonnatural-types.mts "<rom.gba>" [toml]
  *   npx tsx scripts/apply-revert-nonnatural-types.mts --dry-run "<rom.gba>" [toml]
  *
- * A dex-wide scan of this ROM found 15 species whose 2nd type differs from
- * vanilla. Most are a deliberate, canon Fairy pass (Clefable, Marill, Gardevoir,
- * Togetic, …) or Gen-3-era-correct (Masquerain was BUG/WATER in RSE) and are
- * LEFT ALONE. The list below is only the genuine hack additions.
+ * Two groups (see REVERTS):
+ *   1. Invented secondary types on species that are single-type in the games —
+ *      most visibly the Johto starters (Typhlosion had gained Ground, etc.).
+ *   2. The hack's dex-wide Fairy pass, rolled back to Gen 4 on the lines the
+ *      Fairy type didn't exist for then — Clefairy/Jigglypuff/Togepi/Snubbull
+ *      → Normal, Marill/Luvdisc → Water, Gardevoir/Mr. Mime → Psychic, Mawile
+ *      → Steel, Arbok → Poison. Whole evolution lines, so no stage is left
+ *      mismatched; Gallade keeps its canonical Psychic/Fighting.
  *
  * Types are named, resolved through the ROM's own type table (so this doesn't
  * assume a type enum). Each revert states the type the ROM must currently have;
- * if the ROM disagrees the species is reported and skipped, never guessed.
- * Base-stats records are fixed-size, so writes are in place at struct offset
- * 6 (type1) / 7 (type2). Backs up, writes, and re-reads to verify. BPEE needs
- * no toml.
+ * if the ROM disagrees the species is reported and skipped, never guessed. A
+ * species already at its target is a no-op, so the script is idempotent and safe
+ * to re-run. Base-stats records are fixed-size, so writes are in place at struct
+ * offset 6 (type1) / 7 (type2). Backs up, writes, and re-reads to verify. BPEE
+ * needs no toml.
  */
 import * as fs from 'node:fs'
 import { loadRom } from '../src/rom/loadRom'
@@ -64,6 +68,42 @@ const REVERTS: Revert[] = [
   // stays dual, but corrected to vanilla typing
   { name: 'PARASECT', fromType1: 'BUG', fromType2: 'GHOST', toType1: 'BUG', toType2: 'GRASS', note: 'Ghost → Grass (vanilla)' },
   { name: 'NOCTOWL', fromType1: 'PSYCHC', fromType2: 'FLYING', toType1: 'NORMAL', toType2: 'FLYING', note: 'Psychic → Normal (vanilla)' },
+
+  // ── Gen-4 typings: undo the hack's dex-wide Fairy pass on these lines ──
+  // (whole evolution lines, so no stage is left mismatched; Gallade keeps its
+  // canonical Psychic/Fighting and is intentionally not listed.)
+  { name: 'ARBOK', fromType1: 'POISON', fromType2: 'DARK', toType1: 'POISON', toType2: 'POISON', note: 'drop Dark (Gen 4)' },
+  // Clefairy line → Normal
+  { name: 'CLEFFA', fromType1: 'FAIRY', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'Fairy → Normal (Gen 4)' },
+  { name: 'CLEFAIRY', fromType1: 'FAIRY', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'Fairy → Normal (Gen 4)' },
+  { name: 'CLEFABLE', fromType1: 'FAIRY', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'Fairy → Normal (Gen 4)' },
+  // Jigglypuff line → Normal
+  { name: 'IGGLYBUFF', fromType1: 'NORMAL', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'drop Fairy (Gen 4)' },
+  { name: 'JIGGLYPUFF', fromType1: 'NORMAL', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'drop Fairy (Gen 4)' },
+  { name: 'WIGGLYTUFF', fromType1: 'NORMAL', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'drop Fairy (Gen 4)' },
+  // Togepi line → Normal / Normal-Flying
+  { name: 'TOGEPI', fromType1: 'FAIRY', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'Fairy → Normal (Gen 4)' },
+  { name: 'TOGETIC', fromType1: 'FAIRY', fromType2: 'FLYING', toType1: 'NORMAL', toType2: 'FLYING', note: 'Fairy → Normal (Gen 4)' },
+  { name: 'TOGEKISS', fromType1: 'FAIRY', fromType2: 'FLYING', toType1: 'NORMAL', toType2: 'FLYING', note: 'Fairy → Normal (Gen 4)' },
+  // Marill line → Water (Azurill → Normal, as in Gen 4)
+  { name: 'AZURILL', fromType1: 'NORMAL', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'drop Fairy (Gen 4)' },
+  { name: 'MARILL', fromType1: 'WATER', fromType2: 'FAIRY', toType1: 'WATER', toType2: 'WATER', note: 'drop Fairy (Gen 4)' },
+  { name: 'AZUMARILL', fromType1: 'WATER', fromType2: 'FAIRY', toType1: 'WATER', toType2: 'WATER', note: 'drop Fairy (Gen 4)' },
+  // Snubbull line → Normal
+  { name: 'SNUBBULL', fromType1: 'FAIRY', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'Fairy → Normal (Gen 4)' },
+  { name: 'GRANBULL', fromType1: 'FAIRY', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'Fairy → Normal (Gen 4)' },
+  // Skitty line → Normal (Skitty is already Normal; Delcatty drops Fairy)
+  { name: 'DELCATTY', fromType1: 'NORMAL', fromType2: 'FAIRY', toType1: 'NORMAL', toType2: 'NORMAL', note: 'drop Fairy (Gen 4)' },
+  // singles
+  { name: 'LUVDISC', fromType1: 'WATER', fromType2: 'FAIRY', toType1: 'WATER', toType2: 'WATER', note: 'drop Fairy (Gen 4)' },
+  { name: 'MAWILE', fromType1: 'STEEL', fromType2: 'FAIRY', toType1: 'STEEL', toType2: 'STEEL', note: 'drop Fairy (Gen 4)' },
+  // Ralts line → Psychic (Gallade left as canonical Psychic/Fighting)
+  { name: 'RALTS', fromType1: 'PSYCHC', fromType2: 'FAIRY', toType1: 'PSYCHC', toType2: 'PSYCHC', note: 'drop Fairy (Gen 4)' },
+  { name: 'KIRLIA', fromType1: 'PSYCHC', fromType2: 'FAIRY', toType1: 'PSYCHC', toType2: 'PSYCHC', note: 'drop Fairy (Gen 4)' },
+  { name: 'GARDEVOIR', fromType1: 'PSYCHC', fromType2: 'FAIRY', toType1: 'PSYCHC', toType2: 'PSYCHC', note: 'drop Fairy (Gen 4)' },
+  // Mr. Mime line → Psychic
+  { name: 'MR. MIME', fromType1: 'PSYCHC', fromType2: 'FAIRY', toType1: 'PSYCHC', toType2: 'PSYCHC', note: 'drop Fairy (Gen 4)' },
+  { name: 'MIME JR.', fromType1: 'PSYCHC', fromType2: 'FAIRY', toType1: 'PSYCHC', toType2: 'PSYCHC', note: 'drop Fairy (Gen 4)' },
 ]
 
 const TYPE1_OFF = 6

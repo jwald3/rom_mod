@@ -148,7 +148,8 @@
       "now": [
         "GRASS"
       ],
-      "starter": true
+      "starter": true,
+      "group": "invented"
     },
     {
       "name": "TYPHLOSION",
@@ -156,7 +157,8 @@
       "now": [
         "FIRE"
       ],
-      "starter": true
+      "starter": true,
+      "group": "invented"
     },
     {
       "name": "FERALIGATR",
@@ -164,7 +166,8 @@
       "now": [
         "WATER"
       ],
-      "starter": true
+      "starter": true,
+      "group": "invented"
     },
     {
       "name": "GROVYLE",
@@ -172,7 +175,8 @@
       "now": [
         "GRASS"
       ],
-      "starter": true
+      "starter": true,
+      "group": "invented"
     },
     {
       "name": "SCEPTILE",
@@ -180,15 +184,17 @@
       "now": [
         "GRASS"
       ],
-      "starter": true
+      "starter": true,
+      "group": "invented"
     },
     {
-      "name": "ELECTIVIRE",
-      "added": "FIGHT",
+      "name": "SUNFLORA",
+      "added": "FIRE",
       "now": [
-        "ELECTR"
+        "GRASS"
       ],
-      "starter": false
+      "starter": false,
+      "group": "invented"
     },
     {
       "name": "GOLDUCK",
@@ -196,15 +202,8 @@
       "now": [
         "WATER"
       ],
-      "starter": false
-    },
-    {
-      "name": "GULPIN",
-      "added": "NORMAL",
-      "now": [
-        "POISON"
-      ],
-      "starter": false
+      "starter": false,
+      "group": "invented"
     },
     {
       "name": "KINGLER",
@@ -212,16 +211,44 @@
       "now": [
         "WATER"
       ],
-      "starter": false
+      "starter": false,
+      "group": "invented"
     },
     {
-      "name": "NOCTOWL",
+      "name": "STANTLER",
       "added": "PSYCHC",
       "now": [
-        "NORMAL",
-        "FLYING"
+        "NORMAL"
       ],
-      "starter": false
+      "starter": false,
+      "group": "invented"
+    },
+    {
+      "name": "GULPIN",
+      "added": "NORMAL",
+      "now": [
+        "POISON"
+      ],
+      "starter": false,
+      "group": "invented"
+    },
+    {
+      "name": "SWALOT",
+      "added": "NORMAL",
+      "now": [
+        "POISON"
+      ],
+      "starter": false,
+      "group": "invented"
+    },
+    {
+      "name": "ELECTIVIRE",
+      "added": "FIGHT",
+      "now": [
+        "ELECTR"
+      ],
+      "starter": false,
+      "group": "invented"
     },
     {
       "name": "PARASECT",
@@ -230,31 +257,227 @@
         "BUG",
         "GRASS"
       ],
-      "starter": false
+      "starter": false,
+      "group": "invented"
     },
     {
-      "name": "STANTLER",
+      "name": "NOCTOWL",
       "added": "PSYCHC",
       "now": [
-        "NORMAL"
+        "NORMAL",
+        "FLYING"
       ],
-      "starter": false
+      "starter": false,
+      "group": "invented"
     },
     {
-      "name": "SUNFLORA",
-      "added": "FIRE",
-      "now": [
-        "GRASS"
-      ],
-      "starter": false
-    },
-    {
-      "name": "SWALOT",
-      "added": "NORMAL",
+      "name": "ARBOK",
+      "added": "DARK",
       "now": [
         "POISON"
       ],
-      "starter": false
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "CLEFFA",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "CLEFAIRY",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "CLEFABLE",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "IGGLYBUFF",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "JIGGLYPUFF",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "WIGGLYTUFF",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "TOGEPI",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "TOGETIC",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "TOGEKISS",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "AZURILL",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "MARILL",
+      "added": "FAIRY",
+      "now": [
+        "WATER"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "AZUMARILL",
+      "added": "FAIRY",
+      "now": [
+        "WATER"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "SNUBBULL",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "GRANBULL",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "DELCATTY",
+      "added": "FAIRY",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "LUVDISC",
+      "added": "FAIRY",
+      "now": [
+        "WATER"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "MAWILE",
+      "added": "FAIRY",
+      "now": [
+        "STEEL"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "RALTS",
+      "added": "FAIRY",
+      "now": [
+        "PSYCHC"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "KIRLIA",
+      "added": "FAIRY",
+      "now": [
+        "PSYCHC"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "GARDEVOIR",
+      "added": "FAIRY",
+      "now": [
+        "PSYCHC"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "MR. MIME",
+      "added": "FAIRY",
+      "now": [
+        "PSYCHC"
+      ],
+      "starter": false,
+      "group": "gen4"
+    },
+    {
+      "name": "MIME JR.",
+      "added": "FAIRY",
+      "now": [
+        "PSYCHC"
+      ],
+      "starter": false,
+      "group": "gen4"
     }
   ]
 }

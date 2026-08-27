@@ -21,7 +21,7 @@ interface Data {
   removedMoves: string[]
   tm26: { tm: string; move: string; brockNow: string; where: string }
   kanto: { lo: number; hi: number; oldCeiling: number }
-  typeReverts: { name: string; added: string; now: string[]; starter: boolean }[]
+  typeReverts: { name: string; added: string; now: string[]; starter: boolean; group: 'invented' | 'gen4' }[]
 }
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -69,11 +69,13 @@ const typeLabel = (t: string) =>
 const typingOf = (now: string[]) => now.map(typeLabel).join('/')
 const addedLabel = (t: string) => typeLabel(t)
 
+// ── "invented second type" card (starters etc.) ──
 // The starters lead the copy; mono-type reverts get a one-line summary; the two
 // dual-type corrections (which stay dual) get their own clause in the card.
-const starterReverts = d.typeReverts.filter((t) => t.starter)
-const monoReverts = d.typeReverts.filter((t) => !t.starter && t.now.length === 1)
-const dualCorrections = d.typeReverts.filter((t) => !t.starter && t.now.length === 2)
+const invented = d.typeReverts.filter((t) => t.group === 'invented')
+const starterReverts = invented.filter((t) => t.starter)
+const monoReverts = invented.filter((t) => !t.starter && t.now.length === 1)
+const dualCorrections = invented.filter((t) => !t.starter && t.now.length === 2)
 const starterSentence = starterReverts
   .map((t) => `${title(t.name)} back to pure ${typingOf(t.now)}`)
   .join(', ')
@@ -84,6 +86,24 @@ const otherSentence = monoReverts
 const correctionSentence = dualCorrections
   .map((t) => `${title(t.name)} to ${typingOf(t.now)}`)
   .join(' and ')
+
+// ── Gen-4 Fairy-rollback card ──
+// The Fairy-pass lines get grouped by resulting typing ("Normal — Clefairy,
+// Jigglypuff, …"); Arbok (which lost Dark, not Fairy) gets its own clause.
+const gen4 = d.typeReverts.filter((t) => t.group === 'gen4')
+const fairyReverts = gen4.filter((t) => t.added === 'FAIRY')
+const gen4ByTyping = new Map<string, string[]>()
+for (const t of fairyReverts) {
+  const key = typingOf(t.now)
+  if (!gen4ByTyping.has(key)) gen4ByTyping.set(key, [])
+  gen4ByTyping.get(key)!.push(title(t.name))
+}
+const gen4Groups = [...gen4ByTyping.entries()]
+  .map(([typing, names]) => `<strong>${esc(typing)}</strong> — ${esc(names.join(', '))}`)
+  .join('; ')
+// A trailing "Mime Jr." already ends the list in a period; don't add a second.
+const gen4GroupsDot = gen4Groups.endsWith('.') ? gen4Groups : `${gen4Groups}.`
+const arbokReverted = gen4.some((t) => t.name === 'ARBOK')
 
 const vitPrice = d.vitaminPrices[0]?.price ?? 9800
 const vitList = d.vitaminPrices.map((v) => title(v.name)).join(', ')
@@ -135,13 +155,23 @@ ${d.levelEvos.map(levelEvoRow).join('\n')}
         <p>Species and moves introduced after Gen 4 were pulled from every trainer team, evolution and wild slot, so nothing in a normal run will fight or become one of them — including ${esc(removedSpeciesList)}. The fairy-era moves ${esc(removedMovesList)} were removed too; this is the <em>no-fairy</em> build.</p>
       </article>
 ${
-  d.typeReverts.length
+  invented.length
     ? `      <article class="cg-card">
         <div class="cg-card-h"><span class="cg-badge cg-badge-type">◈</span><h4>Starters back to their real types</h4></div>
         <p>An earlier build had bolted a second type onto several Pokémon that are single-type in the games — most obviously the Johto starters. Those are reverted: <strong>${esc(starterSentence)}</strong>.${
         otherSentence ? ` A few others lost an invented second type as well (${esc(otherSentence)}).` : ''
       }${
         correctionSentence ? ` Two dual-types were also corrected to their canon pairing — ${esc(correctionSentence)}.` : ''
+      }</p>
+      </article>`
+    : ''
+}${
+  gen4.length
+    ? `
+      <article class="cg-card">
+        <div class="cg-card-h"><span class="cg-badge cg-badge-type">◈</span><h4>Fairy types rolled back to Gen 4</h4></div>
+        <p>These lines predate the Fairy type, so they're back to their Gen-4 typings: ${gen4GroupsDot} Gallade keeps its usual Psychic/Fighting.${
+        arbokReverted ? ' Arbok also drops its Dark half back to pure Poison.' : ''
       }</p>
       </article>`
     : ''
