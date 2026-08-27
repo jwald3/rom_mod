@@ -321,6 +321,27 @@ describe('move selection', () => {
     expect(two[0].name).toBe('TACKLE')
   })
 
+  it('breaks a near-tie toward the stronger attacking stat', () => {
+    // TACKLE (Normal, physical) and WATER GUN (Water, special) are both 100 BP
+    // and both neutral on a Normal foe — a genuine tie except for which stat
+    // backs them. A physically-stronger mon should take the physical move; a
+    // specially-stronger one the special move.
+    const foe = buildCombatant(ctx, FOEMON, { level: 50, moves: [1] })
+    const physMon = buildCombatant(ctx, species({ ...TESTMON, stats: { hp: 100, atk: 150, def: 100, spa: 60, spd: 100, spe: 100 } }), { level: 50, moves: [] })
+    const specMon = buildCombatant(ctx, species({ ...TESTMON, stats: { hp: 100, atk: 60, def: 100, spa: 150, spd: 100, spe: 100 } }), { level: 50, moves: [] })
+    expect(pickBestMoves(ctx, physMon, [1, 3], [foe], { slots: 1, allowUtility: false })[0].name).toBe('TACKLE')
+    expect(pickBestMoves(ctx, specMon, [1, 3], [foe], { slots: 1, allowUtility: false })[0].name).toBe('WATER GUN')
+  })
+
+  it('does not let the tiebreaker override a real damage difference', () => {
+    // On a Grass foe, FLAMETHROWER (special, ×2) out-damages EARTHQUAKE
+    // (physical, ×1) by a wide margin. A physically-stronger mon must still take
+    // Flamethrower — the category preference is a tiebreaker, not a veto.
+    const grassFoe = buildCombatant(ctx, species({ ...FOEMON, type1: TYPE.GRASS, type2: TYPE.GRASS }), { level: 50, moves: [1] })
+    const physMon = buildCombatant(ctx, species({ ...TESTMON, stats: { hp: 100, atk: 150, def: 100, spa: 80, spd: 100, spe: 100 } }), { level: 50, moves: [] })
+    expect(pickBestMoves(ctx, physMon, [2, 6], [grassFoe], { slots: 1, allowUtility: false })[0].name).toBe('FLAMETHROWER')
+  })
+
   it('does not pick a self-KO move when a real move already KOs the foe', () => {
     // The Feraligatr case: a high-Attack user where EXPLOSION out-damages the
     // real move by a wide margin, but both one-shot the foe. A flat fractional

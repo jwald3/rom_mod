@@ -2,7 +2,7 @@ import type { Learnset } from '../rom/tables/learnsets'
 import { sortEntries } from '../rom/tables/learnsets'
 import { expectedDamage, isDamaging } from './damage'
 import { toSimMove } from './effects'
-import type { Combatant, SimContext, SimMove } from './types'
+import type { Combatant, MoveCategory, SimContext, SimMove } from './types'
 
 /**
  * Choosing what a tested Pokémon actually brings to a fight.
@@ -139,19 +139,28 @@ export function pickBestMoves(
     .filter((m) => !isDamaging(m) && utilityScore(m) > 0)
     .sort((a, b) => utilityScore(b) - utilityScore(a))
 
+  // Which side the mon hits harder off — in the Gen-3 split a move's category
+  // is fixed by its type, so this is just "does Atk or SpA back this move". Used
+  // only to break near-ties: between two moves of nearly equal value, take the
+  // one that leans on the stronger attacking stat (a physical Feraligatr should
+  // reach for its Earthquake over an equally-rated special coverage move). Never
+  // overrides a real damage difference — see TIE_MARGIN.
+  const strongerCategory: MoveCategory = self.stats.atk >= self.stats.spa ? 'physical' : 'special'
+  const TIE_MARGIN = 0.1 // treat gains within 10% of the best as a tie
+
   const chosen: SimMove[] = []
   const gains: number[] = []
   const remaining = [...attacking]
   while (chosen.length < slots && remaining.length > 0) {
-    let bestIndex = 0
-    let bestGain = -1
-    remaining.forEach((move, i) => {
-      const gain = marginalValue(ctx, self, opponents, chosen, move)
-      if (gain > bestGain) {
-        bestGain = gain
-        bestIndex = i
-      }
-    })
+    const scored = remaining.map((move) => ({ move, gain: marginalValue(ctx, self, opponents, chosen, move) }))
+    const bestGain = scored.reduce((m, s) => Math.max(m, s.gain), -1)
+    // Among moves within TIE_MARGIN of the best, prefer one matching the
+    // stronger attacking stat; otherwise keep the highest-gain move.
+    const contenders = scored.filter((s) => s.gain > 0 && s.gain >= bestGain * (1 - TIE_MARGIN))
+    const preferred =
+      contenders.find((s) => s.move.category === strongerCategory) ??
+      scored.find((s) => s.gain === bestGain)!
+    const bestIndex = remaining.indexOf(preferred.move)
     const [move] = remaining.splice(bestIndex, 1)
     if (bestGain <= 0 && chosen.length > 0) break // adds nothing anywhere
     chosen.push(move)
