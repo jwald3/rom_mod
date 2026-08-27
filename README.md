@@ -141,9 +141,13 @@ Without a toml, FireRed ROMs fall back to vanilla 1.0 offsets; Heart & Soul
 ## Tests
 
 ```sh
-npm test                    # 132 tests incl. real-ROM integration (skipped if ROM absent)
+npm test                    # 202 tests incl. real-ROM integration (skipped if the ROM's absent)
 node scripts/smoke.mjs      # 19-step headless drive of the Heart & Soul ROM (dev server must be up)
 ```
+
+The real-ROM integration suites need the (non-repo) ROMs. `tests/romPath.ts`
+checks a few known locations and, failing that, the `HS_ROM` / `FR_ROM`+`FR_TOML`
+env vars — set those to run the suites on a fresh checkout; otherwise they skip.
 
 `PLAN.md` documents the architecture, the ROM's verified table layout, and the
 phase history. `scripts/apply-*.mts` are examples of scripting the ROM library

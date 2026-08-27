@@ -13,6 +13,7 @@ import {
 } from '../src/rom/tables/typeChart'
 import { HS_BPEE } from '../src/rom/anchors'
 import { loadRom } from '../src/rom/loadRom'
+import { heartAndSoulRom } from './romPath'
 
 /** Build a ROM-shaped buffer with a type chart at `offset`. */
 function romWithChart(
@@ -106,12 +107,11 @@ describe('type chart parsing', () => {
   })
 })
 
-const ROM_PATH = 'C:/Users/Waldo/Downloads/H&S/Pokemon Heart & Soul.gba'
-const romExists = fs.existsSync(ROM_PATH)
+const romExists = heartAndSoulRom !== null
 
 describe.skipIf(!romExists)('type chart against the real Heart & Soul ROM', () => {
   const loaded = romExists
-    ? loadRom(new Uint8Array(fs.readFileSync(ROM_PATH)), 'Pokemon Heart & Soul.gba')
+    ? loadRom(new Uint8Array(fs.readFileSync(heartAndSoulRom!.rom)), 'Pokemon Heart & Soul.gba')
     : null!
 
   it('reads the canonically complete table at the anchored offset', () => {

@@ -14,6 +14,7 @@ import {
   viabilityScore,
 } from '../src/sim'
 import { nameIndex, resolveName } from '../src/lib/names'
+import { heartAndSoulRom } from './romPath'
 
 /**
  * The balance harness against the real Heart & Soul ROM. Skipped when the ROM
@@ -22,12 +23,11 @@ import { nameIndex, resolveName } from '../src/lib/names'
  * end-to-end determinism, and the "a buff must not make things worse"
  * monotonicity smoke.
  */
-const ROM_PATH = 'C:/Users/Waldo/Downloads/H&S/Pokemon Heart & Soul.gba'
-const romExists = fs.existsSync(ROM_PATH)
+const romExists = heartAndSoulRom !== null
 
 describe.skipIf(!romExists)('balance harness on the real ROM', () => {
   const rom = romExists
-    ? loadRom(new Uint8Array(fs.readFileSync(ROM_PATH)), 'Pokemon Heart & Soul.gba')
+    ? loadRom(new Uint8Array(fs.readFileSync(heartAndSoulRom!.rom)), 'Pokemon Heart & Soul.gba')
     : null!
   const ctx = romExists ? makeContext(rom) : null!
   const speciesIdx = romExists ? nameIndex(rom.species.map((s) => s.name)) : null!

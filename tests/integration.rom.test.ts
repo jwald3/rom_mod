@@ -3,21 +3,18 @@ import * as fs from 'node:fs'
 import { loadRom } from '../src/rom/loadRom'
 import { applyLearnsetEdits, applyRomEdits } from '../src/rom/writer'
 import { trainerToEdit } from '../src/rom/tables/trainers'
+import { fireRedRom } from './romPath'
 
 /**
  * Phase 1 gate: verify parsing against the real modded ROM.
  * Skipped automatically when the ROM isn't present (e.g. CI / other machines).
  * Expected values were independently confirmed with Hex Maniac Advance.
  */
-const DIR = 'C:/Users/Waldo/Downloads/Pokemon - Fire Red Version [a1] (U) (Squirrels) (2)'
-const ROM_PATH = `${DIR}/20260426__GPT_Mods.gba`
-const TOML_PATH = `${DIR}/20260426__GPT_Mods.toml`
-
-const romExists = fs.existsSync(ROM_PATH) && fs.existsSync(TOML_PATH)
+const romExists = fireRedRom !== null
 
 describe.skipIf(!romExists)('real ROM integration (Phase 1 gate)', () => {
-  const bytes = romExists ? new Uint8Array(fs.readFileSync(ROM_PATH)) : new Uint8Array()
-  const toml = romExists ? fs.readFileSync(TOML_PATH, 'utf8') : ''
+  const bytes = romExists ? new Uint8Array(fs.readFileSync(fireRedRom!.rom)) : new Uint8Array()
+  const toml = romExists ? fs.readFileSync(fireRedRom!.toml!, 'utf8') : ''
   const loaded = romExists ? loadRom(bytes, '20260426__GPT_Mods.gba', toml) : null!
 
   it('identifies the ROM and uses toml anchors', () => {
