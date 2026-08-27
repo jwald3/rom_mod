@@ -133,7 +133,20 @@ for (const sent of sentences) {
   const monRe = /([A-Z][A-Za-z'.♀♂-]+)/g
   let mm: RegExpExecArray | null
   while ((mm = monRe.exec(sent))) { if (knownMon(mm[1])) mons.push({ name: mm[1], idx: mm.index }) }
-  if (mons.length) runningSubject = mons[0].name
+  // Species named inside a parenthetical are asides ("… (hard-counters Whitney's
+  // Miltank) …"), not the sentence's subject — drop them from ownership so a move
+  // claim about the real subject ("It gets Night Shade …") isn't handed to them.
+  const parens: [number, number][] = []
+  const parenRe = /\(([^)]*)\)/g
+  let pm: RegExpExecArray | null
+  while ((pm = parenRe.exec(sent))) parens.push([pm.index, pm.index + pm[0].length])
+  const inParen = (i: number) => parens.some(([lo, hi]) => i >= lo && i < hi)
+  const subjectMons = mons.filter((x) => !inParen(x.idx))
+  // Subject carried INTO this sentence from earlier ones. Don't overwrite it
+  // with mons[0] up front — a species named only parenthetically after the move
+  // ("… Megahorn at Lv 45 … (Whitney's Miltank)") would then wrongly own the
+  // claim. The running subject only advances once the sentence is processed.
+  const priorSubject = runningSubject
 
   // find each "<words> at Lv NN"
   const atRe = /\bat\s+Lv\s*(\d+)/g
@@ -150,18 +163,29 @@ for (const sent of sentences) {
       if (wordsUpper.has(norm(cand))) { moveName = cand; break }
     }
     if (!moveName) continue
-    // owner: nearest species before this move mention, else running subject
-    const before = mons.filter((x) => x.idx < a!.index)
-    const owner = before.length ? before[before.length - 1].name : runningSubject
+    // owner: nearest species mentioned BEFORE this move, else the subject we
+    // walked in with (not one that appears later in the same sentence).
+    const before = subjectMons.filter((x) => x.idx < a!.index)
+    const owner = before.length ? before[before.length - 1].name : priorSubject
     if (!owner) continue
     const ownerId = spByName.get(norm(owner))!
     const claim = `${owner}: ${moveName} @ Lv ${lv}`
     const levels = learnFor(ownerId).get(norm(moveName))
     // The guide often names a base mon but describes the whole family's moves, so
-    // accept the level if the owner OR any pre-evo/evo in its line learns it then.
+    // accept the level if the owner OR anything in its evolution line learns it
+    // then. Walk the line transitively in BOTH directions so a two-step family
+    // (Caterpie → Metapod → Butterfree) reaches the fully-evolved form, not just
+    // the immediate neighbour.
     const family = new Set<number>([ownerId])
-    allEvos[ownerId].forEach((e) => family.add(e.target))
-    allEvos.forEach((evos, sid) => { if (evos.some((e) => e.target === ownerId)) family.add(sid) })
+    for (let changed = true; changed; ) {
+      changed = false
+      for (const fid of [...family]) {
+        allEvos[fid].forEach((e) => { if (!family.has(e.target)) { family.add(e.target); changed = true } })
+        allEvos.forEach((evos, sid) => {
+          if (!family.has(sid) && evos.some((e) => family.has(e.target))) { family.add(sid); changed = true }
+        })
+      }
+    }
     let matched = false, romLevels: number[] = []
     for (const fid of family) {
       const ls = learnFor(fid).get(norm(moveName))
@@ -171,6 +195,11 @@ for (const sent of sentences) {
     else if (romLevels.length) results.push({ kind: 'move-lv', claim, status: 'FAIL', detail: `ROM (family): ${moveName} at Lv ${romLevels.join('/')}, not ${lv}` })
     else if (!levels) results.push({ kind: 'move-lv', claim, status: 'FAIL', detail: `${owner}'s line never learns ${moveName} by level-up` })
   }
+
+  // Advance the running subject for the NEXT sentence to this sentence's leading
+  // species, if it named one (a pronoun-led sentence keeps the prior subject).
+  // Parenthetical mentions don't count as the subject.
+  if (subjectMons.length) runningSubject = subjectMons[0].name
 }
 
 // ── report ──
