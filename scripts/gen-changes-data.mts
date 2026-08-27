@@ -106,6 +106,50 @@ const tm26 = {
 // ── (6) Kanto level scaling (authored; owned by apply-kanto-level-scale) ──
 const kanto = { lo: 45, hi: 58, oldCeiling: 34 }
 
+// ── (7) Non-natural types reverted (read live; owned by
+//        apply-revert-nonnatural-types.mts) ──
+// The hack had given a handful of species a second type they don't have in
+// vanilla — most visibly the Johto starters. We read each species' CURRENT
+// typing out of the ROM and only report it as reverted if it now matches the
+// vanilla target, so this card can't claim a fix the cartridge didn't make.
+// Emit raw type tokens ("GRASS"); the HTML step handles display casing.
+const typeName = (t: number) => r.typeNames[t] ?? `#${t}`
+// Species → (the type this hack added, the vanilla typing it should read now).
+const REVERT_SPEC: { name: string; added: string; vanilla: string[] }[] = [
+  { name: 'MEGANIUM', added: 'FAIRY', vanilla: ['GRASS'] },
+  { name: 'TYPHLOSION', added: 'GROUND', vanilla: ['FIRE'] },
+  { name: 'FERALIGATR', added: 'DRAGON', vanilla: ['WATER'] },
+  { name: 'GROVYLE', added: 'DRAGON', vanilla: ['GRASS'] },
+  { name: 'SCEPTILE', added: 'DRAGON', vanilla: ['GRASS'] },
+  { name: 'SUNFLORA', added: 'FIRE', vanilla: ['GRASS'] },
+  { name: 'GOLDUCK', added: 'PSYCHC', vanilla: ['WATER'] },
+  { name: 'KINGLER', added: 'STEEL', vanilla: ['WATER'] },
+  { name: 'STANTLER', added: 'PSYCHC', vanilla: ['NORMAL'] },
+  { name: 'GULPIN', added: 'NORMAL', vanilla: ['POISON'] },
+  { name: 'SWALOT', added: 'NORMAL', vanilla: ['POISON'] },
+  { name: 'ELECTIVIRE', added: 'FIGHT', vanilla: ['ELECTR'] },
+  { name: 'PARASECT', added: 'GHOST', vanilla: ['BUG', 'GRASS'] },
+  { name: 'NOCTOWL', added: 'PSYCHC', vanilla: ['NORMAL', 'FLYING'] },
+]
+interface TypeRevert { name: string; added: string; now: string[]; starter: boolean }
+const STARTER_ORDER = ['MEGANIUM', 'TYPHLOSION', 'FERALIGATR', 'GROVYLE', 'SCEPTILE']
+const typeReverts: TypeRevert[] = []
+for (const tr of REVERT_SPEC) {
+  const id = r.species.findIndex((s) => s.name && s.name.toUpperCase() === tr.name)
+  if (id < 0) continue
+  const s = r.species[id]
+  const cur = s.type1 === s.type2 ? [typeName(s.type1)] : [typeName(s.type1), typeName(s.type2)]
+  // Only report species whose ROM typing already equals the vanilla target.
+  if (cur.length !== tr.vanilla.length || cur.some((t, i) => t !== tr.vanilla[i])) continue
+  typeReverts.push({ name: tr.name, added: tr.added, now: cur, starter: STARTER_ORDER.includes(tr.name) })
+}
+typeReverts.sort((a, b) => {
+  const ai = STARTER_ORDER.indexOf(a.name)
+  const bi = STARTER_ORDER.indexOf(b.name)
+  if (ai >= 0 || bi >= 0) return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi)
+  return a.name.localeCompare(b.name)
+})
+
 const out = {
   itemEvos,
   levelEvos,
@@ -115,10 +159,12 @@ const out = {
   removedMoves: REMOVED_MOVES,
   tm26,
   kanto,
+  typeReverts,
 }
 writeFileSync(resolve(here, 'changes-data.json'), JSON.stringify(out, null, 2))
 console.log(`wrote scripts/changes-data.json`)
 console.log(`  item→stone evolutions: ${itemEvos.length} (${itemEvos.map((e) => e.from).join(', ')})`)
 console.log(`  trade→level evolutions: ${levelEvos.length} (${levelEvos.map((e) => `${e.from}→${e.to} Lv${e.level}`).join(', ')})`)
 console.log(`  vitamins: ${vitaminPrices.map((v) => `${v.name} ₽${v.price}`).join(', ')}`)
+console.log(`  type reverts: ${typeReverts.length} (${typeReverts.map((t) => `${t.name} -${t.added}`).join(', ')})`)
 if (stillPresent.length) console.warn(`  ⚠ removed species still name-present: ${stillPresent.join(', ')}`)

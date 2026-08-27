@@ -21,6 +21,7 @@ interface Data {
   removedMoves: string[]
   tm26: { tm: string; move: string; brockNow: string; where: string }
   kanto: { lo: number; hi: number; oldCeiling: number }
+  typeReverts: { name: string; added: string; now: string[]; starter: boolean }[]
 }
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -61,6 +62,28 @@ function levelEvoRow(e: Data['levelEvos'][number]): string {
   ${mon(e.to)}
 </li>`
 }
+
+// Type tokens as the ROM stores them → display labels.
+const typeLabel = (t: string) =>
+  ({ FIGHT: 'Fighting', PSYCHC: 'Psychic', ELECTR: 'Electric' } as Record<string, string>)[t] ?? title(t)
+const typingOf = (now: string[]) => now.map(typeLabel).join('/')
+const addedLabel = (t: string) => typeLabel(t)
+
+// The starters lead the copy; mono-type reverts get a one-line summary; the two
+// dual-type corrections (which stay dual) get their own clause in the card.
+const starterReverts = d.typeReverts.filter((t) => t.starter)
+const monoReverts = d.typeReverts.filter((t) => !t.starter && t.now.length === 1)
+const dualCorrections = d.typeReverts.filter((t) => !t.starter && t.now.length === 2)
+const starterSentence = starterReverts
+  .map((t) => `${title(t.name)} back to pure ${typingOf(t.now)}`)
+  .join(', ')
+  .replace(/,([^,]*)$/, ' and$1')
+const otherSentence = monoReverts
+  .map((t) => `${title(t.name)} −${addedLabel(t.added)}`)
+  .join(', ')
+const correctionSentence = dualCorrections
+  .map((t) => `${title(t.name)} to ${typingOf(t.now)}`)
+  .join(' and ')
 
 const vitPrice = d.vitaminPrices[0]?.price ?? 9800
 const vitList = d.vitaminPrices.map((v) => title(v.name)).join(', ')
@@ -111,6 +134,18 @@ ${d.levelEvos.map(levelEvoRow).join('\n')}
         <div class="cg-card-h"><span class="cg-badge cg-badge-cut">✕</span><h4>Roster held to Gen 1–4</h4></div>
         <p>Species and moves introduced after Gen 4 were pulled from every trainer team, evolution and wild slot, so nothing in a normal run will fight or become one of them — including ${esc(removedSpeciesList)}. The fairy-era moves ${esc(removedMovesList)} were removed too; this is the <em>no-fairy</em> build.</p>
       </article>
+${
+  d.typeReverts.length
+    ? `      <article class="cg-card">
+        <div class="cg-card-h"><span class="cg-badge cg-badge-type">◈</span><h4>Starters back to their real types</h4></div>
+        <p>An earlier build had bolted a second type onto several Pokémon that are single-type in the games — most obviously the Johto starters. Those are reverted: <strong>${esc(starterSentence)}</strong>.${
+        otherSentence ? ` A few others lost an invented second type as well (${esc(otherSentence)}).` : ''
+      }${
+        correctionSentence ? ` Two dual-types were also corrected to their canon pairing — ${esc(correctionSentence)}.` : ''
+      }</p>
+      </article>`
+    : ''
+}
     </div>
   </section>`
 
@@ -147,6 +182,8 @@ const css = `
   border:1px solid color-mix(in srgb,var(--ember) 32%,var(--line));font-size:15px}
 .cg-badge-cut{background:color-mix(in srgb,var(--ember) 14%,var(--panel-2));color:var(--ember);
   border:1px solid color-mix(in srgb,var(--ember) 32%,var(--line));font-size:14px}
+.cg-badge-type{background:color-mix(in srgb,var(--gold) 16%,var(--panel-2));color:var(--gold-deep);
+  border:1px solid color-mix(in srgb,var(--gold) 34%,var(--line));font-size:14px}
 .cg-card p{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.58;margin:0;max-width:none}
 `
 

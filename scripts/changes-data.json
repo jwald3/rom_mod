@@ -140,5 +140,121 @@
     "lo": 45,
     "hi": 58,
     "oldCeiling": 34
-  }
+  },
+  "typeReverts": [
+    {
+      "name": "MEGANIUM",
+      "added": "FAIRY",
+      "now": [
+        "GRASS"
+      ],
+      "starter": true
+    },
+    {
+      "name": "TYPHLOSION",
+      "added": "GROUND",
+      "now": [
+        "FIRE"
+      ],
+      "starter": true
+    },
+    {
+      "name": "FERALIGATR",
+      "added": "DRAGON",
+      "now": [
+        "WATER"
+      ],
+      "starter": true
+    },
+    {
+      "name": "GROVYLE",
+      "added": "DRAGON",
+      "now": [
+        "GRASS"
+      ],
+      "starter": true
+    },
+    {
+      "name": "SCEPTILE",
+      "added": "DRAGON",
+      "now": [
+        "GRASS"
+      ],
+      "starter": true
+    },
+    {
+      "name": "ELECTIVIRE",
+      "added": "FIGHT",
+      "now": [
+        "ELECTR"
+      ],
+      "starter": false
+    },
+    {
+      "name": "GOLDUCK",
+      "added": "PSYCHC",
+      "now": [
+        "WATER"
+      ],
+      "starter": false
+    },
+    {
+      "name": "GULPIN",
+      "added": "NORMAL",
+      "now": [
+        "POISON"
+      ],
+      "starter": false
+    },
+    {
+      "name": "KINGLER",
+      "added": "STEEL",
+      "now": [
+        "WATER"
+      ],
+      "starter": false
+    },
+    {
+      "name": "NOCTOWL",
+      "added": "PSYCHC",
+      "now": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "starter": false
+    },
+    {
+      "name": "PARASECT",
+      "added": "GHOST",
+      "now": [
+        "BUG",
+        "GRASS"
+      ],
+      "starter": false
+    },
+    {
+      "name": "STANTLER",
+      "added": "PSYCHC",
+      "now": [
+        "NORMAL"
+      ],
+      "starter": false
+    },
+    {
+      "name": "SUNFLORA",
+      "added": "FIRE",
+      "now": [
+        "GRASS"
+      ],
+      "starter": false
+    },
+    {
+      "name": "SWALOT",
+      "added": "NORMAL",
+      "now": [
+        "POISON"
+      ],
+      "starter": false
+    }
+  ]
 }
