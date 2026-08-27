@@ -26,6 +26,13 @@ import type { Combatant, SimContext, SimMove, Status, BoostableStat } from './ty
  * ones, per Gen 3.
  */
 
+/**
+ * Future Sight lands on the turn it's used + 2, so its total damage is spread
+ * over ~3 turns of commitment (and can be wasted). Dividing its one-shot damage
+ * by this gives an honest damage-per-turn for the picker/matchup view.
+ */
+const FUTURE_SIGHT_TURNS = 3
+
 /** Live per-side battle state the formula needs beyond the static Combatant. */
 export interface SideState {
   hp: number
@@ -53,6 +60,8 @@ export interface DamageOptions {
   crit?: boolean
   /** 85–100; omit to use the average (a deterministic 92.5% roll). */
   randomPercent?: number
+  /** Future Sight: typeless — no STAB, no type multipliers, never immune. */
+  typeless?: boolean
 }
 
 export interface DamageResult {
@@ -129,9 +138,11 @@ export function calcDamage(
   move: SimMove,
   opts: DamageOptions = {},
 ): DamageResult {
+  const typeless = opts.typeless ?? false
   const { multiplier, immune } = typeEffectiveness(ctx, move, defender)
-  const stab = move.type === attacker.types[0] || move.type === attacker.types[1]
-  if (immune || move.power <= 0) {
+  const stab = !typeless && (move.type === attacker.types[0] || move.type === attacker.types[1])
+  // Typeless (Future Sight) is never immune and takes no type multiplier.
+  if ((immune && !typeless) || move.power <= 0) {
     return { damage: 0, effectiveness: multiplier, immune, stab }
   }
 
@@ -149,11 +160,14 @@ export function calcDamage(
   if (stab) dmg = Math.floor((dmg * 3) / 2)
 
   // Type multipliers apply one defending type at a time, each floored.
-  const first = ctx.typeChart.mulTenths(move.type, defender.types[0])
-  dmg = Math.floor((dmg * first) / 10)
-  if (defender.types[1] !== defender.types[0]) {
-    const second = ctx.typeChart.mulTenths(move.type, defender.types[1])
-    dmg = Math.floor((dmg * second) / 10)
+  // Typeless moves (Future Sight) skip this entirely.
+  if (!typeless) {
+    const first = ctx.typeChart.mulTenths(move.type, defender.types[0])
+    dmg = Math.floor((dmg * first) / 10)
+    if (defender.types[1] !== defender.types[0]) {
+      const second = ctx.typeChart.mulTenths(move.type, defender.types[1])
+      dmg = Math.floor((dmg * second) / 10)
+    }
   }
 
   const roll = opts.randomPercent ?? 92.5
@@ -175,6 +189,7 @@ export function rollDamage(
   return calcDamage(ctx, attacker, attackerState, defender, defenderState, move, {
     crit,
     randomPercent: rng.range(85, 100),
+    typeless: move.effect.kind === 'future-sight',
   })
 }
 
@@ -240,6 +255,15 @@ export function expectedDamage(
   // treats opponents as awake — this move can't be relied on to deal damage —
   // so it's worth zero here, keeping the picker from rating it as a real hit.
   if (effect.requiresSleep) return 0
+
+  // Future Sight: typeless damage (no crit — a delayed hit can't crit), heavily
+  // discounted for its 2-turn delay. The foe acts freely twice before it lands
+  // and it's wasted on a faint/switch, so its damage-per-turn is roughly a third
+  // of an instant hit. This stops the picker rating it as a full Psychic hit.
+  if (effect.kind === 'future-sight') {
+    const dmg = calcDamage(ctx, attacker, aState, defender, dState, move, { typeless: true }).damage
+    return (dmg / FUTURE_SIGHT_TURNS) * (accuracyOf(move) / 100)
+  }
 
   const base = calcDamage(ctx, attacker, aState, defender, dState, move, {})
   if (base.immune) return 0

@@ -50,6 +50,7 @@ export interface SimEffect {
     | 'super-fang'
     | 'ohko'
     | 'charge' // two-turn move; turn one does nothing
+    | 'future-sight' // delayed hit, lands 2 turns later; typeless
     | 'heal'
     | 'rest'
     | 'explosion'

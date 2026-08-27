@@ -595,6 +595,11 @@ export function classifyEffect(move: MoveInfo): SimEffect {
       // Modeled as a charge move with the idle turn *after* the hit; close
       // enough on damage-per-turn, which is what the harness measures.
       return { kind: 'charge', modeled: true, label: 'recharges after use' }
+    case EFFECT.FUTURE_SIGHT:
+      // Delayed: strikes two turns after use, so the foe acts freely in between
+      // and the hit can be wasted on a faint/switch. Typeless (can reach Ghosts),
+      // but its damage-per-turn is a fraction of an instant hit — scored as such.
+      return { kind: 'future-sight', modeled: true, label: 'hits 2 turns later' }
 
     case EFFECT.HIGH_CRITICAL:
       return { kind: 'high-crit', modeled: true, label: 'high critical rate' }

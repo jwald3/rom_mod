@@ -31,7 +31,7 @@ import {
  */
 
 // ── fixtures ──────────────────────────────────────────────────────────────
-const TYPE = { NORMAL: 0, FIGHTING: 1, FLYING: 2, GROUND: 4, FIRE: 10, WATER: 11, GRASS: 12 }
+const TYPE = { NORMAL: 0, FIGHTING: 1, FLYING: 2, GROUND: 4, GHOST: 7, FIRE: 10, WATER: 11, GRASS: 12, PSYCHIC: 14 }
 
 const move = (over: Partial<MoveInfo> & { id: number; name: string }): MoveInfo => ({
   effect: EFFECT.HIT,
@@ -57,6 +57,7 @@ const MOVES: MoveInfo[] = [
   move({ id: 9, name: 'SLASH', power: 70, type: TYPE.NORMAL, effect: EFFECT.HIGH_CRITICAL }),
   move({ id: 10, name: 'EXPLOSION', power: 250, type: TYPE.NORMAL, effect: EFFECT.EXPLOSION }),
   move({ id: 11, name: 'DREAM EATER', power: 100, type: TYPE.NORMAL, effect: EFFECT.DREAM_EATER }),
+  move({ id: 12, name: 'FUTURE SIGHT', power: 100, type: TYPE.PSYCHIC, effect: EFFECT.FUTURE_SIGHT }),
 ]
 
 const CHART = typeChartFromRows([
@@ -65,6 +66,7 @@ const CHART = typeChartFromRows([
   { attack: TYPE.FIRE, defend: TYPE.WATER, mul: MUL_NOT_VERY, afterForesight: false },
   { attack: TYPE.GROUND, defend: TYPE.FLYING, mul: MUL_NO_EFFECT, afterForesight: false },
   { attack: TYPE.GROUND, defend: TYPE.FIRE, mul: MUL_SUPER, afterForesight: false },
+  { attack: TYPE.NORMAL, defend: TYPE.GHOST, mul: MUL_NO_EFFECT, afterForesight: false },
 ])
 
 const ctx: SimContext = {
@@ -242,6 +244,27 @@ describe('damage formula', () => {
 
   it('handles fixed-damage moves outside the formula', () => {
     expect(expectedDamage(ctx, attacker, defender, toSimMove(MOVES[8]))).toBe(20)
+  })
+
+  it('discounts Future Sight for its delay and scores it typeless', () => {
+    // FUTURE SIGHT (Psychic, 100 BP) and WATER GUN (100 BP, neutral, non-STAB)
+    // hit for the same base, but Future Sight lands two turns later — its
+    // damage-per-turn should be about a third, never a full hit.
+    const fs = expectedDamage(ctx, attacker, defender, toSimMove(MOVES[12]))
+    const neutral = expectedDamage(ctx, attacker, defender, toSimMove(MOVES[3])) // WATER GUN
+    expect(fs).toBeGreaterThan(0)
+    // ≈ 1/3 of a plain hit (delay discount); allow slack for crit weighting and
+    // flooring differences between the two paths.
+    expect(fs).toBeGreaterThan(neutral / 4)
+    expect(fs).toBeLessThan(neutral / 2.5)
+  })
+
+  it('lets Future Sight hit a Ghost (typeless)', () => {
+    // A Normal move is immune vs Ghost; Future Sight is typeless, so it still
+    // lands — that Ghost coverage is the whole point of the move.
+    const ghost = buildCombatant(ctx, species({ ...FOEMON, type1: TYPE.GHOST, type2: TYPE.GHOST }), { level: 50, moves: [1] })
+    expect(hit(1, {}, ghost).immune).toBe(true) // TACKLE (Normal) can't touch it
+    expect(expectedDamage(ctx, attacker, ghost, toSimMove(MOVES[12]))).toBeGreaterThan(0)
   })
 })
 

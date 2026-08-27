@@ -300,12 +300,13 @@ function takeTurn(
     return
   }
 
-  // Immunity check before anything else fires.
+  // Immunity check before anything else fires. Future Sight is typeless, so it
+  // is never blocked by type immunity (it can hit Ghosts).
   const { immune } = typeEffectiveness(ctx, move, defender.c)
   const damaging = move.power > 0 || move.effect.kind === 'fixed-damage' ||
     move.effect.kind === 'level-damage' || move.effect.kind === 'psywave' ||
     move.effect.kind === 'super-fang' || move.effect.kind === 'ohko'
-  if (immune && damaging) {
+  if (immune && damaging && effect.kind !== 'future-sight') {
     say(`${move.name} had no effect`)
     return
   }
