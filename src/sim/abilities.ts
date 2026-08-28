@@ -35,6 +35,7 @@ export type AbilityKey =
   | 'marvel-scale'
   | 'transistor'
   | 'dragons-maw'
+  | 'truant'
 
 /** Ability name (normalized) → what the engine does with it. */
 const BY_NAME: Record<string, AbilityKey> = {
@@ -70,6 +71,7 @@ const BY_NAME: Record<string, AbilityKey> = {
   MARVELSCALE: 'marvel-scale',
   TRANSISTOR: 'transistor',
   DRAGONSMAW: 'dragons-maw',
+  TRUANT: 'truant',
 }
 
 /** Which status each status-immunity ability blocks. */
@@ -160,6 +162,11 @@ export function hasSpeedBoost(c: Combatant): boolean {
 /** Intimidate: −1 to the foe's Attack on entry. */
 export function hasIntimidate(c: Combatant): boolean {
   return abilityKey(c.abilityName) === 'intimidate'
+}
+
+/** Truant: acts only every other turn — it loafs after any turn it moved. */
+export function hasTruant(c: Combatant): boolean {
+  return abilityKey(c.abilityName) === 'truant'
 }
 
 /**

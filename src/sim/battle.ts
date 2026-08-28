@@ -16,6 +16,7 @@ import {
   blocksStatDrops,
   hasIntimidate,
   hasSpeedBoost,
+  hasTruant,
   ignoresRecoil,
   statusImmunity,
 } from './abilities'
@@ -50,6 +51,8 @@ export interface Fighter {
   /** A two-turn move part-way through its charge. */
   charging: SimMove | null
   flinched: boolean
+  /** Truant: true on a turn this mon must loaf (it moved last turn). */
+  loafing: boolean
   /** Move ids already used, so the AI doesn't loop on setup/status. */
   usedSetup: Set<number>
   usedStatus: Set<number>
@@ -68,6 +71,7 @@ export function makeFighter(c: Combatant): Fighter {
     berryUsed: false,
     charging: null,
     flinched: false,
+    loafing: false,
     usedSetup: new Set(),
     usedStatus: new Set(),
   }
@@ -209,6 +213,17 @@ function takeTurn(
   const say = (t: string): void => log(t, attacker.c.species)
 
   if (attacker.hp <= 0) return
+
+  // Truant: loaf every other turn. Alternates from turn one (act, loaf, act…),
+  // so the mon effectively gets half as many turns as its opponent.
+  if (hasTruant(attacker.c)) {
+    if (attacker.loafing) {
+      attacker.loafing = false
+      say('is loafing around')
+      return
+    }
+    attacker.loafing = true
+  }
 
   // Flinch — set by the defender's move earlier this turn.
   if (attacker.flinched) {

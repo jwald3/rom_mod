@@ -5,6 +5,7 @@ import {
   attackMultiplier,
   blocksCrits,
   defenseMultiplier,
+  hasTruant,
   hasWonderGuard,
 } from './abilities'
 import { isPhysicalType } from './effects'
@@ -274,6 +275,11 @@ export function expectedDamage(
   if (effect.kind === 'multi-hit') perHit *= 3 // 2–5 hits, mean 3 with the 3/8-3/8-1/8-1/8 spread
   if (effect.kind === 'double-hit') perHit *= 2
   if (effect.kind === 'charge') perHit /= 2 // one damaging turn out of two
+
+  // Truant acts only every other turn — half the damage-per-turn (Slaking's
+  // monstrous stats are meant to be balanced by this, so the picker and the
+  // matchup score must see it, not just the battle loop).
+  if (hasTruant(attacker)) perHit /= 2
 
   return perHit * (accuracyOf(move) / 100)
 }

@@ -73,7 +73,7 @@ const ctx: SimContext = {
   moves: MOVES,
   typeChart: CHART,
   typeNames: ['NORMAL', 'FIGHTING', 'FLYING', 'POISON', 'GROUND', 'ROCK', 'BUG', 'GHOST', 'STEEL', '???', 'FIRE', 'WATER', 'GRASS'],
-  abilityNames: ['-', 'LEVITATE', 'BLAZE', 'HUGE POWER', 'WONDER GUARD', 'SPORE POWER'],
+  abilityNames: ['-', 'LEVITATE', 'BLAZE', 'HUGE POWER', 'WONDER GUARD', 'SPORE POWER', 'TRUANT'],
   itemNames: ['', 'CHARCOAL', 'LEFTOVERS', 'SITRUS BERRY', 'MEGA WIDGET'],
   speciesNames: ['-', 'TESTMON', 'FOEMON'],
 }
@@ -266,6 +266,16 @@ describe('damage formula', () => {
     expect(hit(1, {}, ghost).immune).toBe(true) // TACKLE (Normal) can't touch it
     expect(expectedDamage(ctx, attacker, ghost, toSimMove(MOVES[12]))).toBeGreaterThan(0)
   })
+
+  it('halves expected damage for a Truant attacker', () => {
+    // Truant acts every other turn, so its damage-per-turn is half — the picker
+    // and matchup score must see it (Slaking's stats are balanced by this).
+    const normal = buildCombatant(ctx, TESTMON, { level: 50, moves: [1] })
+    const truant = buildCombatant(ctx, species({ ...TESTMON, ability1: 6 }), { level: 50, moves: [1] })
+    const nd = expectedDamage(ctx, normal, defender, toSimMove(MOVES[1]))
+    const td = expectedDamage(ctx, truant, defender, toSimMove(MOVES[1]))
+    expect(td).toBeCloseTo(nd / 2, 5)
+  })
 })
 
 // ── effects ───────────────────────────────────────────────────────────────
@@ -455,6 +465,18 @@ describe('battle simulation', () => {
     const passive = buildCombatant(ctx, FOEMON, { level: 50, moves: [4] }) // GROWL
     const result = simulateBattle(ctx, dreamer, passive, makeRng(1), { maxTurns: 10 })
     expect(result.winner).toBe('draw')
+  })
+
+  it('makes a Truant mon loaf every other turn and lose the mirror', () => {
+    // Same species and moves, but one has Truant. It acts half as often, so it
+    // reliably loses the otherwise-even mirror, and the log shows it loafing.
+    const truant = buildCombatant(ctx, species({ ...TESTMON, ability1: 6 }), { level: 50, moves: [1], label: 'Lazy' })
+    const active = buildCombatant(ctx, TESTMON, { level: 50, moves: [1], label: 'Busy' })
+    const r = simulateBattle(ctx, truant, active, makeRng(3), { log: true })
+    expect(r.winner).toBe('b') // the non-Truant side wins
+    expect(r.log.some((l) => /loafing/i.test(l.text))).toBe(true)
+    // over many seeds the Truant side should almost never win
+    expect(simulateMany(ctx, truant, active, 200, 7).winRate).toBeLessThan(20)
   })
 
   it('keeps a log only when asked', () => {
