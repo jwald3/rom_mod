@@ -10,6 +10,7 @@ import {
   loadOverrides,
   makeContext,
   pickBestMoves,
+  quickRate,
   simulateMany,
   viabilityScore,
 } from '../src/sim'
@@ -168,5 +169,25 @@ describe.skipIf(!romExists)('balance harness on the real ROM', () => {
     const cohort = benchmarkCohort(ctx, rom, { only: ['Brock'] })
     simulateMany(ctx, cohort.members[0].combatant, cohort.members[0].combatant, 5, 1)
     expect(rom.rom.bytes.slice(0x6e13bc, 0x6e13bc + 64)).toEqual(before)
+  })
+
+  it('quickRate rates a species and reflects a what-if buff (editor readout)', () => {
+    const meg = rom.species[resolveName(speciesIdx, 'Meganium', 'species')]
+    const base = quickRate(rom, meg)
+    expect(base).not.toBeNull()
+    expect(base!.winRate).toBeGreaterThanOrEqual(0)
+    expect(base!.winRate).toBeLessThanOrEqual(100)
+    expect(base!.opponents).toBeGreaterThan(80)
+    expect(base!.moves.length).toBeGreaterThan(0)
+
+    // A big all-round stat buff must not lower the win rate.
+    const buffed = quickRate(rom, meg, {
+      stats: { hp: 200, atk: 200, def: 200, spa: 200, spd: 200, spe: 200 },
+      type1: meg.type1,
+      type2: meg.type2,
+      ability1: meg.ability1,
+      ability2: meg.ability2,
+    })
+    expect(buffed!.winRate).toBeGreaterThan(base!.winRate)
   })
 })

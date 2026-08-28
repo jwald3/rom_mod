@@ -8,6 +8,8 @@ import {
   computeAllDirty,
 } from '../state/editStore'
 import type { BaseStatsEdit } from '../rom/writer'
+import { quickRate } from '../sim'
+import { useQuickRate } from './useQuickRate'
 import { sortEntries, type LearnsetEntry } from '../rom/tables/learnsets'
 import { tmSlotLabel } from '../rom/tables/compat'
 import { WILD_KINDS, WILD_KIND_LABELS, WILD_SLOT_PERCENTS } from '../rom/tables/wild'
@@ -77,6 +79,14 @@ export function LearnsetEditor() {
     () => computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts, baseStatsDrafts }, loaded).has(selected),
     [drafts, tmDrafts, tutorDrafts, evoDrafts, baseStatsDrafts, loaded, selected],
   )
+  // Live "how good is it" readout for the Stats tab. Baseline = the ROM as-is
+  // (memoized per species); the draft rate re-runs debounced as you edit.
+  const statsTab = tab === 'stats'
+  const baseline = useMemo(
+    () => (statsTab ? quickRate(loaded, species) : null),
+    [statsTab, loaded, species],
+  )
+  const { result: draftRate, pending: ratePending } = useQuickRate(loaded, species, bs, statsTab)
   const tmFlags = tmDrafts[selected] ?? loaded.tmCompat[selected] ?? []
   const tutorFlags = tutorDrafts[selected] ?? loaded.tutorCompat[selected] ?? []
   const tmItems = useMemo(
@@ -580,6 +590,61 @@ export function LearnsetEditor() {
 
       {tab === 'stats' && (
         <div className="space-y-6 p-6">
+          {/* Live win-rate readout */}
+          <section className="rounded-lg border border-slate-700 bg-slate-900/60 p-4">
+            <div className="flex items-baseline justify-between">
+              <h3 className="text-sm font-semibold text-slate-200">
+                Win rate vs. gyms, Elite Four &amp; Red
+              </h3>
+              <span className="text-[11px] text-slate-500">
+                simulated at level parity{ratePending ? ' · rating…' : ''}
+              </span>
+            </div>
+            {draftRate ? (
+              <div className="mt-2 flex flex-wrap items-end gap-x-8 gap-y-2">
+                <div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-mono text-3xl font-bold text-emerald-300">
+                      {draftRate.winRate}%
+                    </span>
+                    {baseline && draftRate.winRate !== baseline.winRate && (
+                      <span
+                        className={`font-mono text-sm font-semibold ${
+                          draftRate.winRate > baseline.winRate ? 'text-emerald-400' : 'text-rose-400'
+                        }`}
+                      >
+                        {draftRate.winRate > baseline.winRate ? '▲ +' : '▼ '}
+                        {draftRate.winRate - baseline.winRate}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    mean win rate{baseline ? ` · ROM baseline ${baseline.winRate}%` : ''}
+                  </div>
+                </div>
+                <div>
+                  <div className="font-mono text-lg text-slate-200">
+                    {draftRate.viability > 0 ? '+' : ''}
+                    {draftRate.viability.toFixed(2)}
+                  </div>
+                  <div className="text-[11px] text-slate-500">viability (−1…+1)</div>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-xs text-slate-300" title={draftRate.moves.join(', ')}>
+                    {draftRate.moves.join(', ') || '(no moves)'}
+                  </div>
+                  <div className="text-[11px] text-slate-500">
+                    harness-picked moveset · {draftRate.opponents} opponents
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="mt-2 text-xs text-slate-500">
+                {ratePending ? 'Rating…' : 'No type chart in this ROM — can’t simulate.'}
+              </p>
+            )}
+          </section>
+
           {/* Base stats */}
           <section>
             <div className="mb-2 flex items-baseline justify-between">
