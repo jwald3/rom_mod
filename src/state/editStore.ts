@@ -10,6 +10,8 @@ import {
   type WildKind,
 } from '../rom/tables/wild'
 import { evosEqual, type Evolution } from '../rom/tables/evolutions'
+import type { SpeciesInfo } from '../rom/tables/species'
+import type { BaseStatsEdit } from '../rom/writer'
 import { trainersEqual, trainerToEdit, type TrainerEdit } from '../rom/tables/trainers'
 import { prizesEqual, PRIZE_KINDS, type Prize, type PrizeKind } from '../rom/tables/gameCorner'
 import { shopsEqual } from '../rom/tables/shops'
@@ -32,6 +34,7 @@ export type EditRecord =
   /** The global tutor move-id list (which move each tutor slot teaches). species unused (0). */
   | { field: 'tutor-moves'; species: number; prev: number[]; next: number[] }
   | { field: 'evo'; species: number; prev: Evolution[]; next: Evolution[] }
+  | { field: 'base-stats'; species: number; prev: BaseStatsEdit; next: BaseStatsEdit }
   /** species carries the wild area index so undo can jump to it. */
   | { field: 'wild'; species: number; key: string; prev: WildGroupEdit; next: WildGroupEdit }
   /** species carries the trainer index so undo can jump to it. */
@@ -53,6 +56,8 @@ interface EditStore {
   /** Keyed by wildKey(areaIndex, kind). */
   wildDrafts: Record<string, WildGroupEdit>
   evoDrafts: Record<number, Evolution[]>
+  /** Base stats / types / abilities drafts, keyed by species id. */
+  baseStatsDrafts: Record<number, BaseStatsEdit>
   /** Keyed by trainer index. */
   trainerDrafts: Record<number, TrainerEdit>
   /** Game Corner prize drafts, keyed by list kind. */
@@ -74,6 +79,8 @@ interface EditStore {
   applyWild(areaIndex: number, kind: WildKind, next: WildGroupEdit): void
   /** Replace a species' evolution list (records an undo step). No-op if unchanged. */
   applyEvos(species: number, next: Evolution[]): void
+  /** Replace a species' base stats / types / abilities (records an undo step). No-op if unchanged. */
+  applyBaseStats(species: number, next: BaseStatsEdit): void
   /** Replace an NPC trainer (records an undo step). No-op if unchanged. */
   applyTrainer(index: number, next: TrainerEdit): void
   /** Replace a Game Corner prize list (records an undo step). No-op if unchanged. */
@@ -117,6 +124,60 @@ export function effectiveTutorMoves(draft: number[] | null, loaded: LoadedRom): 
 /** True when the tutor move-id draft differs from the ROM. */
 export function isTutorMovesDirty(draft: number[] | null, loaded: LoadedRom): boolean {
   return draft !== null && !moveIdsEqual(draft, loaded.tutorMoves)
+}
+
+/** A species' base stats / types / abilities as an editable draft. */
+export function speciesToBaseStats(s: SpeciesInfo): BaseStatsEdit {
+  return {
+    stats: { ...s.stats },
+    type1: s.type1,
+    type2: s.type2,
+    ability1: s.ability1,
+    ability2: s.ability2,
+  }
+}
+
+export function baseStatsEqual(a: BaseStatsEdit, b: BaseStatsEdit): boolean {
+  return (
+    a.type1 === b.type1 &&
+    a.type2 === b.type2 &&
+    a.ability1 === b.ability1 &&
+    a.ability2 === b.ability2 &&
+    (Object.keys(a.stats) as (keyof BaseStatsEdit['stats'])[]).every(
+      (k) => a.stats[k] === b.stats[k],
+    )
+  )
+}
+
+function originalBaseStats(species: number): BaseStatsEdit {
+  const s = useRomStore.getState().loaded?.species?.[species]
+  return s
+    ? speciesToBaseStats(s)
+    : { stats: { hp: 1, atk: 1, def: 1, spa: 1, spd: 1, spe: 1 }, type1: 0, type2: 0, ability1: 0, ability2: 0 }
+}
+
+/** Effective (draft-or-ROM) base-stats edit for a species. */
+export function effectiveBaseStats(
+  drafts: Record<number, BaseStatsEdit>,
+  loaded: LoadedRom,
+  species: number,
+): BaseStatsEdit {
+  return drafts[species] ?? speciesToBaseStats(loaded.species[species])
+}
+
+/** Species whose base-stats drafts differ from the ROM. */
+export function computeBaseStatsDirtySet(
+  drafts: Record<number, BaseStatsEdit>,
+  loaded: LoadedRom,
+): Set<number> {
+  const dirty = new Set<number>()
+  for (const key of Object.keys(drafts)) {
+    const species = Number(key)
+    if (!baseStatsEqual(drafts[species], speciesToBaseStats(loaded.species[species]))) {
+      dirty.add(species)
+    }
+  }
+  return dirty
 }
 
 function originalEvos(species: number): Evolution[] {
@@ -260,13 +321,14 @@ export function effectiveTrainer(
 
 /** Union of learnset + TM + tutor + evolution dirty species. */
 export function computeAllDirty(
-  s: Pick<EditStore, 'drafts' | 'tmDrafts' | 'tutorDrafts' | 'evoDrafts'>,
+  s: Pick<EditStore, 'drafts' | 'tmDrafts' | 'tutorDrafts' | 'evoDrafts' | 'baseStatsDrafts'>,
   loaded: LoadedRom,
 ): Set<number> {
   const dirty = computeDirtySet(s.drafts, loaded.learnsets)
   for (const sp of computeCompatDirtySet(s.tmDrafts, loaded.tmCompat)) dirty.add(sp)
   for (const sp of computeCompatDirtySet(s.tutorDrafts, loaded.tutorCompat)) dirty.add(sp)
   for (const sp of computeEvoDirtySet(s.evoDrafts, loaded)) dirty.add(sp)
+  for (const sp of computeBaseStatsDirtySet(s.baseStatsDrafts, loaded)) dirty.add(sp)
   return dirty
 }
 
@@ -374,6 +436,17 @@ function evoDraftsWith(
   return next
 }
 
+function baseStatsDraftsWith(
+  drafts: Record<number, BaseStatsEdit>,
+  species: number,
+  edit: BaseStatsEdit,
+): Record<number, BaseStatsEdit> {
+  const next = { ...drafts }
+  if (baseStatsEqual(edit, originalBaseStats(species))) delete next[species]
+  else next[species] = edit
+  return next
+}
+
 function trainerDraftsWith(
   drafts: Record<number, TrainerEdit>,
   index: number,
@@ -412,7 +485,7 @@ export const useEditStore = create<EditStore>((set, get) => {
   /** Partial state applying `value` as the draft for the record's field/species. */
   function patch(
     record: EditRecord,
-    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[] | TrainerEdit | Prize[] | number[],
+    value: LearnsetEntry[] | boolean[] | WildGroupEdit | Evolution[] | TrainerEdit | Prize[] | number[] | BaseStatsEdit,
   ): Partial<EditStore> {
     const s = get()
     if (record.field === 'learnset') {
@@ -430,6 +503,9 @@ export const useEditStore = create<EditStore>((set, get) => {
     }
     if (record.field === 'evo') {
       return { evoDrafts: evoDraftsWith(s.evoDrafts, record.species, value as Evolution[]) }
+    }
+    if (record.field === 'base-stats') {
+      return { baseStatsDrafts: baseStatsDraftsWith(s.baseStatsDrafts, record.species, value as BaseStatsEdit) }
     }
     if (record.field === 'trainer') {
       return { trainerDrafts: trainerDraftsWith(s.trainerDrafts, record.species, value as TrainerEdit) }
@@ -459,6 +535,7 @@ export const useEditStore = create<EditStore>((set, get) => {
     tutorMovesDraft: null,
     wildDrafts: {},
     evoDrafts: {},
+    baseStatsDrafts: {},
     trainerDrafts: {},
     gcDrafts: {},
     shopDrafts: {},
@@ -498,6 +575,12 @@ export const useEditStore = create<EditStore>((set, get) => {
       const prev = get().evoDrafts[species] ?? originalEvos(species)
       if (evosEqual(prev, next)) return
       push({ field: 'evo', species, prev, next })
+    },
+
+    applyBaseStats(species, next) {
+      const prev = get().baseStatsDrafts[species] ?? originalBaseStats(species)
+      if (baseStatsEqual(prev, next)) return
+      push({ field: 'base-stats', species, prev, next })
     },
 
     applyTrainer(index, next) {
@@ -547,6 +630,7 @@ export const useEditStore = create<EditStore>((set, get) => {
       get().applyCompat('tm', species, originalFlags('tm', species))
       get().applyCompat('tutor', species, originalFlags('tutor', species))
       get().applyEvos(species, originalEvos(species))
+      get().applyBaseStats(species, originalBaseStats(species))
     },
 
     revertWild(areaIndex) {
@@ -588,6 +672,7 @@ export const useEditStore = create<EditStore>((set, get) => {
         tutorMovesDraft: null,
         wildDrafts: {},
         evoDrafts: {},
+        baseStatsDrafts: {},
         trainerDrafts: {},
         gcDrafts: {},
         shopDrafts: {},

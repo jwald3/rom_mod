@@ -5,12 +5,13 @@ import {
   computeCompatDirtySet,
   computeWildDirtyKeys,
   computeEvoDirtySet,
+  computeBaseStatsDirtySet,
   computeTrainerDirtySet,
   computeGcDirty,
   computeShopDirty,
   isTutorMovesDirty,
 } from '../state/editStore'
-import { applyRomEdits, type RomEdits } from '../rom/writer'
+import { applyRomEdits, type RomEdits, type BaseStatsEdit } from '../rom/writer'
 import { loadRom } from '../rom/loadRom'
 import type { LearnsetEntry } from '../rom/tables/learnsets'
 import type { WildGroupEdit } from '../rom/tables/wild'
@@ -25,13 +26,14 @@ function setSaveState(saveState: SaveState) {
 
 function buildEdits(): { edits: RomEdits; count: number } {
   const { loaded } = useRomStore.getState()
-  const { drafts, tmDrafts, tutorDrafts, tutorMovesDraft, wildDrafts, evoDrafts, trainerDrafts, gcDrafts, shopDrafts } =
+  const { drafts, tmDrafts, tutorDrafts, tutorMovesDraft, wildDrafts, evoDrafts, baseStatsDrafts, trainerDrafts, gcDrafts, shopDrafts } =
     useEditStore.getState()
   const learnsets = new Map<number, LearnsetEntry[]>()
   const tmCompat = new Map<number, boolean[]>()
   const tutorCompat = new Map<number, boolean[]>()
   const wild = new Map<string, WildGroupEdit>()
   const evolutions = new Map<number, Evolution[]>()
+  const baseStats = new Map<number, BaseStatsEdit>()
   const trainers = new Map<number, TrainerEdit>()
   const gameCorner = new Map<PrizeKind, Prize[]>()
   const shops = new Map<number, number[]>()
@@ -45,12 +47,13 @@ function buildEdits(): { edits: RomEdits; count: number } {
     if (isTutorMovesDirty(tutorMovesDraft, loaded)) tutorMoves = tutorMovesDraft!
     for (const key of computeWildDirtyKeys(wildDrafts, loaded)) wild.set(key, wildDrafts[key])
     for (const s of computeEvoDirtySet(evoDrafts, loaded)) evolutions.set(s, evoDrafts[s])
+    for (const s of computeBaseStatsDirtySet(baseStatsDrafts, loaded)) baseStats.set(s, baseStatsDrafts[s])
     for (const t of computeTrainerDirtySet(trainerDrafts, loaded)) trainers.set(t, trainerDrafts[t])
     for (const kind of computeGcDirty(gcDrafts, loaded)) gameCorner.set(kind, gcDrafts[kind]!)
     for (const cmd of computeShopDirty(shopDrafts, loaded)) shops.set(cmd, shopDrafts[cmd])
   }
   return {
-    edits: { learnsets, tmCompat, tutorCompat, tutorMoves, wild, evolutions, trainers, gameCorner, shops },
+    edits: { learnsets, tmCompat, tutorCompat, tutorMoves, wild, evolutions, baseStats, trainers, gameCorner, shops },
     count:
       learnsets.size +
       tmCompat.size +
@@ -58,6 +61,7 @@ function buildEdits(): { edits: RomEdits; count: number } {
       (tutorMoves ? 1 : 0) +
       wild.size +
       evolutions.size +
+      baseStats.size +
       trainers.size +
       gameCorner.size +
       shops.size,
@@ -135,6 +139,7 @@ export async function saveInPlace(): Promise<void> {
       tutorMovesDraft: null,
       wildDrafts: {},
       evoDrafts: {},
+      baseStatsDrafts: {},
       trainerDrafts: {},
       gcDrafts: {},
       shopDrafts: {},

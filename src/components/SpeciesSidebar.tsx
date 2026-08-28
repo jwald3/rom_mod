@@ -32,10 +32,11 @@ export function SpeciesSidebar() {
   const tutorDrafts = useEditStore((s) => s.tutorDrafts)
   const wildDrafts = useEditStore((s) => s.wildDrafts)
   const evoDrafts = useEditStore((s) => s.evoDrafts)
+  const baseStatsDrafts = useEditStore((s) => s.baseStatsDrafts)
 
   const dirtySet = useMemo(
-    () => computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts }, loaded),
-    [drafts, tmDrafts, tutorDrafts, evoDrafts, loaded],
+    () => computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts, baseStatsDrafts }, loaded),
+    [drafts, tmDrafts, tutorDrafts, evoDrafts, baseStatsDrafts, loaded],
   )
 
   const wildPresence = useMemo(

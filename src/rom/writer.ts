@@ -55,6 +55,7 @@ export interface WriteOp {
     | 'wild'
     | 'evolution'
     | 'held-items'
+    | 'base-stats'
     | 'trainer'
     | 'trainer-repointed'
     | 'game-corner'
@@ -81,6 +82,8 @@ export interface RomEdits {
   evolutions?: Map<number, Evolution[]>
   /** Wild held items (base stats +12/+14): item1 = 50% slot, item2 = 5% slot. */
   heldItems?: Map<number, HeldItemsEdit>
+  /** Base stats, types and abilities — all in the base-stats struct, in place. */
+  baseStats?: Map<number, BaseStatsEdit>
   /** NPC trainer teams, keyed by trainer index. */
   trainers?: Map<number, TrainerEdit>
   /** Game Corner prize lists to regenerate (keyed by list kind). */
@@ -94,7 +97,22 @@ export interface HeldItemsEdit {
   item2: number
 }
 
+/** A species' base stats, types and abilities — all live in the same struct. */
+export interface BaseStatsEdit {
+  stats: { hp: number; atk: number; def: number; spa: number; spd: number; spe: number }
+  type1: number
+  type2: number
+  ability1: number
+  ability2: number
+}
+
 const HELD_ITEMS_OFFSET = 12 // within the 28-byte base stats struct
+// Offsets within the base-stats struct (stats first, then types, then abilities).
+const STAT_OFFSET = { hp: 0, atk: 1, def: 2, spe: 3, spa: 4, spd: 5 } as const
+const TYPE1_OFFSET = 6
+const TYPE2_OFFSET = 7
+const ABILITY1_OFFSET = 22
+const ABILITY2_OFFSET = 23
 
 /**
  * Apply learnset edits to a copy of the ROM. Never mutates the source.
@@ -333,6 +351,48 @@ export function applyRomEdits(
         oldOffset: offset,
         newOffset: offset,
         byteLength: 4,
+        erasedOld: false,
+      })
+    }
+  }
+
+  // Base stats / types / abilities: all in the base-stats struct, written in
+  // place (the struct is fixed-size, so no repointing). Every field is range-
+  // checked before the write.
+  if (romEdits.baseStats) {
+    for (const [species, edit] of [...romEdits.baseStats.entries()].sort((a, b) => a[0] - b[0])) {
+      if (species < 0 || species >= anchors.speciesCount) {
+        throw new Error(`Base stats: invalid species #${species}`)
+      }
+      for (const [label, v] of Object.entries(edit.stats)) {
+        if (!Number.isInteger(v) || v < 1 || v > 255) {
+          throw new Error(`Species #${species}: ${label} ${v} out of range (1–255)`)
+        }
+      }
+      for (const [label, id, count] of [
+        ['type1', edit.type1, anchors.typeCount],
+        ['type2', edit.type2, anchors.typeCount],
+        ['ability1', edit.ability1, anchors.abilityCount],
+        ['ability2', edit.ability2, anchors.abilityCount],
+      ] as const) {
+        if (!Number.isInteger(id) || id < 0 || id >= count) {
+          throw new Error(`Species #${species}: invalid ${label} #${id}`)
+        }
+      }
+      const base = anchors.baseStats + species * anchors.baseStatsLen
+      for (const [key, off] of Object.entries(STAT_OFFSET)) {
+        out[base + off] = edit.stats[key as keyof BaseStatsEdit['stats']]
+      }
+      out[base + TYPE1_OFFSET] = edit.type1
+      out[base + TYPE2_OFFSET] = edit.type2
+      out[base + ABILITY1_OFFSET] = edit.ability1
+      out[base + ABILITY2_OFFSET] = edit.ability2
+      ops.push({
+        species,
+        kind: 'base-stats',
+        oldOffset: base,
+        newOffset: base,
+        byteLength: anchors.baseStatsLen,
         erasedOld: false,
       })
     }

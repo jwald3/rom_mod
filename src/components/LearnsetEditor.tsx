@@ -4,8 +4,10 @@ import {
   useEditStore,
   effectiveEntries,
   effectiveWildGroup,
+  effectiveBaseStats,
   computeAllDirty,
 } from '../state/editStore'
+import type { BaseStatsEdit } from '../rom/writer'
 import { sortEntries, type LearnsetEntry } from '../rom/tables/learnsets'
 import { tmSlotLabel } from '../rom/tables/compat'
 import { WILD_KINDS, WILD_KIND_LABELS, WILD_SLOT_PERCENTS } from '../rom/tables/wild'
@@ -24,7 +26,12 @@ import { MovePicker } from './MovePicker'
 import { CompatGrid } from './CompatGrid'
 import { LevelInput } from './LevelInput'
 
-type Tab = 'levelup' | 'tm' | 'tutor' | 'evo' | 'locations'
+type Tab = 'levelup' | 'tm' | 'tutor' | 'evo' | 'stats' | 'locations'
+
+const STAT_KEYS = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const
+const STAT_LABELS: Record<(typeof STAT_KEYS)[number], string> = {
+  hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe',
+}
 
 function stat(v: number): string {
   return v === 0 ? '—' : String(v)
@@ -40,9 +47,10 @@ export function LearnsetEditor() {
   const tutorMovesDraft = useEditStore((s) => s.tutorMovesDraft)
   const wildDrafts = useEditStore((s) => s.wildDrafts)
   const evoDrafts = useEditStore((s) => s.evoDrafts)
+  const baseStatsDrafts = useEditStore((s) => s.baseStatsDrafts)
   const clipboard = useEditStore((s) => s.clipboard)
   const recentMoves = useEditStore((s) => s.recentMoves)
-  const { apply, applyCompat, applyTutorMoves, applyEvos, revert, copy, paste, noteRecentMove } =
+  const { apply, applyCompat, applyTutorMoves, applyEvos, applyBaseStats, revert, copy, paste, noteRecentMove } =
     useEditStore.getState()
 
   const [tab, setTab] = useState<Tab>('levelup')
@@ -54,9 +62,20 @@ export function LearnsetEditor() {
 
   const species = loaded.species[selected]
   const entries = effectiveEntries(drafts, loaded.learnsets, selected)
+  const bs = effectiveBaseStats(baseStatsDrafts, loaded, selected)
+  const bst = STAT_KEYS.reduce((n, k) => n + bs.stats[k], 0)
+  /** Apply one field of the base-stats draft, leaving the rest untouched. */
+  const patchBaseStats = (
+    change: Partial<Omit<BaseStatsEdit, 'stats'>> & { stats?: Partial<BaseStatsEdit['stats']> },
+  ) =>
+    applyBaseStats(selected, {
+      ...bs,
+      ...change,
+      stats: { ...bs.stats, ...(change.stats ?? {}) },
+    })
   const dirty = useMemo(
-    () => computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts }, loaded).has(selected),
-    [drafts, tmDrafts, tutorDrafts, evoDrafts, loaded, selected],
+    () => computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts, baseStatsDrafts }, loaded).has(selected),
+    [drafts, tmDrafts, tutorDrafts, evoDrafts, baseStatsDrafts, loaded, selected],
   )
   const tmFlags = tmDrafts[selected] ?? loaded.tmCompat[selected] ?? []
   const tutorFlags = tutorDrafts[selected] ?? loaded.tutorCompat[selected] ?? []
@@ -242,15 +261,14 @@ export function LearnsetEditor() {
 
         <div className="mt-2 flex items-center gap-4 text-xs text-slate-500">
           <span className="font-mono">
-            HP {species.stats.hp} · ATK {species.stats.atk} · DEF {species.stats.def} · SPA{' '}
-            {species.stats.spa} · SPD {species.stats.spd} · SPE {species.stats.spe} · BST{' '}
-            {Object.values(species.stats).reduce((a, b) => a + b, 0)}
+            HP {bs.stats.hp} · ATK {bs.stats.atk} · DEF {bs.stats.def} · SPA {bs.stats.spa} · SPD{' '}
+            {bs.stats.spd} · SPE {bs.stats.spe} · BST {bst}
           </span>
           <span>
-            {loaded.abilityNames[species.ability1] ?? `ability #${species.ability1}`}
-            {species.ability2 !== 0 &&
-              species.ability2 !== species.ability1 &&
-              ` / ${loaded.abilityNames[species.ability2] ?? `ability #${species.ability2}`}`}
+            {loaded.abilityNames[bs.ability1] ?? `ability #${bs.ability1}`}
+            {bs.ability2 !== 0 &&
+              bs.ability2 !== bs.ability1 &&
+              ` / ${loaded.abilityNames[bs.ability2] ?? `ability #${bs.ability2}`}`}
           </span>
         </div>
 
@@ -288,6 +306,7 @@ export function LearnsetEditor() {
               ['tm', `TM/HM (${tmFlags.filter(Boolean).length})`],
               ['tutor', `Tutors (${tutorFlags.filter(Boolean).length})`],
               ['evo', `Evolution (${evolutions.length})`],
+              ['stats', 'Stats & Types'],
               ['locations', `Locations (${locations.length})`],
             ] as [Tab, string][]
           ).map(([id, label]) => (
@@ -556,6 +575,107 @@ export function LearnsetEditor() {
             Silcoon/Cascoon halves only fire correctly on species the engine expects, but levels,
             stones, friendship, and trade work anywhere.
           </p>
+        </div>
+      )}
+
+      {tab === 'stats' && (
+        <div className="space-y-6 p-6">
+          {/* Base stats */}
+          <section>
+            <div className="mb-2 flex items-baseline justify-between">
+              <h3 className="text-sm font-semibold text-slate-200">Base stats</h3>
+              <span className="font-mono text-xs text-slate-400">
+                BST <span className="text-emerald-300">{bst}</span>
+              </span>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {STAT_KEYS.map((k) => (
+                <label key={k} className="flex items-center gap-3">
+                  <span className="w-8 shrink-0 text-xs font-medium text-slate-400">
+                    {STAT_LABELS[k]}
+                  </span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={255}
+                    value={bs.stats[k]}
+                    onChange={(e) => {
+                      const v = Math.max(1, Math.min(255, Math.round(Number(e.target.value) || 0)))
+                      patchBaseStats({ stats: { [k]: v } as Partial<BaseStatsEdit['stats']> })
+                    }}
+                    className="w-16 rounded border border-slate-700 bg-slate-900 px-2 py-1 text-right font-mono text-sm text-slate-100 focus:border-emerald-500 focus:outline-none"
+                  />
+                  <span className="h-1.5 flex-1 overflow-hidden rounded bg-slate-800">
+                    <span
+                      className="block h-full bg-emerald-500/70"
+                      style={{ width: `${Math.min(100, (bs.stats[k] / 200) * 100)}%` }}
+                    />
+                  </span>
+                </label>
+              ))}
+            </div>
+          </section>
+
+          {/* Types */}
+          <section>
+            <h3 className="mb-2 text-sm font-semibold text-slate-200">Types</h3>
+            <div className="flex items-center gap-3">
+              {(['type1', 'type2'] as const).map((field) => (
+                <select
+                  key={field}
+                  value={bs[field]}
+                  onChange={(e) => patchBaseStats({ [field]: Number(e.target.value) })}
+                  className="rounded border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm text-slate-100 focus:border-emerald-500 focus:outline-none"
+                >
+                  {loaded.typeNames.map((name, id) => (
+                    <option key={id} value={id}>
+                      {name || `#${id}`}
+                    </option>
+                  ))}
+                </select>
+              ))}
+              <span className="text-xs text-slate-500">
+                {bs.type1 === bs.type2 ? 'single type — set both the same' : 'dual type'}
+              </span>
+            </div>
+          </section>
+
+          {/* Abilities */}
+          <section>
+            <h3 className="mb-2 text-sm font-semibold text-slate-200">Abilities</h3>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {(['ability1', 'ability2'] as const).map((field, i) => (
+                <label key={field} className="flex items-center gap-2">
+                  <span className="w-16 shrink-0 text-xs text-slate-400">
+                    {i === 0 ? 'Slot 1' : 'Slot 2'}
+                  </span>
+                  <select
+                    value={bs[field]}
+                    onChange={(e) => patchBaseStats({ [field]: Number(e.target.value) })}
+                    className="min-w-0 flex-1 rounded border border-slate-700 bg-slate-900 px-2 py-1.5 text-sm text-slate-100 focus:border-emerald-500 focus:outline-none"
+                  >
+                    {loaded.abilityNames.map((name, id) => (
+                      <option key={id} value={id}>
+                        {id === 0 ? '— none —' : name || `#${id}`}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ))}
+            </div>
+            <p className="mt-1.5 text-xs text-slate-500">
+              Slot 2 “none” means the species has a single ability.
+            </p>
+          </section>
+
+          {dirty && (
+            <button
+              onClick={() => revert(selected)}
+              className="rounded border border-slate-700 px-3 py-1.5 text-sm text-slate-300 hover:border-rose-500/60 hover:text-rose-300"
+            >
+              Revert this species to ROM
+            </button>
+          )}
         </div>
       )}
 

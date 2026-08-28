@@ -5,7 +5,8 @@ import { readLearnset, type LearnsetEntry } from '../src/rom/tables/learnsets'
 import { readCompatRow, readMoveIdTable } from '../src/rom/tables/compat'
 import { readEvolutionsFor } from '../src/rom/tables/evolutions'
 import { readTrainer, trainerToEdit } from '../src/rom/tables/trainers'
-import { applyLearnsetEdits, applyRomEdits } from '../src/rom/writer'
+import { readSpecies } from '../src/rom/tables/species'
+import { applyLearnsetEdits, applyRomEdits, type BaseStatsEdit } from '../src/rom/writer'
 
 const FLOOR = 0x800
 
@@ -412,6 +413,76 @@ describe('trainer writes', () => {
     const e = trainerToEdit(readTrainer(rom, anchors, 0))
     e.party[0] = { ...e.party[0], species: 99 }
     applyRomEdits(rom, anchors, { trainers: new Map([[0, e]]) }, opts)
+    expect(rom.bytes).toEqual(before)
+  })
+})
+
+// ── base stats / types / abilities ──────────────────────────────────────────
+/**
+ * The learnset synthetic ROM, extended with a base-stats table (28-byte
+ * structs) at 0x400 so evolutions/trainers/etc. keep their safe anchors and
+ * only the base-stats region is exercised.
+ */
+function baseStatsRom(): { rom: RomBuffer; anchors: AnchorMap } {
+  const { rom, anchors: base } = syntheticRom()
+  const bytes = rom.bytes
+  const put = (species: number, bs: { hp: number; atk: number; def: number; spe: number; spa: number; spd: number; t1: number; t2: number; a1: number; a2: number }) => {
+    const o = 0x400 + species * 28
+    bytes[o] = bs.hp; bytes[o + 1] = bs.atk; bytes[o + 2] = bs.def
+    bytes[o + 3] = bs.spe; bytes[o + 4] = bs.spa; bytes[o + 5] = bs.spd
+    bytes[o + 6] = bs.t1; bytes[o + 7] = bs.t2
+    bytes[o + 22] = bs.a1; bytes[o + 23] = bs.a2
+  }
+  // Bulbasaur-ish: Grass(12)/Poison(3), Overgrow(#65).
+  put(1, { hp: 45, atk: 49, def: 49, spe: 45, spa: 65, spd: 65, t1: 12, t2: 3, a1: 65, a2: 0 })
+  const anchors: AnchorMap = { ...base, baseStats: 0x400, baseStatsLen: 28, typeCount: 18, abilityCount: 78 }
+  return { rom, anchors }
+}
+
+const bsEdit = (o: Partial<Omit<BaseStatsEdit, 'stats'>> & { stats?: Partial<BaseStatsEdit['stats']> } = {}): BaseStatsEdit => ({
+  stats: { hp: 45, atk: 49, def: 49, spa: 65, spd: 65, spe: 45, ...(o.stats ?? {}) },
+  type1: o.type1 ?? 12,
+  type2: o.type2 ?? 3,
+  ability1: o.ability1 ?? 65,
+  ability2: o.ability2 ?? 0,
+})
+
+describe('applyRomEdits base stats', () => {
+  it('writes stats, types and abilities in place and reads them back', () => {
+    const { rom, anchors } = baseStatsRom()
+    const next = bsEdit({ stats: { hp: 80, spe: 100 }, type1: 10, type2: 10, ability1: 66, ability2: 12 })
+    const { bytes, ops } = applyRomEdits(rom, anchors, { baseStats: new Map([[1, next]]) })
+
+    expect(ops).toEqual([
+      { species: 1, kind: 'base-stats', oldOffset: 0x400 + 28, newOffset: 0x400 + 28, byteLength: 28, erasedOld: false },
+    ])
+    const s = readSpecies(new RomBuffer(bytes), anchors)[1]
+    expect(s.stats).toEqual({ hp: 80, atk: 49, def: 49, spa: 65, spd: 65, spe: 100 })
+    expect([s.type1, s.type2]).toEqual([10, 10])
+    expect([s.ability1, s.ability2]).toEqual([66, 12])
+  })
+
+  it('touches only the edited species\' struct bytes', () => {
+    const { rom, anchors } = baseStatsRom()
+    const { bytes } = applyRomEdits(rom, anchors, { baseStats: new Map([[1, bsEdit({ stats: { hp: 200 } })]]) })
+    let diff = 0
+    for (let i = 0; i < bytes.length; i++) if (bytes[i] !== rom.bytes[i]) diff++
+    expect(diff).toBe(1) // just the HP byte
+  })
+
+  it('rejects out-of-range stats, types and abilities', () => {
+    const { rom, anchors } = baseStatsRom()
+    expect(() => applyRomEdits(rom, anchors, { baseStats: new Map([[1, bsEdit({ stats: { hp: 0 } })]]) })).toThrow(/hp/i)
+    expect(() => applyRomEdits(rom, anchors, { baseStats: new Map([[1, bsEdit({ stats: { atk: 256 } })]]) })).toThrow(/atk/i)
+    expect(() => applyRomEdits(rom, anchors, { baseStats: new Map([[1, bsEdit({ type1: 99 })]]) })).toThrow(/type1/i)
+    expect(() => applyRomEdits(rom, anchors, { baseStats: new Map([[1, bsEdit({ ability1: 78 })]]) })).toThrow(/ability1/i)
+    expect(() => applyRomEdits(rom, anchors, { baseStats: new Map([[9, bsEdit()]]) })).toThrow(/species/i)
+  })
+
+  it('never mutates the source buffer', () => {
+    const { rom, anchors } = baseStatsRom()
+    const before = rom.bytes.slice()
+    applyRomEdits(rom, anchors, { baseStats: new Map([[1, bsEdit({ stats: { hp: 111 } })]]) })
     expect(rom.bytes).toEqual(before)
   })
 })

@@ -21,6 +21,7 @@ export function StatusBar() {
   const tutorDrafts = useEditStore((s) => s.tutorDrafts)
   const wildDrafts = useEditStore((s) => s.wildDrafts)
   const evoDrafts = useEditStore((s) => s.evoDrafts)
+  const baseStatsDrafts = useEditStore((s) => s.baseStatsDrafts)
   const trainerDrafts = useEditStore((s) => s.trainerDrafts)
   const tutorMovesDraft = useEditStore((s) => s.tutorMovesDraft)
   const undoDepth = useEditStore((s) => s.undoStack.length)
@@ -35,7 +36,7 @@ export function StatusBar() {
   }, [loaded.fileName, saveState.status])
 
   const { dirtyCount, dirtyLabel } = useMemo(() => {
-    const speciesCount = computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts }, loaded).size
+    const speciesCount = computeAllDirty({ drafts, tmDrafts, tutorDrafts, evoDrafts, baseStatsDrafts }, loaded).size
     const areaCount = computeWildDirtyAreas(wildDrafts, loaded).size
     const trainerCount = computeTrainerDirtySet(trainerDrafts, loaded).size
     const tutorRoster = isTutorMovesDirty(tutorMovesDraft, loaded) ? 1 : 0
@@ -49,7 +50,7 @@ export function StatusBar() {
       dirtyCount: speciesCount + areaCount + trainerCount + tutorRoster,
       dirtyLabel: parts.length > 0 ? `${parts.join(' · ')} modified` : 'No changes',
     }
-  }, [drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, trainerDrafts, tutorMovesDraft, loaded])
+  }, [drafts, tmDrafts, tutorDrafts, wildDrafts, evoDrafts, baseStatsDrafts, trainerDrafts, tutorMovesDraft, loaded])
 
   // Hard validation failures block saving (soft warnings like duplicates don't).
   const hardInvalid = useMemo(() => {
