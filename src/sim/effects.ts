@@ -355,7 +355,7 @@ const PLAIN_DAMAGE_EFFECTS = new Set<number>([
   EFFECT.FALSE_SWIPE,
   EFFECT.QUICK_ATTACK, // priority already comes from the move's own field
   EFFECT.SNORE,
-  EFFECT.RETURN, // max-friendship ⇒ 102 base power, which the ROM already stores
+  EFFECT.RETURN, // power comes from POWER_OVERRIDE (ROM stores a placeholder 1)
   EFFECT.FRUSTRATION,
   EFFECT.HIDDEN_POWER, // ROM stores its 70 base power / Normal typing
   EFFECT.PURSUIT, // no switching in a 1v1 sim, so it never doubles
@@ -613,18 +613,30 @@ export function classifyEffect(move: MoveInfo): SimEffect {
   }
 }
 
+/**
+ * Moves whose real base power isn't in the move table — the engine computes it
+ * from state the ROM stores as base power 1. For a "how good can this mon be"
+ * harness we assume the best case: Return at max friendship, Frustration at min
+ * (both 102 BP). Without this they'd be treated as 1-power whiffs.
+ */
+const POWER_OVERRIDE: Record<number, number> = {
+  [EFFECT.RETURN]: 102,
+  [EFFECT.FRUSTRATION]: 102,
+}
+
 /** Resolve a ROM move into a battle-ready move. */
 export function toSimMove(move: MoveInfo): SimMove {
   const effect = classifyEffect(move)
+  const power = move.power <= 1 ? (POWER_OVERRIDE[move.effect] ?? move.power) : move.power
   let category = categoryOf(move)
   // A "status" effect that somehow carries power is still a damaging move, and
   // a damaging effect with 0 power (a reworked move) is not.
-  if (move.power > 0 && category === 'status') category = isPhysicalType(move.type) ? 'physical' : 'special'
+  if (power > 0 && category === 'status') category = isPhysicalType(move.type) ? 'physical' : 'special'
   return {
     id: move.id,
     name: move.name,
     type: move.type,
-    power: move.power,
+    power,
     accuracy: move.accuracy,
     pp: move.pp,
     priority: move.priority,

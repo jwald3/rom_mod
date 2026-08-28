@@ -58,6 +58,7 @@ const MOVES: MoveInfo[] = [
   move({ id: 10, name: 'EXPLOSION', power: 250, type: TYPE.NORMAL, effect: EFFECT.EXPLOSION }),
   move({ id: 11, name: 'DREAM EATER', power: 100, type: TYPE.NORMAL, effect: EFFECT.DREAM_EATER }),
   move({ id: 12, name: 'FUTURE SIGHT', power: 100, type: TYPE.PSYCHIC, effect: EFFECT.FUTURE_SIGHT }),
+  move({ id: 13, name: 'RETURN', power: 1, type: TYPE.NORMAL, effect: EFFECT.RETURN }),
 ]
 
 const CHART = typeChartFromRows([
@@ -285,6 +286,22 @@ describe('effect classification', () => {
     expect(isPhysicalType(TYPE.GROUND)).toBe(true)
     expect(isPhysicalType(TYPE.FIRE)).toBe(false)
     expect(isPhysicalType(18)).toBe(false) // Fairy is special on this engine
+  })
+
+  it('gives Return/Frustration their real 102 power (ROM stores a placeholder 1)', () => {
+    // The engine computes friendship power at runtime; the move table holds 1.
+    // The harness assumes best case (max friendship), so it must read 102 and
+    // count as a real damaging move, not a 1-power whiff.
+    const ret = toSimMove(MOVES[13])
+    expect(ret.power).toBe(102) // bumped from the ROM's placeholder 1
+    expect(ret.category).toBe('physical')
+    const foe = buildCombatant(ctx, FOEMON, { level: 50, moves: [1] })
+    const self = buildCombatant(ctx, TESTMON, { level: 50, moves: [] })
+    // A real 102-BP hit does far more than the placeholder 1 would: compare to
+    // the same move manually pinned back to power 1.
+    const dmg102 = expectedDamage(ctx, self, foe, ret)
+    const dmg1 = expectedDamage(ctx, self, foe, { ...ret, power: 1 })
+    expect(dmg102).toBeGreaterThan(dmg1 * 10)
   })
 
   it('reads a secondary chance out of effectAccuracy', () => {
