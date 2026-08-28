@@ -93,7 +93,7 @@ function marginalValue(
 }
 
 /** A crude usefulness score for non-damaging moves, so one can win a slot. */
-function utilityScore(move: SimMove): number {
+export function utilityScore(move: SimMove): number {
   const e = move.effect
   switch (e.kind) {
     case 'status':

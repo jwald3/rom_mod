@@ -65,6 +65,8 @@ export function LearnsetEditor() {
   const [simMoves, setSimMoves] = useState<number[] | null>(null)
   /** Which sim move slot is being edited (0–3), or null. */
   const [simMovePicker, setSimMovePicker] = useState<number | null>(null)
+  /** True while the (slow) optimize search runs. */
+  const [optimizing, setOptimizing] = useState(false)
 
   const species = loaded.species[selected]
   const entries = effectiveEntries(drafts, loaded.learnsets, selected)
@@ -188,6 +190,7 @@ export function LearnsetEditor() {
     setFocusLevel(null)
     setSimMoves(null) // sim moveset override is per-species; back to auto-pick
     setSimMovePicker(null)
+    setOptimizing(false)
   }, [selected])
 
   if (!species) return null
@@ -659,14 +662,32 @@ export function LearnsetEditor() {
                 <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
                   Moves used {simMoves ? '(custom)' : '(auto-picked)'}
                 </span>
-                {simMoves && (
+                <div className="flex items-center gap-3">
                   <button
-                    onClick={() => setSimMoves(null)}
-                    className="text-[11px] text-slate-400 hover:text-emerald-300"
+                    disabled={optimizing}
+                    onClick={() => {
+                      setOptimizing(true)
+                      // Let the "Optimizing…" label paint before the blocking search.
+                      setTimeout(() => {
+                        const best = quickRate(loaded, species, bs, { optimize: true })
+                        if (best) setSimMoves(best.moveIds)
+                        setOptimizing(false)
+                      }, 20)
+                    }}
+                    className="text-[11px] font-medium text-emerald-400 hover:text-emerald-300 disabled:text-slate-500"
+                    title="Search for the moveset that wins the most battles (a few seconds)"
                   >
-                    reset to auto
+                    {optimizing ? 'Optimizing…' : '✨ Optimize'}
                   </button>
-                )}
+                  {simMoves && (
+                    <button
+                      onClick={() => setSimMoves(null)}
+                      className="text-[11px] text-slate-400 hover:text-emerald-300"
+                    >
+                      reset to auto
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
                 {[0, 1, 2, 3].map((slot) => {

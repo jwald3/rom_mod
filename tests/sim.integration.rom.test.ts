@@ -199,4 +199,13 @@ describe.skipIf(!romExists)('balance harness on the real ROM', () => {
     expect(rated!.moves.every((m) => m === 'GROWL')).toBe(true)
     expect(rated!.winRate).toBeLessThan(5)
   })
+
+  it('the simulate-candidates picker beats the greedy pick', () => {
+    // Pidgeot is the poster child: greedy takes a charge move + recoil + Toxic
+    // and lands ~36%; the sim picker finds a set that wins far more.
+    const p = rom.species[resolveName(speciesIdx, 'Pidgeot', 'species')]
+    const greedy = quickRate(rom, p)!
+    const optimized = quickRate(rom, p, undefined, { optimize: true })!
+    expect(optimized.winRate).toBeGreaterThan(greedy.winRate + 5)
+  }, 30000) // the optimize search simulates many candidate sets
 })

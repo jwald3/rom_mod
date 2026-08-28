@@ -22,7 +22,7 @@ import {
   levelUpPool,
   machinePool,
   makeContext,
-  pickBestMoves,
+  pickBestMovesBySim,
   simulateMany,
   viabilityScore,
   type Combatant,
@@ -75,15 +75,13 @@ for (const s of rom.species) {
   if (s.id < 1 || s.id > 386) continue // the classic 386-species dex
   if (isExcludedSpecies(s.name)) continue
 
-  // Pick the moveset once, at the endgame level — the pool a mon settles into
-  // (its best four barely change across the L11–L77 band once it's evolved),
-  // and the build that faces the bulk of the hard fights. Then rebuild the same
-  // four moves at each boss's level, so only stats scale per matchup — far
-  // cheaper than re-picking at every level, with effectively identical results.
-  const bare = buildCombatant(ctx, s, { level: hiLevel, moves: [], source: { kind: 'tested' } })
-  const moveIds = pickBestMoves(ctx, bare, levelUpPool(rom.learnsets[s.id], hiLevel), foes, {
-    extra: extraPoolFor(s.id),
-  }).map((m) => m.id)
+  // Pick the moveset by SIMULATING candidate sets (not the greedy damage
+  // proxy) — it finds sets that win 15–25% more for some mons (Pidgeot,
+  // Feraligatr, Alakazam, Typhlosion) by avoiding recoil/charge traps and
+  // dead utility slots. Picked once at the endgame level (the pool a mon
+  // settles into), then rebuilt at each boss's level so only stats scale.
+  const pool = [...levelUpPool(rom.learnsets[s.id], hiLevel), ...extraPoolFor(s.id)]
+  const moveIds = pickBestMovesBySim(ctx, s, pool, foes, hiLevel, foeLevels)
 
   const atLevel = new Map<number, Combatant>()
   const subjectAt = (lvl: number): Combatant => {

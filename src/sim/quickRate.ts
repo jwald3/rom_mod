@@ -6,6 +6,7 @@ import { buildCombatant } from './build'
 import { benchmarkCohort, type CohortMember } from './cohorts'
 import { evaluateCohort, viabilityScore } from './matchup'
 import { levelUpPool, machinePool, pickBestMoves } from './movesets'
+import { pickBestMovesBySim } from './pickMoves'
 import { simulateMany } from './battle'
 import type { Combatant, SimContext } from './types'
 
@@ -52,7 +53,7 @@ export function quickRate(
   rom: LoadedRom,
   species: SpeciesInfo,
   draft?: BaseStatsEdit,
-  opts: { sims?: number; seed?: number; moveOverride?: readonly number[] } = {},
+  opts: { sims?: number; seed?: number; moveOverride?: readonly number[]; optimize?: boolean } = {},
 ): QuickRateResult | null {
   if (rom.typeChart.offset < 0) return null // no type chart → meaningless
   const { ctx, members } = cohortFor(rom)
@@ -83,8 +84,9 @@ export function quickRate(
       source: { kind: 'tested' },
     })
 
-  // A forced moveset (from the editor) wins; otherwise auto-pick the best four
-  // from the level-up + TM/tutor pool, as the tier list does.
+  // A forced moveset (from the editor) wins; otherwise auto-pick. The default
+  // pick is the fast greedy one (instant, for live typing); `optimize` runs the
+  // slower simulate-every-candidate search that finds materially better sets.
   const forced = opts.moveOverride?.filter((id) => id > 0) ?? []
   let moveIds: number[]
   if (forced.length > 0) {
@@ -95,8 +97,12 @@ export function quickRate(
       ...machinePool(rom.tmCompat[species.id], rom.tmMoves),
       ...machinePool(rom.tutorCompat[species.id], rom.tutorMoves),
     ]
-    const bare = buildAt(hiLevel, [])
-    moveIds = pickBestMoves(ctx, bare, pool, foes, {}).map((m) => m.id)
+    if (opts.optimize) {
+      moveIds = pickBestMovesBySim(ctx, species, pool, foes, hiLevel, foeLevels)
+    } else {
+      const bare = buildAt(hiLevel, [])
+      moveIds = pickBestMoves(ctx, bare, pool, foes, {}).map((m) => m.id)
+    }
   }
 
   const atLevel = new Map<number, Combatant>()
