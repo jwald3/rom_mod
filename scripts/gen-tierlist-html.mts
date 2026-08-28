@@ -60,11 +60,11 @@ const typeLabel = (t: string) => ({ FIGHT: 'Fighting', PSYCHC: 'Psychic', ELECTR
 // ── tiers by win-rate band ──
 interface Tier { key: string; label: string; min: number; blurb: string; color: string }
 const TIERS: Tier[] = [
-  { key: 'S', label: 'S', min: 68, color: '#e05a8a', blurb: 'Carries a run. Sweeps the gauntlet even at parity — legendaries and the top-stat monsters.' },
-  { key: 'A', label: 'A', min: 55, color: '#e6602f', blurb: 'Strong picks. A reliable backbone for any team, start to finish.' },
-  { key: 'B', label: 'B', min: 45, color: '#e0b62c', blurb: 'Serviceable. Pulls its weight with the right coverage.' },
-  { key: 'C', label: 'C', min: 35, color: '#4a9d52', blurb: 'Situational. Contributes, but wants support against the back half.' },
-  { key: 'D', label: 'D', min: 22, color: '#3d8bd4', blurb: 'Struggles. A stat or movepool shortfall shows even at level parity.' },
+  { key: 'S', label: 'S', min: 75, color: '#e05a8a', blurb: 'Carries a run. Sweeps the gauntlet even at parity — legendaries and the top-stat monsters.' },
+  { key: 'A', label: 'A', min: 63, color: '#e6602f', blurb: 'Strong picks. A reliable backbone for any team, start to finish.' },
+  { key: 'B', label: 'B', min: 52, color: '#e0b62c', blurb: 'Serviceable. Pulls its weight with the right coverage.' },
+  { key: 'C', label: 'C', min: 40, color: '#4a9d52', blurb: 'Situational. Contributes, but wants support against the back half.' },
+  { key: 'D', label: 'D', min: 28, color: '#3d8bd4', blurb: 'Struggles. A stat or movepool shortfall shows even at level parity.' },
   { key: 'F', label: 'F', min: 0, color: '#5a5250', blurb: 'Route filler and unevolved forms — little to offer a serious team.' },
 ]
 const tierOf = (win: number) => TIERS.find((t) => win >= t.min)!
@@ -122,7 +122,7 @@ const cohortList = d.cohort.join(', ')
 
 const section = `  <section id="tierlist" class="chapter">
     <div class="chapter-head"><span class="ch-mark">§★</span><h2>Tier List</h2></div>
-    <p class="lead">Every obtainable Pokémon ranked by how it actually performs — not by base stats, but by simulated battles against this build's real bosses. Each one is given its best level-up-plus-TM/tutor moveset and run through <strong>${d.sims} battles per opponent</strong> against all ${d.cohort.length} benchmark fights (${esc(cohortList)}). Crucially, it faces each boss <strong>at that boss's own level</strong> — Falkner around Lv ${d.levelLo}, Red up near Lv ${d.levelHi} — the way your ace keeps pace with the badges in a real run, rather than at one flat level that would punish a legendary for being "under-levelled" against endgame Red. The number is its mean win rate across that gauntlet.</p>
+    <p class="lead">Every obtainable Pokémon ranked by how it actually performs — not by base stats, but by simulated battles against this build's real bosses. Each one is given its best four moves — found by simulating candidate movesets and keeping the one that wins the most, drawn from its whole level-up + TM/HM + tutor pool — and run through <strong>${d.sims} battles per opponent</strong> against all ${d.cohort.length} benchmark fights (${esc(cohortList)}). Crucially, it faces each boss <strong>at that boss's own level</strong> — Falkner around Lv ${d.levelLo}, Red up near Lv ${d.levelHi} — the way your ace keeps pace with the badges in a real run, rather than at one flat level that would punish a legendary for being "under-levelled" against endgame Red. The number is its mean win rate across that gauntlet.</p>
     <div class="callout fact"><div class="c-label"><span class="c-ico">◆</span>How this was made</div><p>Produced by the repo's balance harness (<code>scripts/balance.mts</code>) driving the same Gen-3 damage engine the editor uses — seeded, so the ranking is reproducible from the ROM. It models damage, stats, status, crits, PP and Struggle, key abilities (including Truant, so Slaking is judged on the turns it actually gets) and the items the bosses carry; it does <em>not</em> model weather, screens, switching or team synergy, so read a single-number ranking as a strong signal, not gospel. Because every mon fights at level parity, this measures the <em>kit and stats</em> — a raw-stat monster rises to the top where a flat level would have hidden it. Mean win rate across the dex is <strong>${d.meanWin}%</strong>.</p></div>
 
     <div class="tl-tiers">
@@ -130,7 +130,7 @@ ${tierRows}
     </div>
 
     <h3 class="sub-head">Full ranking</h3>
-    <p>All ${d.entries.length} ranked, best to worst. "Moveset" is what the harness picked for each — its level-up pool widened with every TM, HM and move tutor the species can legally use.</p>
+    <p>All ${d.entries.length} ranked, best to worst. "Moveset" is the set the search settled on — the four moves (from its full level-up + TM/HM + tutor pool) that won the most simulated battles.</p>
     <div class="tl-tablewrap">
       <table class="tl-table">
         <thead><tr><th>#</th><th>Tier</th><th>Win</th><th>Dex</th><th>Pokémon</th><th>Type</th><th>Moveset</th></tr></thead>
