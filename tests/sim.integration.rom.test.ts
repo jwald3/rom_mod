@@ -190,4 +190,13 @@ describe.skipIf(!romExists)('balance harness on the real ROM', () => {
     })
     expect(buffed!.winRate).toBeGreaterThan(base!.winRate)
   })
+
+  it('quickRate honours a forced moveset (editable sim moves)', () => {
+    const gatr = rom.species[resolveName(speciesIdx, 'Feraligatr', 'species')]
+    const growl = resolveName(nameIndex(rom.moves.map((m) => m.name)), 'Growl', 'move')
+    // Four non-damaging moves → it can't KO anything → ~0% against the gauntlet.
+    const rated = quickRate(rom, gatr, undefined, { moveOverride: [growl, growl, growl, growl] })
+    expect(rated!.moves.every((m) => m === 'GROWL')).toBe(true)
+    expect(rated!.winRate).toBeLessThan(5)
+  })
 })

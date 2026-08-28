@@ -22,8 +22,10 @@ export interface QuickRateResult {
   winRate: number
   /** −1…+1 viability score from the matchup calculator. */
   viability: number
-  /** The moveset the harness picked, by name. */
+  /** The moveset used, by name (auto-picked unless overridden). */
   moves: string[]
+  /** The move ids used, so the editor can show which slots are set. */
+  moveIds: number[]
   /** How many benchmark opponents were faced. */
   opponents: number
 }
@@ -50,7 +52,7 @@ export function quickRate(
   rom: LoadedRom,
   species: SpeciesInfo,
   draft?: BaseStatsEdit,
-  opts: { sims?: number; seed?: number } = {},
+  opts: { sims?: number; seed?: number; moveOverride?: readonly number[] } = {},
 ): QuickRateResult | null {
   if (rom.typeChart.offset < 0) return null // no type chart → meaningless
   const { ctx, members } = cohortFor(rom)
@@ -81,13 +83,21 @@ export function quickRate(
       source: { kind: 'tested' },
     })
 
-  const pool = [
-    ...levelUpPool(rom.learnsets[species.id], hiLevel),
-    ...machinePool(rom.tmCompat[species.id], rom.tmMoves),
-    ...machinePool(rom.tutorCompat[species.id], rom.tutorMoves),
-  ]
-  const bare = buildAt(hiLevel, [])
-  const moveIds = pickBestMoves(ctx, bare, pool, foes, {}).map((m) => m.id)
+  // A forced moveset (from the editor) wins; otherwise auto-pick the best four
+  // from the level-up + TM/tutor pool, as the tier list does.
+  const forced = opts.moveOverride?.filter((id) => id > 0) ?? []
+  let moveIds: number[]
+  if (forced.length > 0) {
+    moveIds = [...forced]
+  } else {
+    const pool = [
+      ...levelUpPool(rom.learnsets[species.id], hiLevel),
+      ...machinePool(rom.tmCompat[species.id], rom.tmMoves),
+      ...machinePool(rom.tutorCompat[species.id], rom.tutorMoves),
+    ]
+    const bare = buildAt(hiLevel, [])
+    moveIds = pickBestMoves(ctx, bare, pool, foes, {}).map((m) => m.id)
+  }
 
   const atLevel = new Map<number, Combatant>()
   const subjectAt = (level: number): Combatant => {
@@ -105,10 +115,12 @@ export function quickRate(
     winSum += simulateMany(ctx, subjectAt(foeLevels[i]), foe, sims, seed + i * 1013).winRate
   })
 
+  const used = subjectAt(hiLevel).moves
   return {
     winRate: Math.round(winSum / foes.length),
     viability: Number(viabilityScore(matchups).toFixed(2)),
-    moves: subjectAt(hiLevel).moves.map((m) => m.name),
+    moves: used.map((m) => m.name),
+    moveIds: used.map((m) => m.id),
     opponents: foes.length,
   }
 }

@@ -61,6 +61,10 @@ export function LearnsetEditor() {
   /** Which tutor slot is having its move reassigned (global roster edit). */
   const [tutorSlotPicker, setTutorSlotPicker] = useState<number | null>(null)
   const [focusLevel, setFocusLevel] = useState<number | null>(null)
+  /** Forced sim moveset (4 slots) for the win-rate readout; null = auto-pick. */
+  const [simMoves, setSimMoves] = useState<number[] | null>(null)
+  /** Which sim move slot is being edited (0–3), or null. */
+  const [simMovePicker, setSimMovePicker] = useState<number | null>(null)
 
   const species = loaded.species[selected]
   const entries = effectiveEntries(drafts, loaded.learnsets, selected)
@@ -86,7 +90,16 @@ export function LearnsetEditor() {
     () => (statsTab ? quickRate(loaded, species) : null),
     [statsTab, loaded, species],
   )
-  const { result: draftRate, pending: ratePending } = useQuickRate(loaded, species, bs, statsTab)
+  const { result: draftRate, pending: ratePending } = useQuickRate(
+    loaded,
+    species,
+    bs,
+    statsTab,
+    simMoves ?? undefined,
+  )
+  // The moves currently driving the rate: the forced set, else what the harness
+  // auto-picked (shown so you can see and then override them).
+  const simMoveIds = simMoves ?? draftRate?.moveIds ?? []
   const tmFlags = tmDrafts[selected] ?? loaded.tmCompat[selected] ?? []
   const tutorFlags = tutorDrafts[selected] ?? loaded.tutorCompat[selected] ?? []
   const tmItems = useMemo(
@@ -173,6 +186,8 @@ export function LearnsetEditor() {
     setPicker(null)
     setEvoPicker(null)
     setFocusLevel(null)
+    setSimMoves(null) // sim moveset override is per-species; back to auto-pick
+    setSimMovePicker(null)
   }, [selected])
 
   if (!species) return null
@@ -627,14 +642,8 @@ export function LearnsetEditor() {
                     {draftRate.viability > 0 ? '+' : ''}
                     {draftRate.viability.toFixed(2)}
                   </div>
-                  <div className="text-[11px] text-slate-500">viability (−1…+1)</div>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-xs text-slate-300" title={draftRate.moves.join(', ')}>
-                    {draftRate.moves.join(', ') || '(no moves)'}
-                  </div>
                   <div className="text-[11px] text-slate-500">
-                    harness-picked moveset · {draftRate.opponents} opponents
+                    viability (−1…+1) · {draftRate.opponents} opponents
                   </div>
                 </div>
               </div>
@@ -643,6 +652,39 @@ export function LearnsetEditor() {
                 {ratePending ? 'Rating…' : 'No type chart in this ROM — can’t simulate.'}
               </p>
             )}
+
+            {/* Editable simulation moveset */}
+            <div className="mt-3 border-t border-slate-800 pt-3">
+              <div className="mb-1.5 flex items-center justify-between">
+                <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                  Moves used {simMoves ? '(custom)' : '(auto-picked)'}
+                </span>
+                {simMoves && (
+                  <button
+                    onClick={() => setSimMoves(null)}
+                    className="text-[11px] text-slate-400 hover:text-emerald-300"
+                  >
+                    reset to auto
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+                {[0, 1, 2, 3].map((slot) => {
+                  const id = simMoveIds[slot] ?? 0
+                  const mv = id ? loaded.moves[id] : null
+                  return (
+                    <button
+                      key={slot}
+                      onClick={() => setSimMovePicker(slot)}
+                      className="flex items-center justify-between gap-1 rounded border border-slate-700 bg-slate-900 px-2 py-1.5 text-left text-xs text-slate-200 hover:border-emerald-500/60"
+                    >
+                      <span className="truncate">{mv ? mv.name : <span className="text-slate-600">+ add</span>}</span>
+                      {mv && <TypeBadge typeId={mv.type} typeNames={loaded.typeNames} />}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </section>
 
           {/* Base stats */}
@@ -909,6 +951,24 @@ export function LearnsetEditor() {
             setTutorSlotPicker(null)
           }}
           onClose={() => setTutorSlotPicker(null)}
+        />
+      )}
+
+      {simMovePicker !== null && (
+        <MovePicker
+          moves={loaded.moves}
+          typeNames={loaded.typeNames}
+          recentMoves={recentMoves}
+          allowNone
+          onSelect={(id) => {
+            // Seed from the currently-shown moveset so editing one slot keeps
+            // the others; drop empties so the harness sees a clean list.
+            const next = [0, 1, 2, 3].map((s) => (s === simMovePicker ? id : simMoveIds[s] ?? 0))
+            setSimMoves(next.filter((m) => m > 0).length ? next : null)
+            if (id) noteRecentMove(id)
+            setSimMovePicker(null)
+          }}
+          onClose={() => setSimMovePicker(null)}
         />
       )}
     </main>

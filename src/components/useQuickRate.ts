@@ -15,6 +15,8 @@ export function useQuickRate(
   species: SpeciesInfo,
   draft: BaseStatsEdit,
   enabled: boolean,
+  /** Forced moveset (move ids); empty/undefined = auto-pick. */
+  moveOverride?: readonly number[],
   delayMs = 250,
 ): { result: QuickRateResult | null; pending: boolean } {
   const [result, setResult] = useState<QuickRateResult | null>(null)
@@ -28,6 +30,7 @@ export function useQuickRate(
     draft.type1,
     draft.type2,
     draft.ability1,
+    moveOverride ?? [],
   ])
 
   useEffect(() => {
@@ -36,14 +39,14 @@ export function useQuickRate(
     const id = ++runId.current
     const timer = setTimeout(() => {
       // Yield first so the "…" state paints before the (synchronous) sim runs.
-      const rated = quickRate(rom, species, draft)
+      const rated = quickRate(rom, species, draft, { moveOverride })
       if (id === runId.current) {
         setResult(rated)
         setPending(false)
       }
     }, delayMs)
     return () => clearTimeout(timer)
-    // draft is captured via `key`; species/rom identity also matter.
+    // draft + moveOverride are captured via `key`; species/rom identity also matter.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, rom, species, enabled, delayMs])
 
