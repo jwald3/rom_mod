@@ -1,6 +1,8 @@
 {
   "rom": "Pokemon Heart & Soul.gba",
-  "level": 52,
+  "levelModel": "parity",
+  "levelLo": 8,
+  "levelHi": 93,
   "sims": 200,
   "seed": 1,
   "cohort": [
@@ -27,7 +29,7 @@
     "Lance",
     "Red"
   ],
-  "meanWin": 37,
+  "meanWin": 38,
   "entries": [
     {
       "id": 249,
@@ -38,13 +40,13 @@
       ],
       "ability": "MARVEL SCALE",
       "moves": [
-        "PSYCHIC",
+        "AEROBLAST",
         "ICE BEAM",
         "EARTHQUAKE",
         "THUNDER WAVE"
       ],
-      "win": 69,
-      "viability": 0.32
+      "win": 91,
+      "viability": 0.48
     },
     {
       "id": 150,
@@ -59,8 +61,24 @@
         "ICE BEAM",
         "TOXIC"
       ],
-      "win": 66,
-      "viability": 0.39
+      "win": 88,
+      "viability": 0.51
+    },
+    {
+      "id": 366,
+      "name": "SLAKING",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "TRUANT",
+      "moves": [
+        "FOCUS PUNCH",
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 87,
+      "viability": 0.54
     },
     {
       "id": 151,
@@ -75,8 +93,25 @@
         "PSYCHIC",
         "ICE BEAM"
       ],
-      "win": 66,
-      "viability": 0.3
+      "win": 83,
+      "viability": 0.41
+    },
+    {
+      "id": 145,
+      "name": "ZAPDOS",
+      "types": [
+        "ELECTR",
+        "FLYING"
+      ],
+      "ability": "LIGHTNINGROD",
+      "moves": [
+        "THUNDERBOLT",
+        "SKY ATTACK",
+        "EXTRASENSORY",
+        "THUNDER WAVE"
+      ],
+      "win": 81,
+      "viability": 0.38
     },
     {
       "id": 285,
@@ -92,8 +127,25 @@
         "EARTHQUAKE",
         "HYDRO PUMP"
       ],
-      "win": 66,
-      "viability": 0.25
+      "win": 79,
+      "viability": 0.31
+    },
+    {
+      "id": 250,
+      "name": "HO-OH",
+      "types": [
+        "FIRE",
+        "FLYING"
+      ],
+      "ability": "SERENE GRACE",
+      "moves": [
+        "OVERHEAT",
+        "EARTHQUAKE",
+        "ANCIENTPOWER",
+        "TOXIC"
+      ],
+      "win": 76,
+      "viability": 0.41
     },
     {
       "id": 3,
@@ -109,42 +161,42 @@
         "EARTHQUAKE",
         "SLEEP POWDER"
       ],
-      "win": 65,
-      "viability": 0.14
+      "win": 75,
+      "viability": 0.19
     },
     {
-      "id": 250,
-      "name": "HO-OH",
-      "types": [
-        "FIRE",
-        "FLYING"
-      ],
-      "ability": "SERENE GRACE",
-      "moves": [
-        "OVERHEAT",
-        "EARTHQUAKE",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 64,
-      "viability": 0.31
-    },
-    {
-      "id": 131,
-      "name": "LAPRAS",
+      "id": 80,
+      "name": "SLOWBRO",
       "types": [
         "WATER",
-        "ICE"
+        "PSYCHC"
       ],
-      "ability": "WATER ABSORB",
+      "ability": "OBLIVIOUS",
       "moves": [
+        "PSYCHIC",
+        "FOCUS PUNCH",
         "ICE BEAM",
-        "HYDRO PUMP",
-        "THUNDERBOLT",
-        "SING"
+        "SURF"
       ],
-      "win": 61,
-      "viability": 0.2
+      "win": 75,
+      "viability": 0.24
+    },
+    {
+      "id": 199,
+      "name": "SLOWKING",
+      "types": [
+        "WATER",
+        "PSYCHC"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "PSYCHIC",
+        "FOCUS PUNCH",
+        "ICE BEAM",
+        "SURF"
+      ],
+      "win": 75,
+      "viability": 0.23
     },
     {
       "id": 297,
@@ -160,57 +212,74 @@
         "ICE BEAM",
         "PETAL DANCE"
       ],
-      "win": 61,
-      "viability": 0.2
+      "win": 74,
+      "viability": 0.27
     },
     {
-      "id": 329,
-      "name": "MILOTIC",
+      "id": 124,
+      "name": "JYNX",
+      "types": [
+        "ICE",
+        "PSYCHC"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "ICE BEAM",
+        "PSYCHIC",
+        "FOCUS PUNCH",
+        "LOVELY KISS"
+      ],
+      "win": 73,
+      "viability": 0.17
+    },
+    {
+      "id": 131,
+      "name": "LAPRAS",
+      "types": [
+        "WATER",
+        "ICE"
+      ],
+      "ability": "WATER ABSORB",
+      "moves": [
+        "ICE BEAM",
+        "HYDRO PUMP",
+        "THUNDERBOLT",
+        "SING"
+      ],
+      "win": 71,
+      "viability": 0.24
+    },
+    {
+      "id": 181,
+      "name": "AMPHAROS",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "STATIC",
+      "moves": [
+        "THUNDERBOLT",
+        "FOCUS PUNCH",
+        "FIRE PUNCH",
+        "THUNDER WAVE"
+      ],
+      "win": 71,
+      "viability": 0.25
+    },
+    {
+      "id": 186,
+      "name": "POLITOED",
       "types": [
         "WATER"
       ],
-      "ability": "MARVEL SCALE",
+      "ability": "WATER ABSORB",
       "moves": [
         "HYDRO PUMP",
-        "ICE BEAM",
-        "IRON TAIL",
-        "SING"
-      ],
-      "win": 61,
-      "viability": 0.18
-    },
-    {
-      "id": 366,
-      "name": "SLAKING",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "TRUANT",
-      "moves": [
         "FOCUS PUNCH",
-        "DOUBLE-EDGE",
-        "SHADOW BALL",
-        "TOXIC"
+        "ICE BEAM",
+        "HYPNOSIS"
       ],
-      "win": 61,
-      "viability": 0.41
-    },
-    {
-      "id": 145,
-      "name": "ZAPDOS",
-      "types": [
-        "ELECTR",
-        "FLYING"
-      ],
-      "ability": "LIGHTNINGROD",
-      "moves": [
-        "THUNDERBOLT",
-        "DRILL PECK",
-        "EXTRASENSORY",
-        "THUNDER WAVE"
-      ],
-      "win": 60,
-      "viability": 0.24
+      "win": 70,
+      "viability": 0.25
     },
     {
       "id": 251,
@@ -226,7 +295,106 @@
         "GIGA DRAIN",
         "TOXIC"
       ],
-      "win": 60,
+      "win": 70,
+      "viability": 0.31
+    },
+    {
+      "id": 329,
+      "name": "MILOTIC",
+      "types": [
+        "WATER"
+      ],
+      "ability": "MARVEL SCALE",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "IRON TAIL",
+        "SING"
+      ],
+      "win": 70,
+      "viability": 0.27
+    },
+    {
+      "id": 97,
+      "name": "HYPNO",
+      "types": [
+        "PSYCHC"
+      ],
+      "ability": "INSOMNIA",
+      "moves": [
+        "FOCUS PUNCH",
+        "PSYCHIC",
+        "THUNDERPUNCH",
+        "HYPNOSIS"
+      ],
+      "win": 69,
+      "viability": 0.17
+    },
+    {
+      "id": 149,
+      "name": "DRAGONITE",
+      "types": [
+        "DRAGON",
+        "FLYING"
+      ],
+      "ability": "INNER FOCUS",
+      "moves": [
+        "FOCUS PUNCH",
+        "WING ATTACK",
+        "FIRE BLAST",
+        "THUNDER WAVE"
+      ],
+      "win": 69,
+      "viability": 0.31
+    },
+    {
+      "id": 171,
+      "name": "LANTURN",
+      "types": [
+        "WATER",
+        "ELECTR"
+      ],
+      "ability": "VOLT ABSORB",
+      "moves": [
+        "THUNDERBOLT",
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "THUNDER WAVE"
+      ],
+      "win": 69,
+      "viability": 0.22
+    },
+    {
+      "id": 243,
+      "name": "RAIKOU",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "VOLT ABSORB",
+      "moves": [
+        "THUNDERBOLT",
+        "CRUNCH",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 69,
+      "viability": 0.31
+    },
+    {
+      "id": 62,
+      "name": "POLIWRATH",
+      "types": [
+        "WATER",
+        "FIGHT"
+      ],
+      "ability": "WATER ABSORB",
+      "moves": [
+        "FOCUS PUNCH",
+        "HYDRO PUMP",
+        "ROCK TOMB",
+        "HYPNOSIS"
+      ],
+      "win": 67,
       "viability": 0.24
     },
     {
@@ -243,42 +411,8 @@
         "PSYCHIC",
         "HYPNOSIS"
       ],
-      "win": 59,
-      "viability": 0.17
-    },
-    {
-      "id": 124,
-      "name": "JYNX",
-      "types": [
-        "ICE",
-        "PSYCHC"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "ICE BEAM",
-        "PSYCHIC",
-        "FOCUS PUNCH",
-        "LOVELY KISS"
-      ],
-      "win": 59,
-      "viability": 0.09
-    },
-    {
-      "id": 45,
-      "name": "VILEPLUME",
-      "types": [
-        "GRASS",
-        "POISON"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "PETAL DANCE",
-        "SLUDGE BOMB",
-        "DOUBLE-EDGE",
-        "SLEEP POWDER"
-      ],
-      "win": 58,
-      "viability": 0.08
+      "win": 67,
+      "viability": 0.22
     },
     {
       "id": 103,
@@ -294,143 +428,25 @@
         "SLUDGE BOMB",
         "HYPNOSIS"
       ],
-      "win": 58,
-      "viability": 0.13
+      "win": 67,
+      "viability": 0.19
     },
     {
-      "id": 171,
-      "name": "LANTURN",
+      "id": 130,
+      "name": "GYARADOS",
       "types": [
         "WATER",
-        "ELECTR"
-      ],
-      "ability": "VOLT ABSORB",
-      "moves": [
-        "THUNDERBOLT",
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "THUNDER WAVE"
-      ],
-      "win": 58,
-      "viability": 0.17
-    },
-    {
-      "id": 186,
-      "name": "POLITOED",
-      "types": [
-        "WATER"
-      ],
-      "ability": "WATER ABSORB",
-      "moves": [
-        "HYDRO PUMP",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "HYPNOSIS"
-      ],
-      "win": 58,
-      "viability": 0.17
-    },
-    {
-      "id": 49,
-      "name": "VENOMOTH",
-      "types": [
-        "BUG",
-        "POISON"
-      ],
-      "ability": "SHIELD DUST",
-      "moves": [
-        "SLUDGE BOMB",
-        "PSYCHIC",
-        "SIGNAL BEAM",
-        "SLEEP POWDER"
-      ],
-      "win": 57,
-      "viability": 0.01
-    },
-    {
-      "id": 62,
-      "name": "POLIWRATH",
-      "types": [
-        "WATER",
-        "FIGHT"
-      ],
-      "ability": "WATER ABSORB",
-      "moves": [
-        "FOCUS PUNCH",
-        "HYDRO PUMP",
-        "ROCK TOMB",
-        "HYPNOSIS"
-      ],
-      "win": 57,
-      "viability": 0.17
-    },
-    {
-      "id": 80,
-      "name": "SLOWBRO",
-      "types": [
-        "WATER",
-        "PSYCHC"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "PSYCHIC",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "SURF"
-      ],
-      "win": 57,
-      "viability": 0.18
-    },
-    {
-      "id": 199,
-      "name": "SLOWKING",
-      "types": [
-        "WATER",
-        "PSYCHC"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "PSYCHIC",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "SURF"
-      ],
-      "win": 57,
-      "viability": 0.16
-    },
-    {
-      "id": 359,
-      "name": "ALTARIA",
-      "types": [
-        "DRAGON",
         "FLYING"
       ],
-      "ability": "NATURAL CURE",
+      "ability": "INTIMIDATE",
       "moves": [
-        "SKY ATTACK",
-        "ICE BEAM",
+        "THRASH",
+        "HYDRO PUMP",
         "EARTHQUAKE",
-        "SING"
+        "TOXIC"
       ],
-      "win": 57,
-      "viability": 0.14
-    },
-    {
-      "id": 149,
-      "name": "DRAGONITE",
-      "types": [
-        "DRAGON",
-        "FLYING"
-      ],
-      "ability": "INNER FOCUS",
-      "moves": [
-        "FOCUS PUNCH",
-        "AERIAL ACE",
-        "FIRE BLAST",
-        "THUNDER WAVE"
-      ],
-      "win": 56,
-      "viability": 0.24
+      "win": 67,
+      "viability": 0.22
     },
     {
       "id": 195,
@@ -446,73 +462,107 @@
         "EARTHQUAKE",
         "SURF"
       ],
-      "win": 56,
-      "viability": 0.14
+      "win": 67,
+      "viability": 0.17
     },
     {
-      "id": 71,
-      "name": "VICTREEBEL",
+      "id": 245,
+      "name": "SUICUNE",
+      "types": [
+        "WATER"
+      ],
+      "ability": "WATER ABSORB",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 67,
+      "viability": 0.3
+    },
+    {
+      "id": 45,
+      "name": "VILEPLUME",
       "types": [
         "GRASS",
         "POISON"
       ],
       "ability": "CHLOROPHYLL",
       "moves": [
+        "PETAL DANCE",
         "SLUDGE BOMB",
-        "LEAF BLADE",
-        "THIEF",
+        "DOUBLE-EDGE",
         "SLEEP POWDER"
       ],
-      "win": 55,
-      "viability": 0.04
+      "win": 66,
+      "viability": 0.13
     },
     {
-      "id": 181,
-      "name": "AMPHAROS",
+      "id": 121,
+      "name": "STARMIE",
       "types": [
-        "ELECTR"
-      ],
-      "ability": "STATIC",
-      "moves": [
-        "THUNDERBOLT",
-        "FOCUS PUNCH",
-        "FIRE PUNCH",
-        "THUNDER WAVE"
-      ],
-      "win": 55,
-      "viability": 0.16
-    },
-    {
-      "id": 97,
-      "name": "HYPNO",
-      "types": [
+        "WATER",
         "PSYCHC"
       ],
-      "ability": "INSOMNIA",
+      "ability": "ILLUMINATE",
       "moves": [
-        "FOCUS PUNCH",
         "PSYCHIC",
-        "THUNDERPUNCH",
-        "HYPNOSIS"
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "TOXIC"
       ],
-      "win": 54,
-      "viability": 0.11
+      "win": 66,
+      "viability": 0.3
     },
     {
-      "id": 182,
-      "name": "BELLOSSOM",
+      "id": 128,
+      "name": "TAUROS",
       "types": [
-        "GRASS"
+        "NORMAL"
       ],
-      "ability": "CHLOROPHYLL",
+      "ability": "INTIMIDATE",
       "moves": [
-        "PETAL DANCE",
         "DOUBLE-EDGE",
-        "SLUDGE BOMB",
-        "SLEEP POWDER"
+        "IRON TAIL",
+        "EARTHQUAKE",
+        "TOXIC"
       ],
-      "win": 54,
-      "viability": 0.07
+      "win": 66,
+      "viability": 0.32
+    },
+    {
+      "id": 143,
+      "name": "SNORLAX",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "IMMUNITY",
+      "moves": [
+        "FOCUS PUNCH",
+        "SHADOW BALL",
+        "ROCK TOMB",
+        "TOXIC"
+      ],
+      "win": 66,
+      "viability": 0.28
+    },
+    {
+      "id": 214,
+      "name": "HERACROSS",
+      "types": [
+        "BUG",
+        "FIGHT"
+      ],
+      "ability": "SWARM",
+      "moves": [
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "MEGAHORN",
+        "TOXIC"
+      ],
+      "win": 66,
+      "viability": 0.35
     },
     {
       "id": 248,
@@ -528,24 +578,24 @@
         "FIRE BLAST",
         "TOXIC"
       ],
-      "win": 54,
-      "viability": 0.22
+      "win": 66,
+      "viability": 0.32
     },
     {
-      "id": 348,
-      "name": "LUNATONE",
+      "id": 49,
+      "name": "VENOMOTH",
       "types": [
-        "ROCK",
-        "PSYCHC"
+        "BUG",
+        "POISON"
       ],
-      "ability": "LEVITATE",
+      "ability": "SHIELD DUST",
       "moves": [
+        "SLUDGE BOMB",
         "PSYCHIC",
-        "ROCK SLIDE",
-        "ICE BEAM",
-        "HYPNOSIS"
+        "SIGNAL BEAM",
+        "SLEEP POWDER"
       ],
-      "win": 54,
+      "win": 65,
       "viability": 0.07
     },
     {
@@ -562,8 +612,8 @@
         "SIGNAL BEAM",
         "STUN SPORE"
       ],
-      "win": 53,
-      "viability": 0.11
+      "win": 65,
+      "viability": 0.16
     },
     {
       "id": 362,
@@ -578,8 +628,8 @@
         "SHADOW PUNCH",
         "HYPNOSIS"
       ],
-      "win": 53,
-      "viability": 0.15
+      "win": 65,
+      "viability": 0.21
     },
     {
       "id": 24,
@@ -594,74 +644,73 @@
         "EARTHQUAKE",
         "GLARE"
       ],
-      "win": 52,
-      "viability": 0.09
+      "win": 64,
+      "viability": 0.14
     },
     {
-      "id": 134,
-      "name": "VAPOREON",
+      "id": 68,
+      "name": "MACHAMP",
       "types": [
-        "WATER"
+        "FIGHT"
       ],
-      "ability": "WATER ABSORB",
+      "ability": "GUTS",
       "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "SHADOW BALL",
+        "FOCUS PUNCH",
+        "ROCK TOMB",
+        "FIRE BLAST",
         "TOXIC"
       ],
-      "win": 52,
-      "viability": 0.18
+      "win": 64,
+      "viability": 0.31
     },
     {
-      "id": 142,
-      "name": "AERODACTYL",
+      "id": 106,
+      "name": "HITMONLEE",
       "types": [
-        "ROCK",
-        "FLYING"
+        "FIGHT"
       ],
-      "ability": "ROCK HEAD",
+      "ability": "LIMBER",
       "moves": [
+        "FOCUS PUNCH",
         "ROCK SLIDE",
         "EARTHQUAKE",
-        "WING ATTACK",
-        "TOXIC"
+        "REST"
       ],
-      "win": 52,
-      "viability": 0.17
+      "win": 64,
+      "viability": 0.23
     },
     {
-      "id": 212,
-      "name": "SCIZOR",
+      "id": 146,
+      "name": "MOLTRES",
       "types": [
-        "BUG",
-        "STEEL"
+        "FIRE",
+        "FLYING"
       ],
-      "ability": "SWARM",
+      "ability": "FLAME BODY",
       "moves": [
-        "TWINEEDLE",
-        "STEEL WING",
-        "BRICK BREAK",
+        "OVERHEAT",
+        "SKY ATTACK",
+        "EXTRASENSORY",
         "TOXIC"
       ],
-      "win": 52,
-      "viability": 0.17
+      "win": 64,
+      "viability": 0.28
     },
     {
-      "id": 245,
-      "name": "SUICUNE",
+      "id": 314,
+      "name": "WAILORD",
       "types": [
         "WATER"
       ],
-      "ability": "WATER ABSORB",
+      "ability": "WATER VEIL",
       "moves": [
+        "WATER SPOUT",
         "ICE BEAM",
-        "SURF",
-        "IRON TAIL",
+        "ROCK TOMB",
         "TOXIC"
       ],
-      "win": 52,
-      "viability": 0.21
+      "win": 64,
+      "viability": 0.24
     },
     {
       "id": 319,
@@ -677,8 +726,74 @@
         "PSYCHIC",
         "ICE BEAM"
       ],
-      "win": 52,
-      "viability": 0.11
+      "win": 64,
+      "viability": 0.17
+    },
+    {
+      "id": 348,
+      "name": "LUNATONE",
+      "types": [
+        "ROCK",
+        "PSYCHC"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "PSYCHIC",
+        "ROCK SLIDE",
+        "ICE BEAM",
+        "HYPNOSIS"
+      ],
+      "win": 64,
+      "viability": 0.13
+    },
+    {
+      "id": 359,
+      "name": "ALTARIA",
+      "types": [
+        "DRAGON",
+        "FLYING"
+      ],
+      "ability": "NATURAL CURE",
+      "moves": [
+        "SKY ATTACK",
+        "ICE BEAM",
+        "EARTHQUAKE",
+        "SING"
+      ],
+      "win": 64,
+      "viability": 0.18
+    },
+    {
+      "id": 134,
+      "name": "VAPOREON",
+      "types": [
+        "WATER"
+      ],
+      "ability": "WATER ABSORB",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 63,
+      "viability": 0.27
+    },
+    {
+      "id": 157,
+      "name": "TYPHLOSION",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "BLAZE",
+      "moves": [
+        "ERUPTION",
+        "FOCUS PUNCH",
+        "THUNDERBOLT",
+        "TOXIC"
+      ],
+      "win": 63,
+      "viability": 0.34
     },
     {
       "id": 334,
@@ -694,25 +809,42 @@
         "FIRE BLAST",
         "TOXIC"
       ],
-      "win": 52,
-      "viability": 0.2
+      "win": 63,
+      "viability": 0.28
     },
     {
-      "id": 130,
-      "name": "GYARADOS",
+      "id": 71,
+      "name": "VICTREEBEL",
       "types": [
-        "WATER",
+        "GRASS",
+        "POISON"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "SLUDGE BOMB",
+        "LEAF BLADE",
+        "THIEF",
+        "SLEEP POWDER"
+      ],
+      "win": 62,
+      "viability": 0.05
+    },
+    {
+      "id": 142,
+      "name": "AERODACTYL",
+      "types": [
+        "ROCK",
         "FLYING"
       ],
-      "ability": "INTIMIDATE",
+      "ability": "ROCK HEAD",
       "moves": [
-        "THRASH",
-        "HYDRO PUMP",
+        "ROCK SLIDE",
         "EARTHQUAKE",
+        "WING ATTACK",
         "TOXIC"
       ],
-      "win": 51,
-      "viability": 0.15
+      "win": 62,
+      "viability": 0.27
     },
     {
       "id": 144,
@@ -724,392 +856,12 @@
       "ability": "WATER VEIL",
       "moves": [
         "ICE BEAM",
-        "DRILL PECK",
+        "SKY ATTACK",
         "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 51,
-      "viability": 0.17
-    },
-    {
-      "id": 214,
-      "name": "HERACROSS",
-      "types": [
-        "BUG",
-        "FIGHT"
-      ],
-      "ability": "SWARM",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "MEGAHORN",
-        "TOXIC"
-      ],
-      "win": 51,
-      "viability": 0.25
-    },
-    {
-      "id": 324,
-      "name": "WHISCASH",
-      "types": [
-        "WATER",
-        "GROUND"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "SURF",
-        "EARTHQUAKE",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 51,
-      "viability": 0.15
-    },
-    {
-      "id": 345,
-      "name": "CACTURNE",
-      "types": [
-        "GRASS",
-        "DARK"
-      ],
-      "ability": "SAND VEIL",
-      "moves": [
-        "FOCUS PUNCH",
-        "FAINT ATTACK",
-        "THUNDERPUNCH",
-        "NEEDLE ARM"
-      ],
-      "win": 51,
-      "viability": 0.09
-    },
-    {
-      "id": 9,
-      "name": "BLASTOISE",
-      "types": [
-        "WATER"
-      ],
-      "ability": "TORRENT",
-      "moves": [
-        "FOCUS PUNCH",
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 50,
-      "viability": 0.2
-    },
-    {
-      "id": 47,
-      "name": "PARASECT",
-      "types": [
-        "BUG",
-        "GRASS"
-      ],
-      "ability": "EFFECT SPORE",
-      "moves": [
-        "DOUBLE-EDGE",
-        "TWINEEDLE",
-        "GIGA DRAIN",
-        "SPORE"
-      ],
-      "win": 50,
-      "viability": -0.05
-    },
-    {
-      "id": 68,
-      "name": "MACHAMP",
-      "types": [
-        "FIGHT"
-      ],
-      "ability": "GUTS",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK TOMB",
-        "FIRE BLAST",
-        "TOXIC"
-      ],
-      "win": 50,
-      "viability": 0.21
-    },
-    {
-      "id": 112,
-      "name": "RHYDON",
-      "types": [
-        "GROUND",
-        "ROCK"
-      ],
-      "ability": "LIGHTNINGROD",
-      "moves": [
-        "ROCK BLAST",
-        "FOCUS PUNCH",
-        "EARTHQUAKE",
-        "ROCK SLIDE"
-      ],
-      "win": 50,
-      "viability": 0.09
-    },
-    {
-      "id": 143,
-      "name": "SNORLAX",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "IMMUNITY",
-      "moves": [
-        "FOCUS PUNCH",
-        "SHADOW BALL",
-        "ROCK TOMB",
-        "TOXIC"
-      ],
-      "win": 50,
-      "viability": 0.2
-    },
-    {
-      "id": 157,
-      "name": "TYPHLOSION",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "BLAZE",
-      "moves": [
-        "OVERHEAT",
-        "FOCUS PUNCH",
-        "THUNDERBOLT",
-        "TOXIC"
-      ],
-      "win": 50,
-      "viability": 0.18
-    },
-    {
-      "id": 200,
-      "name": "MISDREAVUS",
-      "types": [
-        "GHOST"
-      ],
-      "ability": "LEVITATE",
-      "moves": [
-        "THUNDERBOLT",
-        "SHADOW BALL",
-        "PSYCHIC",
-        "SING"
-      ],
-      "win": 50,
-      "viability": 0.09
-    },
-    {
-      "id": 234,
-      "name": "STANTLER",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "INTIMIDATE",
-      "moves": [
-        "DOUBLE-EDGE",
-        "SHADOW BALL",
-        "EARTHQUAKE",
-        "HYPNOSIS"
-      ],
-      "win": 50,
-      "viability": 0.07
-    },
-    {
-      "id": 340,
-      "name": "CAMERUPT",
-      "types": [
-        "FIRE",
-        "GROUND"
-      ],
-      "ability": "FLAME BODY",
-      "moves": [
-        "ERUPTION",
-        "EARTHQUAKE",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 50,
-      "viability": 0.13
-    },
-    {
-      "id": 73,
-      "name": "TENTACRUEL",
-      "types": [
-        "WATER",
-        "POISON"
-      ],
-      "ability": "CLEAR BODY",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "SLUDGE BOMB",
-        "TOXIC"
-      ],
-      "win": 49,
-      "viability": 0.16
-    },
-    {
-      "id": 93,
-      "name": "HAUNTER",
-      "types": [
-        "GHOST",
-        "POISON"
-      ],
-      "ability": "LEVITATE",
-      "moves": [
-        "THUNDERBOLT",
-        "PSYCHIC",
-        "GIGA DRAIN",
-        "HYPNOSIS"
-      ],
-      "win": 49,
-      "viability": 0
-    },
-    {
-      "id": 121,
-      "name": "STARMIE",
-      "types": [
-        "WATER",
-        "PSYCHC"
-      ],
-      "ability": "ILLUMINATE",
-      "moves": [
-        "PSYCHIC",
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 49,
-      "viability": 0.2
-    },
-    {
-      "id": 146,
-      "name": "MOLTRES",
-      "types": [
-        "FIRE",
-        "FLYING"
-      ],
-      "ability": "FLAME BODY",
-      "moves": [
-        "OVERHEAT",
-        "DRILL PECK",
-        "EXTRASENSORY",
-        "TOXIC"
-      ],
-      "win": 49,
-      "viability": 0.17
-    },
-    {
-      "id": 154,
-      "name": "MEGANIUM",
-      "types": [
-        "GRASS"
-      ],
-      "ability": "OVERGROW",
-      "moves": [
-        "GIGA DRAIN",
-        "IRON TAIL",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 49,
-      "viability": 0.08
-    },
-    {
-      "id": 242,
-      "name": "BLISSEY",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "NATURAL CURE",
-      "moves": [
-        "ICE BEAM",
-        "FLAMETHROWER",
-        "EGG BOMB",
-        "PSYCHIC"
-      ],
-      "win": 49,
-      "viability": 0.05
-    },
-    {
-      "id": 243,
-      "name": "RAIKOU",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "VOLT ABSORB",
-      "moves": [
-        "THUNDERBOLT",
-        "IRON TAIL",
-        "DOUBLE-EDGE",
-        "TOXIC"
-      ],
-      "win": 49,
-      "viability": 0.18
-    },
-    {
-      "id": 282,
-      "name": "BLAZIKEN",
-      "types": [
-        "FIRE",
-        "FIGHT"
-      ],
-      "ability": "BLAZE",
-      "moves": [
-        "FOCUS PUNCH",
-        "OVERHEAT",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 49,
-      "viability": 0.19
-    },
-    {
-      "id": 300,
-      "name": "SHIFTRY",
-      "types": [
-        "GRASS",
-        "DARK"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "MEGA KICK",
-        "LEAF BLADE",
-        "SHADOW BALL",
-        "BRICK BREAK"
-      ],
-      "win": 49,
-      "viability": 0.04
-    },
-    {
-      "id": 314,
-      "name": "WAILORD",
-      "types": [
-        "WATER"
-      ],
-      "ability": "WATER VEIL",
-      "moves": [
-        "WATER SPOUT",
-        "ICE BEAM",
-        "ROCK TOMB",
-        "TOXIC"
-      ],
-      "win": 49,
-      "viability": 0.21
-    },
-    {
-      "id": 338,
-      "name": "MANECTRIC",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "STATIC",
-      "moves": [
-        "THUNDERBOLT",
-        "OVERHEAT",
-        "CRUNCH",
-        "THUNDER WAVE"
-      ],
-      "win": 49,
-      "viability": 0.11
+      "win": 62,
+      "viability": 0.26
     },
     {
       "id": 343,
@@ -1125,40 +877,106 @@
         "ROCK SLIDE",
         "TOXIC"
       ],
-      "win": 49,
+      "win": 62,
+      "viability": 0.23
+    },
+    {
+      "id": 200,
+      "name": "MISDREAVUS",
+      "types": [
+        "GHOST"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "THUNDERBOLT",
+        "SHADOW BALL",
+        "PSYCHIC",
+        "SING"
+      ],
+      "win": 61,
       "viability": 0.16
     },
     {
-      "id": 384,
-      "name": "AGGRON",
+      "id": 212,
+      "name": "SCIZOR",
       "types": [
-        "STEEL",
-        "ROCK"
+        "BUG",
+        "STEEL"
       ],
-      "ability": "STURDY",
+      "ability": "SWARM",
       "moves": [
-        "ROCK SLIDE",
-        "FOCUS PUNCH",
-        "IRON TAIL",
-        "THUNDER WAVE"
+        "TWINEEDLE",
+        "STEEL WING",
+        "BRICK BREAK",
+        "TOXIC"
       ],
-      "win": 49,
-      "viability": 0.09
+      "win": 61,
+      "viability": 0.21
     },
     {
-      "id": 128,
-      "name": "TAUROS",
+      "id": 282,
+      "name": "BLAZIKEN",
       "types": [
-        "NORMAL"
+        "FIRE",
+        "FIGHT"
       ],
-      "ability": "INTIMIDATE",
+      "ability": "BLAZE",
       "moves": [
-        "DOUBLE-EDGE",
-        "IRON TAIL",
+        "FOCUS PUNCH",
+        "OVERHEAT",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 61,
+      "viability": 0.29
+    },
+    {
+      "id": 336,
+      "name": "HARIYAMA",
+      "types": [
+        "FIGHT"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "FOCUS PUNCH",
+        "ROCK TOMB",
         "EARTHQUAKE",
         "TOXIC"
       ],
-      "win": 48,
+      "win": 61,
+      "viability": 0.26
+    },
+    {
+      "id": 9,
+      "name": "BLASTOISE",
+      "types": [
+        "WATER"
+      ],
+      "ability": "TORRENT",
+      "moves": [
+        "FOCUS PUNCH",
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 60,
+      "viability": 0.26
+    },
+    {
+      "id": 73,
+      "name": "TENTACRUEL",
+      "types": [
+        "WATER",
+        "POISON"
+      ],
+      "ability": "CLEAR BODY",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "SLUDGE BOMB",
+        "TOXIC"
+      ],
+      "win": 60,
       "viability": 0.23
     },
     {
@@ -1174,108 +992,8 @@
         "SHADOW BALL",
         "THUNDER WAVE"
       ],
-      "win": 48,
-      "viability": 0.09
-    },
-    {
-      "id": 303,
-      "name": "SHEDINJA",
-      "types": [
-        "BUG",
-        "GHOST"
-      ],
-      "ability": "WONDER GUARD",
-      "moves": [
-        "SHADOW BALL",
-        "SILVER WIND",
-        "HYPER BEAM",
-        "TOXIC"
-      ],
-      "win": 48,
-      "viability": 0.21
-    },
-    {
-      "id": 336,
-      "name": "HARIYAMA",
-      "types": [
-        "FIGHT"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK TOMB",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 48,
-      "viability": 0.19
-    },
-    {
-      "id": 369,
-      "name": "TROPIUS",
-      "types": [
-        "GRASS",
-        "FLYING"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "AIR CUTTER",
-        "GIGA DRAIN",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 48,
-      "viability": 0.11
-    },
-    {
-      "id": 381,
-      "name": "RELICANTH",
-      "types": [
-        "WATER",
-        "ROCK"
-      ],
-      "ability": "SWIFT SWIM",
-      "moves": [
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "HYDRO PUMP",
-        "TOXIC"
-      ],
-      "win": 48,
-      "viability": 0.1
-    },
-    {
-      "id": 6,
-      "name": "CHARIZARD",
-      "types": [
-        "FIRE",
-        "FLYING"
-      ],
-      "ability": "BLAZE",
-      "moves": [
-        "OVERHEAT",
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 47,
-      "viability": 0.16
-    },
-    {
-      "id": 125,
-      "name": "ELECTABUZZ",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "STATIC",
-      "moves": [
-        "THUNDERBOLT",
-        "FOCUS PUNCH",
-        "PSYCHIC",
-        "THUNDER WAVE"
-      ],
-      "win": 47,
-      "viability": 0.14
+      "win": 60,
+      "viability": 0.17
     },
     {
       "id": 230,
@@ -1291,8 +1009,90 @@
         "DRAGONBREATH",
         "TOXIC"
       ],
-      "win": 47,
+      "win": 60,
+      "viability": 0.25
+    },
+    {
+      "id": 338,
+      "name": "MANECTRIC",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "STATIC",
+      "moves": [
+        "THUNDERBOLT",
+        "OVERHEAT",
+        "CRUNCH",
+        "THUNDER WAVE"
+      ],
+      "win": 60,
       "viability": 0.18
+    },
+    {
+      "id": 345,
+      "name": "CACTURNE",
+      "types": [
+        "GRASS",
+        "DARK"
+      ],
+      "ability": "SAND VEIL",
+      "moves": [
+        "FOCUS PUNCH",
+        "FAINT ATTACK",
+        "THUNDERPUNCH",
+        "NEEDLE ARM"
+      ],
+      "win": 60,
+      "viability": 0.14
+    },
+    {
+      "id": 352,
+      "name": "GRUMPIG",
+      "types": [
+        "PSYCHC"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "PSYCHIC",
+        "THUNDERBOLT",
+        "FOCUS PUNCH",
+        "TOXIC"
+      ],
+      "win": 60,
+      "viability": 0.24
+    },
+    {
+      "id": 93,
+      "name": "HAUNTER",
+      "types": [
+        "GHOST",
+        "POISON"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "THUNDERBOLT",
+        "PSYCHIC",
+        "GIGA DRAIN",
+        "HYPNOSIS"
+      ],
+      "win": 59,
+      "viability": 0.07
+    },
+    {
+      "id": 234,
+      "name": "STANTLER",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "INTIMIDATE",
+      "moves": [
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "EARTHQUAKE",
+        "HYPNOSIS"
+      ],
+      "win": 59,
+      "viability": 0.13
     },
     {
       "id": 244,
@@ -1307,140 +1107,41 @@
         "FIRE BLAST",
         "TOXIC"
       ],
-      "win": 47,
-      "viability": 0.16
+      "win": 59,
+      "viability": 0.27
     },
     {
-      "id": 12,
-      "name": "BUTTERFREE",
+      "id": 182,
+      "name": "BELLOSSOM",
       "types": [
-        "BUG",
-        "FLYING"
-      ],
-      "ability": "COMPOUNDEYES",
-      "moves": [
-        "PSYCHIC",
-        "GIGA DRAIN",
-        "SIGNAL BEAM",
-        "SLEEP POWDER"
-      ],
-      "win": 46,
-      "viability": -0.11
-    },
-    {
-      "id": 36,
-      "name": "CLEFABLE",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "CUTE CHARM",
-      "moves": [
-        "ICE BEAM",
-        "FOCUS PUNCH",
-        "FLAMETHROWER",
-        "DOUBLE-EDGE"
-      ],
-      "win": 46,
-      "viability": 0.12
-    },
-    {
-      "id": 44,
-      "name": "GLOOM",
-      "types": [
-        "GRASS",
-        "POISON"
+        "GRASS"
       ],
       "ability": "CHLOROPHYLL",
       "moves": [
         "PETAL DANCE",
-        "SLUDGE BOMB",
         "DOUBLE-EDGE",
+        "SLUDGE BOMB",
         "SLEEP POWDER"
       ],
-      "win": 46,
-      "viability": -0.05
+      "win": 58,
+      "viability": 0.1
     },
     {
-      "id": 59,
-      "name": "ARCANINE",
+      "id": 307,
+      "name": "BRELOOM",
       "types": [
-        "FIRE"
+        "GRASS",
+        "FIGHT"
       ],
-      "ability": "INTIMIDATE",
-      "moves": [
-        "OVERHEAT",
-        "DOUBLE-EDGE",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 46,
-      "viability": 0.14
-    },
-    {
-      "id": 76,
-      "name": "GOLEM",
-      "types": [
-        "ROCK",
-        "GROUND"
-      ],
-      "ability": "ROCK HEAD",
-      "moves": [
-        "ROCK BLAST",
-        "FOCUS PUNCH",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 46,
-      "viability": 0.09
-    },
-    {
-      "id": 160,
-      "name": "FERALIGATR",
-      "types": [
-        "WATER"
-      ],
-      "ability": "TORRENT",
+      "ability": "EFFECT SPORE",
       "moves": [
         "FOCUS PUNCH",
-        "HYDRO PUMP",
-        "DOUBLE-EDGE",
-        "TOXIC"
-      ],
-      "win": 46,
-      "viability": 0.2
-    },
-    {
-      "id": 196,
-      "name": "ESPEON",
-      "types": [
-        "PSYCHC"
-      ],
-      "ability": "SYNCHRONIZE",
-      "moves": [
-        "PSYCHIC",
         "IRON TAIL",
-        "SHADOW BALL",
-        "TOXIC"
+        "DOUBLE-EDGE",
+        "SPORE"
       ],
-      "win": 46,
-      "viability": 0.13
-    },
-    {
-      "id": 229,
-      "name": "HOUNDOOM",
-      "types": [
-        "DARK",
-        "FIRE"
-      ],
-      "ability": "EARLY BIRD",
-      "moves": [
-        "OVERHEAT",
-        "CRUNCH",
-        "SOLARBEAM",
-        "TOXIC"
-      ],
-      "win": 46,
-      "viability": 0.14
+      "win": 58,
+      "viability": 0.12
     },
     {
       "id": 357,
@@ -1456,174 +1157,73 @@
         "ROCK TOMB",
         "TOXIC"
       ],
-      "win": 46,
-      "viability": 0.21
+      "win": 58,
+      "viability": 0.27
     },
     {
-      "id": 169,
-      "name": "CROBAT",
+      "id": 36,
+      "name": "CLEFABLE",
       "types": [
-        "POISON",
-        "FLYING"
+        "NORMAL"
       ],
-      "ability": "INNER FOCUS",
+      "ability": "CUTE CHARM",
       "moves": [
-        "AIR CUTTER",
-        "SLUDGE BOMB",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 45,
-      "viability": 0.1
-    },
-    {
-      "id": 185,
-      "name": "SUDOWOODO",
-      "types": [
-        "ROCK"
-      ],
-      "ability": "STURDY",
-      "moves": [
-        "ROCK SLIDE",
+        "ICE BEAM",
         "FOCUS PUNCH",
-        "EARTHQUAKE",
-        "TOXIC"
+        "FLAMETHROWER",
+        "DOUBLE-EDGE"
       ],
-      "win": 45,
-      "viability": 0.08
+      "win": 57,
+      "viability": 0.19
     },
     {
-      "id": 189,
-      "name": "JUMPLUFF",
-      "types": [
-        "GRASS",
-        "FLYING"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "AERIAL ACE",
-        "GIGA DRAIN",
-        "DOUBLE-EDGE",
-        "SLEEP POWDER"
-      ],
-      "win": 45,
-      "viability": -0.05
-    },
-    {
-      "id": 279,
-      "name": "SCEPTILE",
-      "types": [
-        "GRASS"
-      ],
-      "ability": "OVERGROW",
-      "moves": [
-        "FOCUS PUNCH",
-        "LEAF BLADE",
-        "THUNDERPUNCH",
-        "TOXIC"
-      ],
-      "win": 45,
-      "viability": 0.1
-    },
-    {
-      "id": 292,
-      "name": "BEAUTIFLY",
-      "types": [
-        "BUG",
-        "FLYING"
-      ],
-      "ability": "SWARM",
-      "moves": [
-        "AIR CUTTER",
-        "SIGNAL BEAM",
-        "PSYCHIC",
-        "SLEEP POWDER"
-      ],
-      "win": 45,
-      "viability": -0.11
-    },
-    {
-      "id": 352,
-      "name": "GRUMPIG",
-      "types": [
-        "PSYCHC"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "PSYCHIC",
-        "THUNDERBOLT",
-        "FOCUS PUNCH",
-        "TOXIC"
-      ],
-      "win": 45,
-      "viability": 0.16
-    },
-    {
-      "id": 363,
-      "name": "ROSELIA",
-      "types": [
-        "GRASS",
-        "POISON"
-      ],
-      "ability": "NATURAL CURE",
-      "moves": [
-        "PETAL DANCE",
-        "SLUDGE BOMB",
-        "SHADOW BALL",
-        "STUN SPORE"
-      ],
-      "win": 45,
-      "viability": -0.01
-    },
-    {
-      "id": 2,
-      "name": "IVYSAUR",
-      "types": [
-        "GRASS",
-        "POISON"
-      ],
-      "ability": "OVERGROW",
-      "moves": [
-        "SLUDGE BOMB",
-        "GIGA DRAIN",
-        "ROCK SMASH",
-        "SLEEP POWDER"
-      ],
-      "win": 44,
-      "viability": -0.1
-    },
-    {
-      "id": 31,
-      "name": "NIDOQUEEN",
-      "types": [
-        "POISON",
-        "GROUND"
-      ],
-      "ability": "POISON POINT",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.12
-    },
-    {
-      "id": 38,
-      "name": "NINETALES",
+      "id": 59,
+      "name": "ARCANINE",
       "types": [
         "FIRE"
       ],
-      "ability": "FLASH FIRE",
+      "ability": "INTIMIDATE",
       "moves": [
         "OVERHEAT",
-        "SOLARBEAM",
-        "PSYCHIC",
+        "DOUBLE-EDGE",
+        "IRON TAIL",
         "TOXIC"
       ],
-      "win": 44,
-      "viability": 0.11
+      "win": 57,
+      "viability": 0.24
+    },
+    {
+      "id": 196,
+      "name": "ESPEON",
+      "types": [
+        "PSYCHC"
+      ],
+      "ability": "SYNCHRONIZE",
+      "moves": [
+        "PSYCHIC",
+        "IRON TAIL",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 57,
+      "viability": 0.22
+    },
+    {
+      "id": 381,
+      "name": "RELICANTH",
+      "types": [
+        "WATER",
+        "ROCK"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "HYDRO PUMP",
+        "TOXIC"
+      ],
+      "win": 57,
+      "viability": 0.17
     },
     {
       "id": 40,
@@ -1638,352 +1238,75 @@
         "FLAMETHROWER",
         "DOUBLE-EDGE"
       ],
-      "win": 44,
-      "viability": 0.09
+      "win": 56,
+      "viability": 0.13
     },
     {
-      "id": 89,
-      "name": "MUK",
+      "id": 47,
+      "name": "PARASECT",
       "types": [
-        "POISON"
-      ],
-      "ability": "STENCH",
-      "moves": [
-        "FOCUS PUNCH",
-        "SLUDGE BOMB",
-        "FIRE BLAST",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.15
-    },
-    {
-      "id": 108,
-      "name": "LICKITUNG",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "OWN TEMPO",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "FLAMETHROWER"
-      ],
-      "win": 44,
-      "viability": 0.09
-    },
-    {
-      "id": 127,
-      "name": "PINSIR",
-      "types": [
-        "BUG"
-      ],
-      "ability": "HYPER CUTTER",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "TWINEEDLE",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.15
-    },
-    {
-      "id": 221,
-      "name": "PILOSWINE",
-      "types": [
-        "ICE",
-        "GROUND"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "ICE BEAM",
-        "EARTHQUAKE",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.08
-    },
-    {
-      "id": 227,
-      "name": "SKARMORY",
-      "types": [
-        "STEEL",
-        "FLYING"
-      ],
-      "ability": "KEEN EYE",
-      "moves": [
-        "AIR CUTTER",
-        "ROCK SLIDE",
-        "DRILL PECK",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.05
-    },
-    {
-      "id": 232,
-      "name": "DONPHAN",
-      "types": [
-        "GROUND"
-      ],
-      "ability": "STURDY",
-      "moves": [
-        "DOUBLE-EDGE",
-        "EARTHQUAKE",
-        "ROCK TOMB",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.1
-    },
-    {
-      "id": 237,
-      "name": "HITMONTOP",
-      "types": [
-        "FIGHT"
-      ],
-      "ability": "INTIMIDATE",
-      "moves": [
-        "ROCK SLIDE",
-        "BRICK BREAK",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.05
-    },
-    {
-      "id": 347,
-      "name": "GLALIE",
-      "types": [
-        "ICE"
-      ],
-      "ability": "LEVITATE",
-      "moves": [
-        "ICE BEAM",
-        "EARTHQUAKE",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 44,
-      "viability": 0.11
-    },
-    {
-      "id": 34,
-      "name": "NIDOKING",
-      "types": [
-        "POISON",
-        "GROUND"
-      ],
-      "ability": "POISON POINT",
-      "moves": [
-        "FOCUS PUNCH",
-        "FIRE BLAST",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 43,
-      "viability": 0.11
-    },
-    {
-      "id": 82,
-      "name": "MAGNETON",
-      "types": [
-        "ELECTR",
-        "STEEL"
-      ],
-      "ability": "MAGNET PULL",
-      "moves": [
-        "THUNDERBOLT",
-        "TRI ATTACK",
-        "SONICBOOM",
-        "TOXIC"
-      ],
-      "win": 43,
-      "viability": 0.05
-    },
-    {
-      "id": 106,
-      "name": "HITMONLEE",
-      "types": [
-        "FIGHT"
-      ],
-      "ability": "LIMBER",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 43,
-      "viability": 0.16
-    },
-    {
-      "id": 107,
-      "name": "HITMONCHAN",
-      "types": [
-        "FIGHT"
-      ],
-      "ability": "KEEN EYE",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 43,
-      "viability": 0.15
-    },
-    {
-      "id": 114,
-      "name": "TANGELA",
-      "types": [
+        "BUG",
         "GRASS"
       ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "GIGA DRAIN",
-        "THIEF",
-        "SLUDGE BOMB",
-        "SLEEP POWDER"
-      ],
-      "win": 43,
-      "viability": -0.11
-    },
-    {
-      "id": 119,
-      "name": "SEAKING",
-      "types": [
-        "WATER"
-      ],
-      "ability": "SWIFT SWIM",
+      "ability": "EFFECT SPORE",
       "moves": [
         "DOUBLE-EDGE",
-        "HYDRO PUMP",
-        "DRILL PECK",
-        "MEGAHORN"
+        "TWINEEDLE",
+        "GIGA DRAIN",
+        "SPORE"
       ],
-      "win": 43,
-      "viability": 0.08
+      "win": 56,
+      "viability": -0.04
     },
     {
-      "id": 141,
-      "name": "KABUTOPS",
+      "id": 125,
+      "name": "ELECTABUZZ",
       "types": [
-        "ROCK",
-        "WATER"
+        "ELECTR"
       ],
-      "ability": "SWIFT SWIM",
+      "ability": "STATIC",
       "moves": [
+        "THUNDERBOLT",
+        "FOCUS PUNCH",
+        "PSYCHIC",
+        "THUNDER WAVE"
+      ],
+      "win": 56,
+      "viability": 0.2
+    },
+    {
+      "id": 340,
+      "name": "CAMERUPT",
+      "types": [
+        "FIRE",
+        "GROUND"
+      ],
+      "ability": "FLAME BODY",
+      "moves": [
+        "ERUPTION",
+        "EARTHQUAKE",
         "ROCK SLIDE",
-        "BRICK BREAK",
-        "SURF",
         "TOXIC"
       ],
-      "win": 43,
-      "viability": 0.04
+      "win": 56,
+      "viability": 0.17
     },
     {
-      "id": 164,
-      "name": "NOCTOWL",
+      "id": 369,
+      "name": "TROPIUS",
       "types": [
-        "NORMAL",
+        "GRASS",
         "FLYING"
       ],
-      "ability": "INSOMNIA",
-      "moves": [
-        "PSYCHIC",
-        "TAKE DOWN",
-        "WING ATTACK",
-        "HYPNOSIS"
-      ],
-      "win": 43,
-      "viability": -0.03
-    },
-    {
-      "id": 197,
-      "name": "UMBREON",
-      "types": [
-        "DARK"
-      ],
-      "ability": "SYNCHRONIZE",
-      "moves": [
-        "FAINT ATTACK",
-        "IRON TAIL",
-        "PSYCHIC",
-        "TOXIC"
-      ],
-      "win": 43,
-      "viability": 0.06
-    },
-    {
-      "id": 207,
-      "name": "GLIGAR",
-      "types": [
-        "GROUND",
-        "FLYING"
-      ],
-      "ability": "HYPER CUTTER",
+      "ability": "THICK FAT",
       "moves": [
         "AIR CUTTER",
+        "GIGA DRAIN",
         "EARTHQUAKE",
-        "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 43,
-      "viability": 0.09
-    },
-    {
-      "id": 217,
-      "name": "URSARING",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "GUTS",
-      "moves": [
-        "FOCUS PUNCH",
-        "DOUBLE-EDGE",
-        "LICK",
-        "TOXIC"
-      ],
-      "win": 43,
-      "viability": 0.19
-    },
-    {
-      "id": 327,
-      "name": "CRAWDAUNT",
-      "types": [
-        "WATER",
-        "DARK"
-      ],
-      "ability": "HYPER CUTTER",
-      "moves": [
-        "CRABHAMMER",
-        "ROCK TOMB",
-        "CRUNCH",
-        "TOXIC"
-      ],
-      "win": 43,
-      "viability": 0.08
-    },
-    {
-      "id": 376,
-      "name": "ABSOL",
-      "types": [
-        "DARK"
-      ],
-      "ability": "PRESSURE",
-      "moves": [
-        "IRON TAIL",
-        "THUNDERBOLT",
-        "SHADOW BALL",
-        "FIRE BLAST"
-      ],
-      "win": 43,
-      "viability": 0.01
+      "win": 56,
+      "viability": 0.14
     },
     {
       "id": 55,
@@ -1998,8 +1321,237 @@
         "ICE BEAM",
         "TOXIC"
       ],
-      "win": 42,
-      "viability": 0.16
+      "win": 55,
+      "viability": 0.23
+    },
+    {
+      "id": 107,
+      "name": "HITMONCHAN",
+      "types": [
+        "FIGHT"
+      ],
+      "ability": "KEEN EYE",
+      "moves": [
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 55,
+      "viability": 0.22
+    },
+    {
+      "id": 108,
+      "name": "LICKITUNG",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "OWN TEMPO",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FOCUS PUNCH",
+        "ICE BEAM",
+        "FLAMETHROWER"
+      ],
+      "win": 55,
+      "viability": 0.15
+    },
+    {
+      "id": 160,
+      "name": "FERALIGATR",
+      "types": [
+        "WATER"
+      ],
+      "ability": "TORRENT",
+      "moves": [
+        "FOCUS PUNCH",
+        "HYDRO PUMP",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 55,
+      "viability": 0.28
+    },
+    {
+      "id": 237,
+      "name": "HITMONTOP",
+      "types": [
+        "FIGHT"
+      ],
+      "ability": "INTIMIDATE",
+      "moves": [
+        "ROCK SLIDE",
+        "BRICK BREAK",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 55,
+      "viability": 0.1
+    },
+    {
+      "id": 242,
+      "name": "BLISSEY",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "NATURAL CURE",
+      "moves": [
+        "ICE BEAM",
+        "FLAMETHROWER",
+        "EGG BOMB",
+        "PSYCHIC"
+      ],
+      "win": 55,
+      "viability": 0.09
+    },
+    {
+      "id": 384,
+      "name": "AGGRON",
+      "types": [
+        "STEEL",
+        "ROCK"
+      ],
+      "ability": "STURDY",
+      "moves": [
+        "ROCK SLIDE",
+        "FOCUS PUNCH",
+        "IRON TAIL",
+        "THUNDER WAVE"
+      ],
+      "win": 55,
+      "viability": 0.13
+    },
+    {
+      "id": 6,
+      "name": "CHARIZARD",
+      "types": [
+        "FIRE",
+        "FLYING"
+      ],
+      "ability": "BLAZE",
+      "moves": [
+        "OVERHEAT",
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 54,
+      "viability": 0.27
+    },
+    {
+      "id": 89,
+      "name": "MUK",
+      "types": [
+        "POISON"
+      ],
+      "ability": "STENCH",
+      "moves": [
+        "FOCUS PUNCH",
+        "SLUDGE BOMB",
+        "FIRE BLAST",
+        "TOXIC"
+      ],
+      "win": 54,
+      "viability": 0.22
+    },
+    {
+      "id": 300,
+      "name": "SHIFTRY",
+      "types": [
+        "GRASS",
+        "DARK"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "MEGA KICK",
+        "LEAF BLADE",
+        "SHADOW BALL",
+        "BRICK BREAK"
+      ],
+      "win": 54,
+      "viability": 0.07
+    },
+    {
+      "id": 324,
+      "name": "WHISCASH",
+      "types": [
+        "WATER",
+        "GROUND"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "SURF",
+        "EARTHQUAKE",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 54,
+      "viability": 0.17
+    },
+    {
+      "id": 119,
+      "name": "SEAKING",
+      "types": [
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "DOUBLE-EDGE",
+        "HYDRO PUMP",
+        "DRILL PECK",
+        "MEGAHORN"
+      ],
+      "win": 53,
+      "viability": 0.11
+    },
+    {
+      "id": 217,
+      "name": "URSARING",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "GUTS",
+      "moves": [
+        "FOCUS PUNCH",
+        "DOUBLE-EDGE",
+        "LICK",
+        "TOXIC"
+      ],
+      "win": 53,
+      "viability": 0.25
+    },
+    {
+      "id": 372,
+      "name": "EXPLOUD",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "SOUNDPROOF",
+      "moves": [
+        "DOUBLE-EDGE",
+        "OVERHEAT",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 53,
+      "viability": 0.26
+    },
+    {
+      "id": 44,
+      "name": "GLOOM",
+      "types": [
+        "GRASS",
+        "POISON"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "PETAL DANCE",
+        "SLUDGE BOMB",
+        "DOUBLE-EDGE",
+        "SLEEP POWDER"
+      ],
+      "win": 52,
+      "viability": -0.06
     },
     {
       "id": 65,
@@ -2014,157 +1566,56 @@
         "FOCUS PUNCH",
         "TOXIC"
       ],
-      "win": 42,
-      "viability": 0.12
+      "win": 52,
+      "viability": 0.23
     },
     {
-      "id": 70,
-      "name": "WEEPINBELL",
-      "types": [
-        "GRASS",
-        "POISON"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "SLUDGE BOMB",
-        "LEAF BLADE",
-        "THIEF",
-        "SLEEP POWDER"
-      ],
-      "win": 42,
-      "viability": -0.09
-    },
-    {
-      "id": 87,
-      "name": "DEWGONG",
-      "types": [
-        "WATER",
-        "ICE"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "ICE BEAM",
-        "SURF",
-        "DOUBLE-EDGE",
-        "TOXIC"
-      ],
-      "win": 42,
-      "viability": 0.09
-    },
-    {
-      "id": 113,
-      "name": "CHANSEY",
+      "id": 115,
+      "name": "KANGASKHAN",
       "types": [
         "NORMAL"
       ],
-      "ability": "NATURAL CURE",
+      "ability": "EARLY BIRD",
       "moves": [
-        "ICE BEAM",
-        "SEISMIC TOSS",
-        "FLAMETHROWER",
-        "SING"
-      ],
-      "win": 42,
-      "viability": -0.06
-    },
-    {
-      "id": 123,
-      "name": "SCYTHER",
-      "types": [
-        "BUG",
-        "FLYING"
-      ],
-      "ability": "SWARM",
-      "moves": [
-        "WING ATTACK",
-        "TWINEEDLE",
-        "ROCK SMASH",
-        "TOXIC"
-      ],
-      "win": 42,
-      "viability": 0.04
-    },
-    {
-      "id": 126,
-      "name": "MAGMAR",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "FLAME BODY",
-      "moves": [
-        "FLAMETHROWER",
-        "FOCUS PUNCH",
-        "THUNDERPUNCH",
-        "TOXIC"
-      ],
-      "win": 42,
-      "viability": 0.1
-    },
-    {
-      "id": 136,
-      "name": "FLAREON",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "FLASH FIRE",
-      "moves": [
-        "OVERHEAT",
         "DOUBLE-EDGE",
-        "SHADOW BALL",
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
         "TOXIC"
       ],
-      "win": 42,
-      "viability": 0.06
+      "win": 52,
+      "viability": 0.32
     },
     {
-      "id": 192,
-      "name": "SUNFLORA",
+      "id": 127,
+      "name": "PINSIR",
+      "types": [
+        "BUG"
+      ],
+      "ability": "HYPER CUTTER",
+      "moves": [
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "TWINEEDLE",
+        "TOXIC"
+      ],
+      "win": 52,
+      "viability": 0.22
+    },
+    {
+      "id": 154,
+      "name": "MEGANIUM",
       "types": [
         "GRASS"
       ],
-      "ability": "CHLOROPHYLL",
+      "ability": "OVERGROW",
       "moves": [
-        "PETAL DANCE",
-        "FLAMETHROWER",
-        "DOUBLE-EDGE",
-        "TOXIC"
-      ],
-      "win": 42,
-      "viability": -0.01
-    },
-    {
-      "id": 198,
-      "name": "MURKROW",
-      "types": [
-        "DARK",
-        "FLYING"
-      ],
-      "ability": "INSOMNIA",
-      "moves": [
-        "DRILL PECK",
-        "SHADOW BALL",
-        "FAINT ATTACK",
-        "TOXIC"
-      ],
-      "win": 42,
-      "viability": 0.01
-    },
-    {
-      "id": 205,
-      "name": "FORRETRESS",
-      "types": [
-        "BUG",
-        "STEEL"
-      ],
-      "ability": "STURDY",
-      "moves": [
-        "ROCK SLIDE",
+        "GIGA DRAIN",
+        "IRON TAIL",
         "EARTHQUAKE",
-        "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 42,
-      "viability": 0.08
+      "win": 52,
+      "viability": 0.11
     },
     {
       "id": 211,
@@ -2180,8 +1631,408 @@
         "SHADOW BALL",
         "TOXIC"
       ],
-      "win": 42,
-      "viability": 0.09
+      "win": 52,
+      "viability": 0.16
+    },
+    {
+      "id": 376,
+      "name": "ABSOL",
+      "types": [
+        "DARK"
+      ],
+      "ability": "PRESSURE",
+      "moves": [
+        "IRON TAIL",
+        "SHADOW BALL",
+        "ICE BEAM",
+        "FIRE BLAST"
+      ],
+      "win": 52,
+      "viability": 0.06
+    },
+    {
+      "id": 76,
+      "name": "GOLEM",
+      "types": [
+        "ROCK",
+        "GROUND"
+      ],
+      "ability": "ROCK HEAD",
+      "moves": [
+        "ROCK BLAST",
+        "FOCUS PUNCH",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 51,
+      "viability": 0.1
+    },
+    {
+      "id": 197,
+      "name": "UMBREON",
+      "types": [
+        "DARK"
+      ],
+      "ability": "SYNCHRONIZE",
+      "moves": [
+        "FAINT ATTACK",
+        "IRON TAIL",
+        "PSYCHIC",
+        "TOXIC"
+      ],
+      "win": 51,
+      "viability": 0.1
+    },
+    {
+      "id": 229,
+      "name": "HOUNDOOM",
+      "types": [
+        "DARK",
+        "FIRE"
+      ],
+      "ability": "EARLY BIRD",
+      "moves": [
+        "OVERHEAT",
+        "CRUNCH",
+        "SOLARBEAM",
+        "TOXIC"
+      ],
+      "win": 51,
+      "viability": 0.22
+    },
+    {
+      "id": 232,
+      "name": "DONPHAN",
+      "types": [
+        "GROUND"
+      ],
+      "ability": "STURDY",
+      "moves": [
+        "DOUBLE-EDGE",
+        "EARTHQUAKE",
+        "ROCK TOMB",
+        "TOXIC"
+      ],
+      "win": 51,
+      "viability": 0.12
+    },
+    {
+      "id": 31,
+      "name": "NIDOQUEEN",
+      "types": [
+        "POISON",
+        "GROUND"
+      ],
+      "ability": "POISON POINT",
+      "moves": [
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 50,
+      "viability": 0.19
+    },
+    {
+      "id": 34,
+      "name": "NIDOKING",
+      "types": [
+        "POISON",
+        "GROUND"
+      ],
+      "ability": "POISON POINT",
+      "moves": [
+        "FOCUS PUNCH",
+        "FIRE BLAST",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 50,
+      "viability": 0.18
+    },
+    {
+      "id": 38,
+      "name": "NINETALES",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "FLASH FIRE",
+      "moves": [
+        "OVERHEAT",
+        "SOLARBEAM",
+        "PSYCHIC",
+        "TOXIC"
+      ],
+      "win": 50,
+      "viability": 0.22
+    },
+    {
+      "id": 112,
+      "name": "RHYDON",
+      "types": [
+        "GROUND",
+        "ROCK"
+      ],
+      "ability": "LIGHTNINGROD",
+      "moves": [
+        "ROCK SLIDE",
+        "FOCUS PUNCH",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 50,
+      "viability": 0.1
+    },
+    {
+      "id": 139,
+      "name": "OMASTAR",
+      "types": [
+        "ROCK",
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "HYDRO PUMP",
+        "ROCK SLIDE",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 50,
+      "viability": 0.1
+    },
+    {
+      "id": 189,
+      "name": "JUMPLUFF",
+      "types": [
+        "GRASS",
+        "FLYING"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "AERIAL ACE",
+        "GIGA DRAIN",
+        "DOUBLE-EDGE",
+        "SLEEP POWDER"
+      ],
+      "win": 50,
+      "viability": -0.01
+    },
+    {
+      "id": 241,
+      "name": "MILTANK",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FOCUS PUNCH",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 50,
+      "viability": 0.3
+    },
+    {
+      "id": 375,
+      "name": "GOREBYSS",
+      "types": [
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "PSYCHIC",
+        "TOXIC"
+      ],
+      "win": 50,
+      "viability": 0.13
+    },
+    {
+      "id": 141,
+      "name": "KABUTOPS",
+      "types": [
+        "ROCK",
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "ROCK SLIDE",
+        "BRICK BREAK",
+        "HYDRO PUMP",
+        "TOXIC"
+      ],
+      "win": 49,
+      "viability": 0.11
+    },
+    {
+      "id": 185,
+      "name": "SUDOWOODO",
+      "types": [
+        "ROCK"
+      ],
+      "ability": "STURDY",
+      "moves": [
+        "ROCK SLIDE",
+        "FOCUS PUNCH",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 49,
+      "viability": 0.14
+    },
+    {
+      "id": 210,
+      "name": "GRANBULL",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "INTIMIDATE",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 49,
+      "viability": 0.17
+    },
+    {
+      "id": 221,
+      "name": "PILOSWINE",
+      "types": [
+        "ICE",
+        "GROUND"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "ICE BEAM",
+        "EARTHQUAKE",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 49,
+      "viability": 0.11
+    },
+    {
+      "id": 327,
+      "name": "CRAWDAUNT",
+      "types": [
+        "WATER",
+        "DARK"
+      ],
+      "ability": "HYPER CUTTER",
+      "moves": [
+        "CRABHAMMER",
+        "ROCK TOMB",
+        "CRUNCH",
+        "TOXIC"
+      ],
+      "win": 49,
+      "viability": 0.1
+    },
+    {
+      "id": 2,
+      "name": "IVYSAUR",
+      "types": [
+        "GRASS",
+        "POISON"
+      ],
+      "ability": "OVERGROW",
+      "moves": [
+        "SLUDGE BOMB",
+        "GIGA DRAIN",
+        "ROCK SMASH",
+        "SLEEP POWDER"
+      ],
+      "win": 48,
+      "viability": -0.14
+    },
+    {
+      "id": 12,
+      "name": "BUTTERFREE",
+      "types": [
+        "BUG",
+        "FLYING"
+      ],
+      "ability": "COMPOUNDEYES",
+      "moves": [
+        "PSYCHIC",
+        "GIGA DRAIN",
+        "SIGNAL BEAM",
+        "SLEEP POWDER"
+      ],
+      "win": 48,
+      "viability": -0.13
+    },
+    {
+      "id": 82,
+      "name": "MAGNETON",
+      "types": [
+        "ELECTR",
+        "STEEL"
+      ],
+      "ability": "MAGNET PULL",
+      "moves": [
+        "THUNDERBOLT",
+        "TRI ATTACK",
+        "HIDDEN POWER",
+        "TOXIC"
+      ],
+      "win": 48,
+      "viability": 0.1
+    },
+    {
+      "id": 169,
+      "name": "CROBAT",
+      "types": [
+        "POISON",
+        "FLYING"
+      ],
+      "ability": "INNER FOCUS",
+      "moves": [
+        "AIR CUTTER",
+        "SLUDGE BOMB",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 48,
+      "viability": 0.15
+    },
+    {
+      "id": 207,
+      "name": "GLIGAR",
+      "types": [
+        "GROUND",
+        "FLYING"
+      ],
+      "ability": "HYPER CUTTER",
+      "moves": [
+        "AIR CUTTER",
+        "EARTHQUAKE",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 48,
+      "viability": 0.14
+    },
+    {
+      "id": 310,
+      "name": "PELIPPER",
+      "types": [
+        "WATER",
+        "FLYING"
+      ],
+      "ability": "KEEN EYE",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "SHOCK WAVE",
+        "TOXIC"
+      ],
+      "win": 48,
+      "viability": 0.11
     },
     {
       "id": 316,
@@ -2196,173 +2047,8 @@
         "SHADOW BALL",
         "SING"
       ],
-      "win": 42,
-      "viability": 0.03
-    },
-    {
-      "id": 372,
-      "name": "EXPLOUD",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "SOUNDPROOF",
-      "moves": [
-        "DOUBLE-EDGE",
-        "OVERHEAT",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 42,
-      "viability": 0.16
-    },
-    {
-      "id": 28,
-      "name": "SANDSLASH",
-      "types": [
-        "GROUND"
-      ],
-      "ability": "SAND VEIL",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0.05
-    },
-    {
-      "id": 61,
-      "name": "POLIWHIRL",
-      "types": [
-        "WATER"
-      ],
-      "ability": "WATER ABSORB",
-      "moves": [
-        "FOCUS PUNCH",
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "HYPNOSIS"
-      ],
-      "win": 41,
-      "viability": -0.04
-    },
-    {
-      "id": 110,
-      "name": "WEEZING",
-      "types": [
-        "POISON"
-      ],
-      "ability": "LEVITATE",
-      "moves": [
-        "SLUDGE BOMB",
-        "FIRE BLAST",
-        "THUNDERBOLT",
-        "TOXIC"
-      ],
-      "win": 41,
+      "win": 48,
       "viability": 0.08
-    },
-    {
-      "id": 168,
-      "name": "ARIADOS",
-      "types": [
-        "BUG",
-        "POISON"
-      ],
-      "ability": "SWARM",
-      "moves": [
-        "MEGAHORN",
-        "SLUDGE BOMB",
-        "PSYCHIC",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0
-    },
-    {
-      "id": 178,
-      "name": "XATU",
-      "types": [
-        "PSYCHC",
-        "FLYING"
-      ],
-      "ability": "SYNCHRONIZE",
-      "moves": [
-        "PSYCHIC",
-        "DRILL PECK",
-        "GIGA DRAIN",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0.04
-    },
-    {
-      "id": 184,
-      "name": "AZUMARILL",
-      "types": [
-        "WATER"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "HYDRO PUMP",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0.07
-    },
-    {
-      "id": 208,
-      "name": "STEELIX",
-      "types": [
-        "STEEL",
-        "GROUND"
-      ],
-      "ability": "ROCK HEAD",
-      "moves": [
-        "IRON TAIL",
-        "EARTHQUAKE",
-        "ROCK THROW",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0.06
-    },
-    {
-      "id": 226,
-      "name": "MANTINE",
-      "types": [
-        "WATER",
-        "FLYING"
-      ],
-      "ability": "SWIFT SWIM",
-      "moves": [
-        "ICE BEAM",
-        "SURF",
-        "WING ATTACK",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0.05
-    },
-    {
-      "id": 284,
-      "name": "MARSHTOMP",
-      "types": [
-        "WATER",
-        "GROUND"
-      ],
-      "ability": "TORRENT",
-      "moves": [
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "HYDRO PUMP",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0.05
     },
     {
       "id": 322,
@@ -2378,156 +2064,204 @@
         "ROCK TOMB",
         "TOXIC"
       ],
-      "win": 41,
-      "viability": 0.13
+      "win": 48,
+      "viability": 0.21
     },
     {
-      "id": 368,
-      "name": "SWALOT",
+      "id": 347,
+      "name": "GLALIE",
       "types": [
-        "POISON"
+        "ICE"
       ],
-      "ability": "LIQUID OOZE",
+      "ability": "LEVITATE",
       "moves": [
-        "SLUDGE BOMB",
         "ICE BEAM",
+        "EARTHQUAKE",
         "SHADOW BALL",
         "TOXIC"
       ],
-      "win": 41,
-      "viability": 0.05
+      "win": 48,
+      "viability": 0.15
     },
     {
-      "id": 375,
-      "name": "GOREBYSS",
+      "id": 57,
+      "name": "PRIMEAPE",
       "types": [
-        "WATER"
+        "FIGHT"
       ],
-      "ability": "SWIFT SWIM",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "PSYCHIC",
-        "TOXIC"
-      ],
-      "win": 41,
-      "viability": 0.08
-    },
-    {
-      "id": 386,
-      "name": "VOLBEAT",
-      "types": [
-        "BUG"
-      ],
-      "ability": "ILLUMINATE",
+      "ability": "VITAL SPIRIT",
       "moves": [
         "FOCUS PUNCH",
-        "THUNDERBOLT",
-        "SIGNAL BEAM",
-        "THUNDER WAVE"
-      ],
-      "win": 41,
-      "viability": 0.03
-    },
-    {
-      "id": 26,
-      "name": "RAICHU",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "STATIC",
-      "moves": [
-        "THUNDERBOLT",
-        "FOCUS PUNCH",
-        "SURF",
+        "OVERHEAT",
+        "ROCK TOMB",
         "TOXIC"
       ],
-      "win": 40,
-      "viability": 0.11
+      "win": 47,
+      "viability": 0.18
     },
     {
-      "id": 92,
-      "name": "GASTLY",
+      "id": 110,
+      "name": "WEEZING",
       "types": [
-        "GHOST",
         "POISON"
       ],
       "ability": "LEVITATE",
       "moves": [
+        "SLUDGE BOMB",
+        "FIRE BLAST",
         "THUNDERBOLT",
-        "PSYCHIC",
-        "GIGA DRAIN",
-        "HYPNOSIS"
+        "TOXIC"
       ],
-      "win": 40,
-      "viability": -0.13
+      "win": 47,
+      "viability": 0.11
     },
     {
-      "id": 115,
-      "name": "KANGASKHAN",
+      "id": 227,
+      "name": "SKARMORY",
       "types": [
-        "NORMAL"
+        "STEEL",
+        "FLYING"
       ],
-      "ability": "EARLY BIRD",
+      "ability": "KEEN EYE",
+      "moves": [
+        "AIR CUTTER",
+        "ROCK SLIDE",
+        "DRILL PECK",
+        "TOXIC"
+      ],
+      "win": 47,
+      "viability": 0.08
+    },
+    {
+      "id": 279,
+      "name": "SCEPTILE",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "OVERGROW",
       "moves": [
         "FOCUS PUNCH",
-        "ROCK SLIDE",
+        "LEAF BLADE",
+        "THUNDERPUNCH",
+        "TOXIC"
+      ],
+      "win": 47,
+      "viability": 0.16
+    },
+    {
+      "id": 292,
+      "name": "BEAUTIFLY",
+      "types": [
+        "BUG",
+        "FLYING"
+      ],
+      "ability": "SWARM",
+      "moves": [
+        "AIR CUTTER",
+        "SIGNAL BEAM",
+        "PSYCHIC",
+        "SLEEP POWDER"
+      ],
+      "win": 47,
+      "viability": -0.14
+    },
+    {
+      "id": 378,
+      "name": "BANETTE",
+      "types": [
+        "GHOST"
+      ],
+      "ability": "INSOMNIA",
+      "moves": [
+        "THUNDERBOLT",
         "SHADOW BALL",
+        "REVENGE",
         "TOXIC"
       ],
-      "win": 40,
-      "viability": 0.15
+      "win": 47,
+      "viability": 0.1
     },
     {
-      "id": 139,
-      "name": "OMASTAR",
+      "id": 379,
+      "name": "SEVIPER",
       "types": [
-        "ROCK",
-        "WATER"
+        "POISON"
       ],
-      "ability": "SWIFT SWIM",
+      "ability": "SHED SKIN",
       "moves": [
-        "ICE BEAM",
-        "SURF",
-        "ROCK SLIDE",
-        "TOXIC"
+        "POISON TAIL",
+        "FLAMETHROWER",
+        "EARTHQUAKE",
+        "GLARE"
       ],
-      "win": 40,
-      "viability": 0.04
+      "win": 47,
+      "viability": 0.03
     },
     {
-      "id": 219,
-      "name": "MAGCARGO",
+      "id": 28,
+      "name": "SANDSLASH",
       "types": [
-        "FIRE",
-        "ROCK"
+        "GROUND"
       ],
-      "ability": "MAGMA ARMOR",
+      "ability": "SAND VEIL",
       "moves": [
-        "OVERHEAT",
+        "FOCUS PUNCH",
         "ROCK SLIDE",
         "EARTHQUAKE",
         "TOXIC"
       ],
-      "win": 40,
-      "viability": 0
+      "win": 46,
+      "viability": 0.1
     },
     {
-      "id": 307,
-      "name": "BRELOOM",
+      "id": 123,
+      "name": "SCYTHER",
       "types": [
-        "GRASS",
-        "FIGHT"
+        "BUG",
+        "FLYING"
       ],
-      "ability": "EFFECT SPORE",
+      "ability": "SWARM",
       "moves": [
-        "FOCUS PUNCH",
-        "IRON TAIL",
-        "DOUBLE-EDGE",
-        "STUN SPORE"
+        "WING ATTACK",
+        "TWINEEDLE",
+        "ROCK SMASH",
+        "TOXIC"
       ],
-      "win": 40,
-      "viability": 0.06
+      "win": 46,
+      "viability": 0.1
+    },
+    {
+      "id": 184,
+      "name": "AZUMARILL",
+      "types": [
+        "WATER"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "HYDRO PUMP",
+        "FOCUS PUNCH",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 46,
+      "viability": 0.09
+    },
+    {
+      "id": 205,
+      "name": "FORRETRESS",
+      "types": [
+        "BUG",
+        "STEEL"
+      ],
+      "ability": "STURDY",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 46,
+      "viability": 0.14
     },
     {
       "id": 308,
@@ -2542,24 +2276,7 @@
         "ROCK SLIDE",
         "HYPNOSIS"
       ],
-      "win": 40,
-      "viability": 0.01
-    },
-    {
-      "id": 310,
-      "name": "PELIPPER",
-      "types": [
-        "WATER",
-        "FLYING"
-      ],
-      "ability": "KEEN EYE",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "AIR CUTTER",
-        "TOXIC"
-      ],
-      "win": 40,
+      "win": 46,
       "viability": 0.06
     },
     {
@@ -2576,8 +2293,74 @@
         "PSYCHIC",
         "TOXIC"
       ],
-      "win": 40,
-      "viability": 0.08
+      "win": 46,
+      "viability": 0.13
+    },
+    {
+      "id": 26,
+      "name": "RAICHU",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "STATIC",
+      "moves": [
+        "THUNDERBOLT",
+        "FOCUS PUNCH",
+        "SURF",
+        "TOXIC"
+      ],
+      "win": 45,
+      "viability": 0.18
+    },
+    {
+      "id": 61,
+      "name": "POLIWHIRL",
+      "types": [
+        "WATER"
+      ],
+      "ability": "WATER ABSORB",
+      "moves": [
+        "FOCUS PUNCH",
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "HYPNOSIS"
+      ],
+      "win": 45,
+      "viability": 0
+    },
+    {
+      "id": 87,
+      "name": "DEWGONG",
+      "types": [
+        "WATER",
+        "ICE"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "ICE BEAM",
+        "SURF",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 45,
+      "viability": 0.11
+    },
+    {
+      "id": 164,
+      "name": "NOCTOWL",
+      "types": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "ability": "INSOMNIA",
+      "moves": [
+        "PSYCHIC",
+        "TAKE DOWN",
+        "WING ATTACK",
+        "HYPNOSIS"
+      ],
+      "win": 45,
+      "viability": -0.01
     },
     {
       "id": 355,
@@ -2592,41 +2375,338 @@
         "METEOR MASH",
         "TOXIC"
       ],
-      "win": 40,
+      "win": 45,
+      "viability": 0.12
+    },
+    {
+      "id": 363,
+      "name": "ROSELIA",
+      "types": [
+        "GRASS",
+        "POISON"
+      ],
+      "ability": "NATURAL CURE",
+      "moves": [
+        "PETAL DANCE",
+        "SLUDGE BOMB",
+        "SHADOW BALL",
+        "STUN SPORE"
+      ],
+      "win": 45,
+      "viability": 0
+    },
+    {
+      "id": 114,
+      "name": "TANGELA",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "GIGA DRAIN",
+        "THIEF",
+        "SLUDGE BOMB",
+        "SLEEP POWDER"
+      ],
+      "win": 44,
+      "viability": -0.15
+    },
+    {
+      "id": 208,
+      "name": "STEELIX",
+      "types": [
+        "STEEL",
+        "GROUND"
+      ],
+      "ability": "ROCK HEAD",
+      "moves": [
+        "IRON TAIL",
+        "EARTHQUAKE",
+        "ROCK THROW",
+        "TOXIC"
+      ],
+      "win": 44,
       "viability": 0.08
     },
     {
-      "id": 42,
-      "name": "GOLBAT",
+      "id": 219,
+      "name": "MAGCARGO",
       "types": [
-        "POISON",
+        "FIRE",
+        "ROCK"
+      ],
+      "ability": "MAGMA ARMOR",
+      "moves": [
+        "OVERHEAT",
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 44,
+      "viability": 0.02
+    },
+    {
+      "id": 353,
+      "name": "PLUSLE",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "PLUS",
+      "moves": [
+        "VOLT TACKLE",
+        "IRON TAIL",
+        "DOUBLE-EDGE",
+        "THUNDER WAVE"
+      ],
+      "win": 44,
+      "viability": 0.13
+    },
+    {
+      "id": 70,
+      "name": "WEEPINBELL",
+      "types": [
+        "GRASS",
+        "POISON"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "SLUDGE BOMB",
+        "LEAF BLADE",
+        "THIEF",
+        "SLEEP POWDER"
+      ],
+      "win": 43,
+      "viability": -0.12
+    },
+    {
+      "id": 126,
+      "name": "MAGMAR",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "FLAME BODY",
+      "moves": [
+        "FLAMETHROWER",
+        "FOCUS PUNCH",
+        "THUNDERPUNCH",
+        "TOXIC"
+      ],
+      "win": 43,
+      "viability": 0.19
+    },
+    {
+      "id": 178,
+      "name": "XATU",
+      "types": [
+        "PSYCHC",
         "FLYING"
       ],
-      "ability": "INNER FOCUS",
+      "ability": "SYNCHRONIZE",
       "moves": [
-        "AIR CUTTER",
+        "PSYCHIC",
+        "DRILL PECK",
+        "GIGA DRAIN",
+        "TOXIC"
+      ],
+      "win": 43,
+      "viability": 0.11
+    },
+    {
+      "id": 233,
+      "name": "PORYGON2",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "TRACE",
+      "moves": [
+        "ICE BEAM",
+        "DOUBLE-EDGE",
+        "PSYCHIC",
+        "TOXIC"
+      ],
+      "win": 43,
+      "viability": 0.18
+    },
+    {
+      "id": 284,
+      "name": "MARSHTOMP",
+      "types": [
+        "WATER",
+        "GROUND"
+      ],
+      "ability": "TORRENT",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "HYDRO PUMP",
+        "TOXIC"
+      ],
+      "win": 43,
+      "viability": 0.05
+    },
+    {
+      "id": 303,
+      "name": "SHEDINJA",
+      "types": [
+        "BUG",
+        "GHOST"
+      ],
+      "ability": "WONDER GUARD",
+      "moves": [
+        "SHADOW BALL",
+        "SILVER WIND",
+        "FACADE",
+        "TOXIC"
+      ],
+      "win": 43,
+      "viability": 0.19
+    },
+    {
+      "id": 368,
+      "name": "SWALOT",
+      "types": [
+        "POISON"
+      ],
+      "ability": "LIQUID OOZE",
+      "moves": [
         "SLUDGE BOMB",
+        "ICE BEAM",
         "SHADOW BALL",
         "TOXIC"
       ],
-      "win": 39,
-      "viability": -0.02
+      "win": 43,
+      "viability": 0.09
     },
     {
-      "id": 57,
-      "name": "PRIMEAPE",
+      "id": 386,
+      "name": "VOLBEAT",
+      "types": [
+        "BUG"
+      ],
+      "ability": "ILLUMINATE",
+      "moves": [
+        "FOCUS PUNCH",
+        "THUNDERBOLT",
+        "SIGNAL BEAM",
+        "THUNDER WAVE"
+      ],
+      "win": 43,
+      "viability": 0.05
+    },
+    {
+      "id": 67,
+      "name": "MACHOKE",
       "types": [
         "FIGHT"
       ],
-      "ability": "VITAL SPIRIT",
+      "ability": "GUTS",
       "moves": [
         "FOCUS PUNCH",
-        "OVERHEAT",
         "ROCK TOMB",
+        "FIRE BLAST",
         "TOXIC"
       ],
-      "win": 39,
-      "viability": 0.12
+      "win": 42,
+      "viability": 0.05
+    },
+    {
+      "id": 136,
+      "name": "FLAREON",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "FLASH FIRE",
+      "moves": [
+        "OVERHEAT",
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 42,
+      "viability": 0.13
+    },
+    {
+      "id": 198,
+      "name": "MURKROW",
+      "types": [
+        "DARK",
+        "FLYING"
+      ],
+      "ability": "INSOMNIA",
+      "moves": [
+        "DRILL PECK",
+        "SHADOW BALL",
+        "FAINT ATTACK",
+        "TOXIC"
+      ],
+      "win": 42,
+      "viability": 0.07
+    },
+    {
+      "id": 203,
+      "name": "GIRAFARIG",
+      "types": [
+        "NORMAL",
+        "PSYCHC"
+      ],
+      "ability": "INNER FOCUS",
+      "moves": [
+        "PSYCHIC",
+        "THUNDERBOLT",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 42,
+      "viability": 0.11
+    },
+    {
+      "id": 224,
+      "name": "OCTILLERY",
+      "types": [
+        "WATER"
+      ],
+      "ability": "SUCTION CUPS",
+      "moves": [
+        "SURF",
+        "ICE BEAM",
+        "FIRE BLAST",
+        "TOXIC"
+      ],
+      "win": 42,
+      "viability": 0.07
+    },
+    {
+      "id": 226,
+      "name": "MANTINE",
+      "types": [
+        "WATER",
+        "FLYING"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "ICE BEAM",
+        "SURF",
+        "WING ATTACK",
+        "TOXIC"
+      ],
+      "win": 42,
+      "viability": 0.07
+    },
+    {
+      "id": 380,
+      "name": "ZANGOOSE",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "IMMUNITY",
+      "moves": [
+        "FOCUS PUNCH",
+        "DOUBLE-EDGE",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 42,
+      "viability": 0.23
     },
     {
       "id": 78,
@@ -2641,8 +2721,140 @@
         "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 39,
-      "viability": 0.1
+      "win": 41,
+      "viability": 0.2
+    },
+    {
+      "id": 281,
+      "name": "COMBUSKEN",
+      "types": [
+        "FIRE",
+        "FIGHT"
+      ],
+      "ability": "BLAZE",
+      "moves": [
+        "FOCUS PUNCH",
+        "OVERHEAT",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 41,
+      "viability": 0.02
+    },
+    {
+      "id": 92,
+      "name": "GASTLY",
+      "types": [
+        "GHOST",
+        "POISON"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "THUNDERBOLT",
+        "PSYCHIC",
+        "GIGA DRAIN",
+        "HYPNOSIS"
+      ],
+      "win": 40,
+      "viability": -0.14
+    },
+    {
+      "id": 96,
+      "name": "DROWZEE",
+      "types": [
+        "PSYCHC"
+      ],
+      "ability": "INSOMNIA",
+      "moves": [
+        "FOCUS PUNCH",
+        "PSYCHIC",
+        "SHADOW BALL",
+        "HYPNOSIS"
+      ],
+      "win": 40,
+      "viability": -0.15
+    },
+    {
+      "id": 122,
+      "name": "MR. MIME",
+      "types": [
+        "PSYCHC"
+      ],
+      "ability": "SOUNDPROOF",
+      "moves": [
+        "PSYCHIC",
+        "THUNDERBOLT",
+        "FOCUS PUNCH",
+        "TOXIC"
+      ],
+      "win": 40,
+      "viability": 0.14
+    },
+    {
+      "id": 170,
+      "name": "CHINCHOU",
+      "types": [
+        "WATER",
+        "ELECTR"
+      ],
+      "ability": "VOLT ABSORB",
+      "moves": [
+        "THUNDERBOLT",
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "THUNDER WAVE"
+      ],
+      "win": 40,
+      "viability": -0.07
+    },
+    {
+      "id": 192,
+      "name": "SUNFLORA",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "PETAL DANCE",
+        "FLAMETHROWER",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 40,
+      "viability": 0
+    },
+    {
+      "id": 321,
+      "name": "TORKOAL",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "WHITE SMOKE",
+      "moves": [
+        "OVERHEAT",
+        "DOUBLE-EDGE",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 40,
+      "viability": 0.06
+    },
+    {
+      "id": 331,
+      "name": "SHARPEDO",
+      "types": [
+        "WATER",
+        "DARK"
+      ],
+      "ability": "ROUGH SKIN",
+      "moves": [
+        "HYDRO PUMP",
+        "DOUBLE-EDGE",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 40,
+      "viability": 0.14
     },
     {
       "id": 85,
@@ -2659,40 +2871,39 @@
         "TOXIC"
       ],
       "win": 39,
-      "viability": 0.11
+      "viability": 0.22
     },
     {
-      "id": 122,
-      "name": "MR. MIME",
+      "id": 105,
+      "name": "MAROWAK",
       "types": [
-        "PSYCHC"
+        "GROUND"
       ],
-      "ability": "SOUNDPROOF",
+      "ability": "ROCK HEAD",
       "moves": [
-        "PSYCHIC",
-        "THUNDERBOLT",
         "FOCUS PUNCH",
+        "ROCK TOMB",
+        "EARTHQUAKE",
         "TOXIC"
       ],
       "win": 39,
-      "viability": 0.08
+      "viability": 0.02
     },
     {
-      "id": 170,
-      "name": "CHINCHOU",
+      "id": 148,
+      "name": "DRAGONAIR",
       "types": [
-        "WATER",
-        "ELECTR"
+        "DRAGON"
       ],
-      "ability": "VOLT ABSORB",
+      "ability": "SHED SKIN",
       "moves": [
-        "THUNDERBOLT",
-        "HYDRO PUMP",
+        "OUTRAGE",
         "ICE BEAM",
+        "FIRE BLAST",
         "THUNDER WAVE"
       ],
       "win": 39,
-      "viability": -0.07
+      "viability": -0.04
     },
     {
       "id": 180,
@@ -2708,122 +2919,7 @@
         "THUNDER WAVE"
       ],
       "win": 39,
-      "viability": -0.04
-    },
-    {
-      "id": 203,
-      "name": "GIRAFARIG",
-      "types": [
-        "NORMAL",
-        "PSYCHC"
-      ],
-      "ability": "INNER FOCUS",
-      "moves": [
-        "PSYCHIC",
-        "THUNDERBOLT",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 39,
-      "viability": 0.08
-    },
-    {
-      "id": 210,
-      "name": "GRANBULL",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "INTIMIDATE",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 39,
-      "viability": 0.13
-    },
-    {
-      "id": 233,
-      "name": "PORYGON2",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "TRACE",
-      "moves": [
-        "ICE BEAM",
-        "DOUBLE-EDGE",
-        "PSYCHIC",
-        "TOXIC"
-      ],
-      "win": 39,
-      "viability": 0.12
-    },
-    {
-      "id": 241,
-      "name": "MILTANK",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "FOCUS PUNCH",
-        "DOUBLE-EDGE",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 39,
-      "viability": 0.2
-    },
-    {
-      "id": 331,
-      "name": "SHARPEDO",
-      "types": [
-        "WATER",
-        "DARK"
-      ],
-      "ability": "ROUGH SKIN",
-      "moves": [
-        "HYDRO PUMP",
-        "DOUBLE-EDGE",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 39,
-      "viability": 0.07
-    },
-    {
-      "id": 378,
-      "name": "BANETTE",
-      "types": [
-        "GHOST"
-      ],
-      "ability": "INSOMNIA",
-      "moves": [
-        "THUNDERBOLT",
-        "SHADOW BALL",
-        "REVENGE",
-        "TOXIC"
-      ],
-      "win": 39,
-      "viability": 0.05
-    },
-    {
-      "id": 18,
-      "name": "PIDGEOT",
-      "types": [
-        "NORMAL",
-        "FLYING"
-      ],
-      "ability": "KEEN EYE",
-      "moves": [
-        "SKY ATTACK",
-        "DOUBLE-EDGE",
-        "STEEL WING",
-        "TOXIC"
-      ],
-      "win": 38,
-      "viability": 0.08
+      "viability": -0.06
     },
     {
       "id": 320,
@@ -2838,8 +2934,8 @@
         "EARTHQUAKE",
         "THUNDER WAVE"
       ],
-      "win": 38,
-      "viability": -0.12
+      "win": 39,
+      "viability": -0.1
     },
     {
       "id": 342,
@@ -2855,205 +2951,8 @@
         "ROCK SLIDE",
         "TOXIC"
       ],
-      "win": 38,
+      "win": 39,
       "viability": 0
-    },
-    {
-      "id": 67,
-      "name": "MACHOKE",
-      "types": [
-        "FIGHT"
-      ],
-      "ability": "GUTS",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK TOMB",
-        "FIRE BLAST",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0.04
-    },
-    {
-      "id": 96,
-      "name": "DROWZEE",
-      "types": [
-        "PSYCHC"
-      ],
-      "ability": "INSOMNIA",
-      "moves": [
-        "FOCUS PUNCH",
-        "PSYCHIC",
-        "SHADOW BALL",
-        "HYPNOSIS"
-      ],
-      "win": 37,
-      "viability": -0.15
-    },
-    {
-      "id": 215,
-      "name": "SNEASEL",
-      "types": [
-        "DARK",
-        "ICE"
-      ],
-      "ability": "INNER FOCUS",
-      "moves": [
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0.06
-    },
-    {
-      "id": 224,
-      "name": "OCTILLERY",
-      "types": [
-        "WATER"
-      ],
-      "ability": "SUCTION CUPS",
-      "moves": [
-        "SURF",
-        "ICE BEAM",
-        "FIRE BLAST",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0.04
-    },
-    {
-      "id": 247,
-      "name": "PUPITAR",
-      "types": [
-        "ROCK",
-        "GROUND"
-      ],
-      "ability": "SHED SKIN",
-      "moves": [
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "BRICK BREAK",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": -0.05
-    },
-    {
-      "id": 281,
-      "name": "COMBUSKEN",
-      "types": [
-        "FIRE",
-        "FIGHT"
-      ],
-      "ability": "BLAZE",
-      "moves": [
-        "FOCUS PUNCH",
-        "OVERHEAT",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0
-    },
-    {
-      "id": 294,
-      "name": "DUSTOX",
-      "types": [
-        "BUG",
-        "POISON"
-      ],
-      "ability": "SHIELD DUST",
-      "moves": [
-        "SLUDGE BOMB",
-        "PSYCHIC",
-        "SIGNAL BEAM",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": -0.1
-    },
-    {
-      "id": 313,
-      "name": "WAILMER",
-      "types": [
-        "WATER"
-      ],
-      "ability": "WATER VEIL",
-      "moves": [
-        "WATER SPOUT",
-        "ICE BEAM",
-        "ROCK TOMB",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0
-    },
-    {
-      "id": 317,
-      "name": "KECLEON",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "COLOR CHANGE",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0.11
-    },
-    {
-      "id": 321,
-      "name": "TORKOAL",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "WHITE SMOKE",
-      "moves": [
-        "OVERHEAT",
-        "DOUBLE-EDGE",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0.01
-    },
-    {
-      "id": 333,
-      "name": "VIBRAVA",
-      "types": [
-        "GROUND",
-        "DRAGON"
-      ],
-      "ability": "LEVITATE",
-      "moves": [
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "CRUNCH",
-        "TOXIC"
-      ],
-      "win": 37,
-      "viability": 0.01
-    },
-    {
-      "id": 353,
-      "name": "PLUSLE",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "PLUS",
-      "moves": [
-        "VOLT TACKLE",
-        "IRON TAIL",
-        "DOUBLE-EDGE",
-        "THUNDER WAVE"
-      ],
-      "win": 37,
-      "viability": 0.04
     },
     {
       "id": 354,
@@ -3068,105 +2967,8 @@
         "DOUBLE-EDGE",
         "THUNDER WAVE"
       ],
-      "win": 37,
-      "viability": 0.04
-    },
-    {
-      "id": 5,
-      "name": "CHARMELEON",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "BLAZE",
-      "moves": [
-        "OVERHEAT",
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 36,
-      "viability": -0.02
-    },
-    {
-      "id": 8,
-      "name": "WARTORTLE",
-      "types": [
-        "WATER"
-      ],
-      "ability": "TORRENT",
-      "moves": [
-        "HYDRO PUMP",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 36,
-      "viability": 0
-    },
-    {
-      "id": 102,
-      "name": "EXEGGCUTE",
-      "types": [
-        "GRASS",
-        "PSYCHC"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "PSYCHIC",
-        "GIGA DRAIN",
-        "DOUBLE-EDGE",
-        "HYPNOSIS"
-      ],
-      "win": 36,
-      "viability": -0.18
-    },
-    {
-      "id": 105,
-      "name": "MAROWAK",
-      "types": [
-        "GROUND"
-      ],
-      "ability": "ROCK HEAD",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK TOMB",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 36,
-      "viability": 0.01
-    },
-    {
-      "id": 117,
-      "name": "SEADRA",
-      "types": [
-        "WATER"
-      ],
-      "ability": "POISON POINT",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "DRAGONBREATH",
-        "TOXIC"
-      ],
-      "win": 36,
-      "viability": 0
-    },
-    {
-      "id": 120,
-      "name": "STARYU",
-      "types": [
-        "WATER"
-      ],
-      "ability": "ILLUMINATE",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "THUNDERBOLT",
-        "THUNDER WAVE"
-      ],
-      "win": 36,
-      "viability": -0.1
+      "win": 39,
+      "viability": 0.1
     },
     {
       "id": 159,
@@ -3181,25 +2983,25 @@
         "ICE BEAM",
         "TOXIC"
       ],
-      "win": 36,
-      "viability": -0.01
+      "win": 38,
+      "viability": 0.02
     },
     {
-      "id": 176,
-      "name": "TOGETIC",
+      "id": 168,
+      "name": "ARIADOS",
       "types": [
-        "NORMAL",
-        "FLYING"
+        "BUG",
+        "POISON"
       ],
-      "ability": "HUSTLE",
+      "ability": "SWARM",
       "moves": [
-        "FLAMETHROWER",
-        "FOCUS PUNCH",
-        "DOUBLE-EDGE",
+        "MEGAHORN",
+        "SLUDGE BOMB",
+        "PSYCHIC",
         "TOXIC"
       ],
-      "win": 36,
-      "viability": 0.05
+      "win": 38,
+      "viability": -0.01
     },
     {
       "id": 193,
@@ -3211,12 +3013,12 @@
       "ability": "SPEED BOOST",
       "moves": [
         "WING ATTACK",
-        "TWINEEDLE",
+        "SIGNAL BEAM",
         "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 36,
-      "viability": -0.04
+      "win": 38,
+      "viability": 0
     },
     {
       "id": 222,
@@ -3232,8 +3034,105 @@
         "PSYCHIC",
         "TOXIC"
       ],
-      "win": 36,
-      "viability": -0.02
+      "win": 38,
+      "viability": 0
+    },
+    {
+      "id": 317,
+      "name": "KECLEON",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "COLOR CHANGE",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 38,
+      "viability": 0.16
+    },
+    {
+      "id": 8,
+      "name": "WARTORTLE",
+      "types": [
+        "WATER"
+      ],
+      "ability": "TORRENT",
+      "moves": [
+        "HYDRO PUMP",
+        "FOCUS PUNCH",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 37,
+      "viability": 0.03
+    },
+    {
+      "id": 51,
+      "name": "DUGTRIO",
+      "types": [
+        "GROUND"
+      ],
+      "ability": "SAND VEIL",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "ROCK SMASH",
+        "TOXIC"
+      ],
+      "win": 37,
+      "viability": 0.06
+    },
+    {
+      "id": 91,
+      "name": "CLOYSTER",
+      "types": [
+        "WATER",
+        "ICE"
+      ],
+      "ability": "SHELL ARMOR",
+      "moves": [
+        "ICE BEAM",
+        "HYDRO PUMP",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 37,
+      "viability": 0.08
+    },
+    {
+      "id": 101,
+      "name": "ELECTRODE",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "SOUNDPROOF",
+      "moves": [
+        "VOLT TACKLE",
+        "THIEF",
+        "SELFDESTRUCT",
+        "THUNDER WAVE"
+      ],
+      "win": 37,
+      "viability": 0.22
+    },
+    {
+      "id": 117,
+      "name": "SEADRA",
+      "types": [
+        "WATER"
+      ],
+      "ability": "POISON POINT",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "DRAGONBREATH",
+        "TOXIC"
+      ],
+      "win": 37,
+      "viability": 0.04
     },
     {
       "id": 325,
@@ -3248,8 +3147,8 @@
         "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 36,
-      "viability": 0.02
+      "win": 37,
+      "viability": 0.04
     },
     {
       "id": 374,
@@ -3264,23 +3163,289 @@
         "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 36,
-      "viability": 0.07
+      "win": 37,
+      "viability": 0.11
     },
     {
-      "id": 380,
-      "name": "ZANGOOSE",
+      "id": 5,
+      "name": "CHARMELEON",
       "types": [
-        "NORMAL"
+        "FIRE"
       ],
-      "ability": "IMMUNITY",
+      "ability": "BLAZE",
       "moves": [
+        "OVERHEAT",
         "FOCUS PUNCH",
-        "DOUBLE-EDGE",
         "ROCK SLIDE",
         "TOXIC"
       ],
       "win": 36,
+      "viability": 0.02
+    },
+    {
+      "id": 18,
+      "name": "PIDGEOT",
+      "types": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "ability": "KEEN EYE",
+      "moves": [
+        "SKY ATTACK",
+        "DOUBLE-EDGE",
+        "STEEL WING",
+        "TOXIC"
+      ],
+      "win": 36,
+      "viability": 0.16
+    },
+    {
+      "id": 333,
+      "name": "VIBRAVA",
+      "types": [
+        "GROUND",
+        "DRAGON"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "CRUNCH",
+        "TOXIC"
+      ],
+      "win": 36,
+      "viability": 0.03
+    },
+    {
+      "id": 365,
+      "name": "VIGOROTH",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "VITAL SPIRIT",
+      "moves": [
+        "FOCUS PUNCH",
+        "SHADOW BALL",
+        "FIRE BLAST",
+        "TOXIC"
+      ],
+      "win": 36,
+      "viability": 0.09
+    },
+    {
+      "id": 383,
+      "name": "LAIRON",
+      "types": [
+        "STEEL",
+        "ROCK"
+      ],
+      "ability": "STURDY",
+      "moves": [
+        "ROCK SLIDE",
+        "IRON TAIL",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 36,
+      "viability": -0.02
+    },
+    {
+      "id": 42,
+      "name": "GOLBAT",
+      "types": [
+        "POISON",
+        "FLYING"
+      ],
+      "ability": "INNER FOCUS",
+      "moves": [
+        "AIR CUTTER",
+        "SLUDGE BOMB",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 35,
+      "viability": 0.02
+    },
+    {
+      "id": 102,
+      "name": "EXEGGCUTE",
+      "types": [
+        "GRASS",
+        "PSYCHC"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "PSYCHIC",
+        "GIGA DRAIN",
+        "DOUBLE-EDGE",
+        "HYPNOSIS"
+      ],
+      "win": 35,
+      "viability": -0.2
+    },
+    {
+      "id": 156,
+      "name": "QUILAVA",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "BLAZE",
+      "moves": [
+        "OVERHEAT",
+        "FOCUS PUNCH",
+        "CUT",
+        "TOXIC"
+      ],
+      "win": 35,
+      "viability": 0
+    },
+    {
+      "id": 247,
+      "name": "PUPITAR",
+      "types": [
+        "ROCK",
+        "GROUND"
+      ],
+      "ability": "SHED SKIN",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "BRICK BREAK",
+        "TOXIC"
+      ],
+      "win": 35,
+      "viability": -0.08
+    },
+    {
+      "id": 313,
+      "name": "WAILMER",
+      "types": [
+        "WATER"
+      ],
+      "ability": "WATER VEIL",
+      "moves": [
+        "WATER SPOUT",
+        "ICE BEAM",
+        "ROCK TOMB",
+        "TOXIC"
+      ],
+      "win": 35,
+      "viability": 0.03
+    },
+    {
+      "id": 99,
+      "name": "KINGLER",
+      "types": [
+        "WATER"
+      ],
+      "ability": "HYPER CUTTER",
+      "moves": [
+        "DOUBLE-EDGE",
+        "CRABHAMMER",
+        "BRICK BREAK",
+        "TOXIC"
+      ],
+      "win": 34,
+      "viability": 0.07
+    },
+    {
+      "id": 120,
+      "name": "STARYU",
+      "types": [
+        "WATER"
+      ],
+      "ability": "ILLUMINATE",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "THUNDERBOLT",
+        "THUNDER WAVE"
+      ],
+      "win": 34,
+      "viability": -0.11
+    },
+    {
+      "id": 215,
+      "name": "SNEASEL",
+      "types": [
+        "DARK",
+        "ICE"
+      ],
+      "ability": "INNER FOCUS",
+      "moves": [
+        "FOCUS PUNCH",
+        "ICE BEAM",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 34,
+      "viability": 0.1
+    },
+    {
+      "id": 294,
+      "name": "DUSTOX",
+      "types": [
+        "BUG",
+        "POISON"
+      ],
+      "ability": "SHIELD DUST",
+      "moves": [
+        "SLUDGE BOMB",
+        "PSYCHIC",
+        "SIGNAL BEAM",
+        "TOXIC"
+      ],
+      "win": 34,
+      "viability": -0.07
+    },
+    {
+      "id": 305,
+      "name": "SWELLOW",
+      "types": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "ability": "GUTS",
+      "moves": [
+        "SKY ATTACK",
+        "DOUBLE-EDGE",
+        "STEEL WING",
+        "TOXIC"
+      ],
+      "win": 34,
+      "viability": 0.12
+    },
+    {
+      "id": 356,
+      "name": "MEDITITE",
+      "types": [
+        "FIGHT",
+        "PSYCHC"
+      ],
+      "ability": "PURE POWER",
+      "moves": [
+        "FOCUS PUNCH",
+        "PSYCHIC",
+        "ROCK TOMB",
+        "TOXIC"
+      ],
+      "win": 34,
+      "viability": -0.01
+    },
+    {
+      "id": 385,
+      "name": "CASTFORM",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "FORECAST",
+      "moves": [
+        "ICE BEAM",
+        "DOUBLE-EDGE",
+        "FIRE BLAST",
+        "TOXIC"
+      ],
+      "win": 34,
       "viability": 0.13
     },
     {
@@ -3297,206 +3462,8 @@
         "STEEL WING",
         "TOXIC"
       ],
-      "win": 35,
-      "viability": 0.03
-    },
-    {
-      "id": 23,
-      "name": "EKANS",
-      "types": [
-        "POISON"
-      ],
-      "ability": "INTIMIDATE",
-      "moves": [
-        "SLUDGE BOMB",
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "GLARE"
-      ],
-      "win": 35,
-      "viability": -0.19
-    },
-    {
-      "id": 48,
-      "name": "VENONAT",
-      "types": [
-        "BUG",
-        "POISON"
-      ],
-      "ability": "COMPOUNDEYES",
-      "moves": [
-        "SLUDGE BOMB",
-        "SIGNAL BEAM",
-        "PSYCHIC",
-        "SLEEP POWDER"
-      ],
-      "win": 35,
-      "viability": -0.22
-    },
-    {
-      "id": 51,
-      "name": "DUGTRIO",
-      "types": [
-        "GROUND"
-      ],
-      "ability": "SAND VEIL",
-      "moves": [
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "ROCK SMASH",
-        "TOXIC"
-      ],
-      "win": 35,
-      "viability": -0.02
-    },
-    {
-      "id": 91,
-      "name": "CLOYSTER",
-      "types": [
-        "WATER",
-        "ICE"
-      ],
-      "ability": "SHELL ARMOR",
-      "moves": [
-        "ICE BEAM",
-        "SURF",
-        "DOUBLE-EDGE",
-        "TOXIC"
-      ],
-      "win": 35,
-      "viability": 0.02
-    },
-    {
-      "id": 156,
-      "name": "QUILAVA",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "BLAZE",
-      "moves": [
-        "OVERHEAT",
-        "FOCUS PUNCH",
-        "CUT",
-        "TOXIC"
-      ],
-      "win": 35,
-      "viability": -0.03
-    },
-    {
-      "id": 206,
-      "name": "DUNSPARCE",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "SERENE GRACE",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FIRE BLAST",
-        "SHADOW BALL",
-        "GLARE"
-      ],
-      "win": 35,
-      "viability": 0
-    },
-    {
-      "id": 225,
-      "name": "DELIBIRD",
-      "types": [
-        "ICE",
-        "FLYING"
-      ],
-      "ability": "VITAL SPIRIT",
-      "moves": [
-        "ICE BEAM",
-        "FOCUS PUNCH",
-        "AERIAL ACE",
-        "TOXIC"
-      ],
-      "win": 35,
-      "viability": -0.06
-    },
-    {
-      "id": 238,
-      "name": "SMOOCHUM",
-      "types": [
-        "ICE",
-        "PSYCHC"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "ICE BEAM",
-        "PSYCHIC",
-        "DYNAMICPUNCH",
-        "SING"
-      ],
-      "win": 35,
-      "viability": -0.21
-    },
-    {
-      "id": 379,
-      "name": "SEVIPER",
-      "types": [
-        "POISON"
-      ],
-      "ability": "SHED SKIN",
-      "moves": [
-        "POISON TAIL",
-        "FLAMETHROWER",
-        "SUPER FANG",
-        "GLARE"
-      ],
-      "win": 35,
-      "viability": 0.07
-    },
-    {
-      "id": 385,
-      "name": "CASTFORM",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "FORECAST",
-      "moves": [
-        "ICE BEAM",
-        "DOUBLE-EDGE",
-        "FIRE BLAST",
-        "TOXIC"
-      ],
-      "win": 35,
-      "viability": 0.09
-    },
-    {
-      "id": 1,
-      "name": "BULBASAUR",
-      "types": [
-        "GRASS",
-        "POISON"
-      ],
-      "ability": "OVERGROW",
-      "moves": [
-        "SLUDGE BOMB",
-        "GIGA DRAIN",
-        "ROCK SMASH",
-        "SLEEP POWDER"
-      ],
-      "win": 34,
-      "viability": -0.24
-    },
-    {
-      "id": 15,
-      "name": "BEEDRILL",
-      "types": [
-        "BUG",
-        "POISON"
-      ],
-      "ability": "SWARM",
-      "moves": [
-        "SLUDGE BOMB",
-        "TWINEEDLE",
-        "BRICK BREAK",
-        "TOXIC"
-      ],
-      "win": 34,
-      "viability": -0.08
+      "win": 33,
+      "viability": 0.12
     },
     {
       "id": 75,
@@ -3512,173 +3479,90 @@
         "EARTHQUAKE",
         "TOXIC"
       ],
-      "win": 34,
+      "win": 33,
       "viability": -0.07
     },
     {
-      "id": 365,
-      "name": "VIGOROTH",
+      "id": 176,
+      "name": "TOGETIC",
+      "types": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "ability": "HUSTLE",
+      "moves": [
+        "FLAMETHROWER",
+        "FOCUS PUNCH",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 33,
+      "viability": 0.08
+    },
+    {
+      "id": 206,
+      "name": "DUNSPARCE",
       "types": [
         "NORMAL"
       ],
-      "ability": "VITAL SPIRIT",
+      "ability": "SERENE GRACE",
       "moves": [
-        "FOCUS PUNCH",
+        "DOUBLE-EDGE",
+        "FIRE BLAST",
         "SHADOW BALL",
-        "FIRE BLAST",
-        "TOXIC"
-      ],
-      "win": 34,
-      "viability": 0.01
-    },
-    {
-      "id": 383,
-      "name": "LAIRON",
-      "types": [
-        "STEEL",
-        "ROCK"
-      ],
-      "ability": "STURDY",
-      "moves": [
-        "ROCK SLIDE",
-        "IRON TAIL",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 34,
-      "viability": -0.06
-    },
-    {
-      "id": 64,
-      "name": "KADABRA",
-      "types": [
-        "PSYCHC"
-      ],
-      "ability": "SYNCHRONIZE",
-      "moves": [
-        "PSYCHIC",
-        "THUNDERPUNCH",
-        "FOCUS PUNCH",
-        "TOXIC"
+        "GLARE"
       ],
       "win": 33,
-      "viability": -0.01
+      "viability": 0.02
     },
     {
-      "id": 99,
-      "name": "KINGLER",
+      "id": 287,
+      "name": "MIGHTYENA",
       "types": [
-        "WATER"
+        "DARK"
       ],
-      "ability": "HYPER CUTTER",
+      "ability": "INTIMIDATE",
       "moves": [
-        "DOUBLE-EDGE",
-        "CRABHAMMER",
-        "BRICK BREAK",
+        "TAKE DOWN",
+        "SHADOW BALL",
+        "ROCK SMASH",
         "TOXIC"
-      ],
-      "win": 33,
-      "viability": 0.04
-    },
-    {
-      "id": 148,
-      "name": "DRAGONAIR",
-      "types": [
-        "DRAGON"
-      ],
-      "ability": "SHED SKIN",
-      "moves": [
-        "DOUBLE-EDGE",
-        "ICE BEAM",
-        "FIRE BLAST",
-        "THUNDER WAVE"
       ],
       "win": 33,
       "viability": -0.05
     },
     {
-      "id": 296,
-      "name": "LOMBRE",
+      "id": 1,
+      "name": "BULBASAUR",
       "types": [
-        "WATER",
-        "GRASS"
+        "GRASS",
+        "POISON"
       ],
-      "ability": "SWIFT SWIM",
+      "ability": "OVERGROW",
       "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
+        "SLUDGE BOMB",
         "GIGA DRAIN",
-        "TOXIC"
-      ],
-      "win": 33,
-      "viability": -0.1
-    },
-    {
-      "id": 339,
-      "name": "NUMEL",
-      "types": [
-        "FIRE",
-        "GROUND"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "ERUPTION",
-        "EARTHQUAKE",
-        "ROCK SLIDE",
-        "AMNESIA"
-      ],
-      "win": 33,
-      "viability": -0.14
-    },
-    {
-      "id": 43,
-      "name": "ODDISH",
-      "types": [
-        "GRASS",
-        "POISON"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "PETAL DANCE",
-        "SLUDGE BOMB",
-        "DOUBLE-EDGE",
-        "STUN SPORE"
-      ],
-      "win": 32,
-      "viability": -0.17
-    },
-    {
-      "id": 69,
-      "name": "BELLSPROUT",
-      "types": [
-        "GRASS",
-        "POISON"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "SLUDGE BOMB",
-        "LEAF BLADE",
-        "THIEF",
+        "ROCK SMASH",
         "SLEEP POWDER"
       ],
       "win": 32,
-      "viability": -0.24
+      "viability": -0.28
     },
     {
-      "id": 88,
-      "name": "GRIMER",
+      "id": 23,
+      "name": "EKANS",
       "types": [
         "POISON"
       ],
-      "ability": "STENCH",
+      "ability": "INTIMIDATE",
       "moves": [
         "SLUDGE BOMB",
-        "FIRE BLAST",
-        "ROCK TOMB",
-        "TOXIC"
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "GLARE"
       ],
       "win": 32,
-      "viability": -0.13
+      "viability": -0.22
     },
     {
       "id": 111,
@@ -3689,30 +3573,29 @@
       ],
       "ability": "LIGHTNINGROD",
       "moves": [
-        "ROCK BLAST",
-        "EARTHQUAKE",
         "ROCK SLIDE",
+        "EARTHQUAKE",
+        "MEGAHORN",
         "TOXIC"
       ],
       "win": 32,
       "viability": -0.13
     },
     {
-      "id": 166,
-      "name": "LEDIAN",
+      "id": 77,
+      "name": "PONYTA",
       "types": [
-        "BUG",
-        "FLYING"
+        "FIRE"
       ],
-      "ability": "SWARM",
+      "ability": "RUN AWAY",
       "moves": [
-        "FOCUS PUNCH",
-        "ICE PUNCH",
-        "SIGNAL BEAM",
+        "OVERHEAT",
+        "IRON TAIL",
+        "SOLARBEAM",
         "TOXIC"
       ],
-      "win": 32,
-      "viability": -0.11
+      "win": 31,
+      "viability": -0.06
     },
     {
       "id": 190,
@@ -3727,155 +3610,58 @@
         "SHADOW BALL",
         "TOXIC"
       ],
-      "win": 32,
-      "viability": 0.09
+      "win": 31,
+      "viability": 0.17
     },
     {
-      "id": 289,
-      "name": "LINOONE",
+      "id": 225,
+      "name": "DELIBIRD",
       "types": [
-        "NORMAL"
-      ],
-      "ability": "PICKUP",
-      "moves": [
-        "DOUBLE-EDGE",
-        "SHADOW BALL",
-        "SURF",
-        "TOXIC"
-      ],
-      "win": 32,
-      "viability": 0.05
-    },
-    {
-      "id": 305,
-      "name": "SWELLOW",
-      "types": [
-        "NORMAL",
+        "ICE",
         "FLYING"
       ],
-      "ability": "GUTS",
-      "moves": [
-        "DOUBLE-EDGE",
-        "WING ATTACK",
-        "STEEL WING",
-        "TOXIC"
-      ],
-      "win": 32,
-      "viability": 0.01
-    },
-    {
-      "id": 60,
-      "name": "POLIWAG",
-      "types": [
-        "WATER"
-      ],
-      "ability": "WATER ABSORB",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "PSYCHIC",
-        "HYPNOSIS"
-      ],
-      "win": 31,
-      "viability": -0.25
-    },
-    {
-      "id": 77,
-      "name": "PONYTA",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "RUN AWAY",
-      "moves": [
-        "OVERHEAT",
-        "DOUBLE KICK",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 31,
-      "viability": -0.09
-    },
-    {
-      "id": 81,
-      "name": "MAGNEMITE",
-      "types": [
-        "ELECTR",
-        "STEEL"
-      ],
-      "ability": "MAGNET PULL",
-      "moves": [
-        "THUNDERBOLT",
-        "DOUBLE-EDGE",
-        "SONICBOOM",
-        "TOXIC"
-      ],
-      "win": 31,
-      "viability": -0.13
-    },
-    {
-      "id": 137,
-      "name": "PORYGON",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "TRACE",
+      "ability": "VITAL SPIRIT",
       "moves": [
         "ICE BEAM",
-        "DOUBLE-EDGE",
-        "PSYCHIC",
-        "TOXIC"
-      ],
-      "win": 31,
-      "viability": 0
-    },
-    {
-      "id": 153,
-      "name": "BAYLEEF",
-      "types": [
-        "GRASS"
-      ],
-      "ability": "OVERGROW",
-      "moves": [
-        "DOUBLE-EDGE",
-        "GIGA DRAIN",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 31,
-      "viability": -0.13
-    },
-    {
-      "id": 162,
-      "name": "FURRET",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "RUN AWAY",
-      "moves": [
-        "DOUBLE-EDGE",
         "FOCUS PUNCH",
-        "SHADOW BALL",
+        "AERIAL ACE",
         "TOXIC"
       ],
       "win": 31,
-      "viability": 0.05
+      "viability": -0.04
     },
     {
-      "id": 228,
-      "name": "HOUNDOUR",
+      "id": 64,
+      "name": "KADABRA",
       "types": [
-        "DARK",
-        "FIRE"
+        "PSYCHC"
       ],
-      "ability": "EARLY BIRD",
+      "ability": "SYNCHRONIZE",
       "moves": [
-        "OVERHEAT",
-        "CRUNCH",
-        "SOLARBEAM",
+        "PSYCHIC",
+        "THUNDERPUNCH",
+        "FOCUS PUNCH",
         "TOXIC"
       ],
-      "win": 31,
-      "viability": -0.14
+      "win": 30,
+      "viability": 0.03
+    },
+    {
+      "id": 238,
+      "name": "SMOOCHUM",
+      "types": [
+        "ICE",
+        "PSYCHC"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "ICE BEAM",
+        "PSYCHIC",
+        "DYNAMICPUNCH",
+        "SING"
+      ],
+      "win": 30,
+      "viability": -0.27
     },
     {
       "id": 302,
@@ -3891,121 +3677,90 @@
         "SILVER WIND",
         "TOXIC"
       ],
-      "win": 31,
-      "viability": -0.08
+      "win": 30,
+      "viability": -0.06
     },
     {
-      "id": 306,
-      "name": "SHROOMISH",
+      "id": 48,
+      "name": "VENONAT",
       "types": [
-        "GRASS"
-      ],
-      "ability": "EFFECT SPORE",
-      "moves": [
-        "SLUDGE BOMB",
-        "GIGA DRAIN",
-        "HIDDEN POWER",
-        "SPORE"
-      ],
-      "win": 31,
-      "viability": -0.32
-    },
-    {
-      "id": 356,
-      "name": "MEDITITE",
-      "types": [
-        "FIGHT",
-        "PSYCHC"
-      ],
-      "ability": "PURE POWER",
-      "moves": [
-        "FOCUS PUNCH",
-        "PSYCHIC",
-        "ROCK TOMB",
-        "TOXIC"
-      ],
-      "win": 31,
-      "viability": -0.07
-    },
-    {
-      "id": 30,
-      "name": "NIDORINA",
-      "types": [
+        "BUG",
         "POISON"
       ],
-      "ability": "POISON POINT",
+      "ability": "COMPOUNDEYES",
       "moves": [
         "SLUDGE BOMB",
-        "ICE BEAM",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 30,
-      "viability": -0.15
-    },
-    {
-      "id": 35,
-      "name": "CLEFAIRY",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "CUTE CHARM",
-      "moves": [
-        "ICE BEAM",
-        "FOCUS PUNCH",
-        "FLAMETHROWER",
-        "DOUBLE-EDGE"
-      ],
-      "win": 30,
-      "viability": -0.12
-    },
-    {
-      "id": 53,
-      "name": "PERSIAN",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "LIMBER",
-      "moves": [
-        "DOUBLE-EDGE",
-        "SHADOW BALL",
-        "THUNDERBOLT",
-        "TOXIC"
-      ],
-      "win": 30,
-      "viability": 0
-    },
-    {
-      "id": 58,
-      "name": "GROWLITHE",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "INTIMIDATE",
-      "moves": [
-        "OVERHEAT",
-        "DOUBLE-EDGE",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 30,
-      "viability": -0.16
-    },
-    {
-      "id": 63,
-      "name": "ABRA",
-      "types": [
-        "PSYCHC"
-      ],
-      "ability": "SYNCHRONIZE",
-      "moves": [
+        "SIGNAL BEAM",
         "PSYCHIC",
-        "THUNDERPUNCH",
-        "FOCUS PUNCH",
-        "THUNDER WAVE"
+        "SLEEP POWDER"
       ],
-      "win": 30,
-      "viability": -0.15
+      "win": 29,
+      "viability": -0.3
+    },
+    {
+      "id": 60,
+      "name": "POLIWAG",
+      "types": [
+        "WATER"
+      ],
+      "ability": "WATER ABSORB",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "PSYCHIC",
+        "HYPNOSIS"
+      ],
+      "win": 29,
+      "viability": -0.31
+    },
+    {
+      "id": 113,
+      "name": "CHANSEY",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "NATURAL CURE",
+      "moves": [
+        "ICE BEAM",
+        "FLAMETHROWER",
+        "EGG BOMB",
+        "PSYCHIC"
+      ],
+      "win": 29,
+      "viability": -0.17
+    },
+    {
+      "id": 162,
+      "name": "FURRET",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "RUN AWAY",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FOCUS PUNCH",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 29,
+      "viability": 0.12
+    },
+    {
+      "id": 339,
+      "name": "NUMEL",
+      "types": [
+        "FIRE",
+        "GROUND"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "ERUPTION",
+        "EARTHQUAKE",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 29,
+      "viability": -0.13
     },
     {
       "id": 66,
@@ -4020,41 +3775,273 @@
         "FIRE BLAST",
         "TOXIC"
       ],
-      "win": 30,
+      "win": 28,
+      "viability": -0.08
+    },
+    {
+      "id": 289,
+      "name": "LINOONE",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "PICKUP",
+      "moves": [
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "SURF",
+        "TOXIC"
+      ],
+      "win": 28,
+      "viability": 0.1
+    },
+    {
+      "id": 296,
+      "name": "LOMBRE",
+      "types": [
+        "WATER",
+        "GRASS"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "GIGA DRAIN",
+        "TOXIC"
+      ],
+      "win": 28,
       "viability": -0.13
     },
     {
-      "id": 83,
-      "name": "FARFETCH’D",
+      "id": 299,
+      "name": "NUZLEAF",
       "types": [
-        "NORMAL",
-        "FLYING"
+        "GRASS",
+        "DARK"
       ],
-      "ability": "KEEN EYE",
+      "ability": "CHLOROPHYLL",
       "moves": [
+        "MEGA KICK",
+        "FAINT ATTACK",
+        "BRICK BREAK",
+        "GIGA DRAIN"
+      ],
+      "win": 28,
+      "viability": -0.24
+    },
+    {
+      "id": 35,
+      "name": "CLEFAIRY",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "CUTE CHARM",
+      "moves": [
+        "ICE BEAM",
+        "FOCUS PUNCH",
+        "FLAMETHROWER",
+        "DOUBLE-EDGE"
+      ],
+      "win": 27,
+      "viability": -0.12
+    },
+    {
+      "id": 58,
+      "name": "GROWLITHE",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "INTIMIDATE",
+      "moves": [
+        "OVERHEAT",
         "DOUBLE-EDGE",
-        "AIR CUTTER",
         "IRON TAIL",
         "TOXIC"
       ],
-      "win": 30,
-      "viability": -0.06
+      "win": 27,
+      "viability": -0.18
     },
     {
-      "id": 100,
-      "name": "VOLTORB",
+      "id": 69,
+      "name": "BELLSPROUT",
       "types": [
-        "ELECTR"
+        "GRASS",
+        "POISON"
       ],
-      "ability": "SOUNDPROOF",
+      "ability": "CHLOROPHYLL",
       "moves": [
-        "THUNDERBOLT",
+        "SLUDGE BOMB",
+        "LEAF BLADE",
         "THIEF",
-        "SONICBOOM",
-        "THUNDER WAVE"
+        "SLEEP POWDER"
       ],
-      "win": 30,
-      "viability": -0.21
+      "win": 27,
+      "viability": -0.31
+    },
+    {
+      "id": 166,
+      "name": "LEDIAN",
+      "types": [
+        "BUG",
+        "FLYING"
+      ],
+      "ability": "SWARM",
+      "moves": [
+        "FOCUS PUNCH",
+        "ICE PUNCH",
+        "SIGNAL BEAM",
+        "TOXIC"
+      ],
+      "win": 27,
+      "viability": -0.12
+    },
+    {
+      "id": 15,
+      "name": "BEEDRILL",
+      "types": [
+        "BUG",
+        "POISON"
+      ],
+      "ability": "SWARM",
+      "moves": [
+        "SLUDGE BOMB",
+        "TWINEEDLE",
+        "BRICK BREAK",
+        "TOXIC"
+      ],
+      "win": 26,
+      "viability": -0.09
+    },
+    {
+      "id": 43,
+      "name": "ODDISH",
+      "types": [
+        "GRASS",
+        "POISON"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "PETAL DANCE",
+        "SLUDGE BOMB",
+        "DOUBLE-EDGE",
+        "STUN SPORE"
+      ],
+      "win": 26,
+      "viability": -0.22
+    },
+    {
+      "id": 53,
+      "name": "PERSIAN",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "LIMBER",
+      "moves": [
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "THUNDERBOLT",
+        "TOXIC"
+      ],
+      "win": 26,
+      "viability": 0.06
+    },
+    {
+      "id": 153,
+      "name": "BAYLEEF",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "OVERGROW",
+      "moves": [
+        "DOUBLE-EDGE",
+        "GIGA DRAIN",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 26,
+      "viability": -0.14
+    },
+    {
+      "id": 306,
+      "name": "SHROOMISH",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "EFFECT SPORE",
+      "moves": [
+        "SLUDGE BOMB",
+        "GIGA DRAIN",
+        "HIDDEN POWER",
+        "SPORE"
+      ],
+      "win": 26,
+      "viability": -0.41
+    },
+    {
+      "id": 74,
+      "name": "GEODUDE",
+      "types": [
+        "ROCK",
+        "GROUND"
+      ],
+      "ability": "ROCK HEAD",
+      "moves": [
+        "ROCK BLAST",
+        "FOCUS PUNCH",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 25,
+      "viability": -0.2
+    },
+    {
+      "id": 137,
+      "name": "PORYGON",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "TRACE",
+      "moves": [
+        "ICE BEAM",
+        "DOUBLE-EDGE",
+        "PSYCHIC",
+        "TOXIC"
+      ],
+      "win": 25,
+      "viability": 0
+    },
+    {
+      "id": 138,
+      "name": "OMANYTE",
+      "types": [
+        "ROCK",
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 25,
+      "viability": -0.16
+    },
+    {
+      "id": 228,
+      "name": "HOUNDOUR",
+      "types": [
+        "DARK",
+        "FIRE"
+      ],
+      "ability": "EARLY BIRD",
+      "moves": [
+        "OVERHEAT",
+        "CRUNCH",
+        "SOLARBEAM",
+        "TOXIC"
+      ],
+      "win": 25,
+      "viability": -0.15
     },
     {
       "id": 278,
@@ -4069,41 +4056,74 @@
         "GIGA DRAIN",
         "TOXIC"
       ],
-      "win": 30,
-      "viability": -0.11
+      "win": 25,
+      "viability": -0.09
     },
     {
-      "id": 287,
-      "name": "MIGHTYENA",
+      "id": 56,
+      "name": "MANKEY",
       "types": [
-        "DARK"
+        "FIGHT"
       ],
-      "ability": "INTIMIDATE",
+      "ability": "VITAL SPIRIT",
       "moves": [
-        "TAKE DOWN",
-        "SUPER FANG",
-        "SHADOW BALL",
-        "ROCK SMASH"
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "OVERHEAT",
+        "TOXIC"
       ],
-      "win": 30,
-      "viability": 0.12
+      "win": 24,
+      "viability": -0.13
     },
     {
-      "id": 299,
-      "name": "NUZLEAF",
+      "id": 63,
+      "name": "ABRA",
       "types": [
-        "GRASS",
-        "DARK"
+        "PSYCHC"
       ],
-      "ability": "CHLOROPHYLL",
+      "ability": "SYNCHRONIZE",
       "moves": [
-        "FAINT ATTACK",
+        "PSYCHIC",
+        "THUNDERPUNCH",
+        "FOCUS PUNCH",
+        "THUNDER WAVE"
+      ],
+      "win": 24,
+      "viability": -0.17
+    },
+    {
+      "id": 81,
+      "name": "MAGNEMITE",
+      "types": [
+        "ELECTR",
+        "STEEL"
+      ],
+      "ability": "MAGNET PULL",
+      "moves": [
+        "THUNDERBOLT",
+        "DOUBLE-EDGE",
+        "HIDDEN POWER",
+        "TOXIC"
+      ],
+      "win": 24,
+      "viability": -0.16
+    },
+    {
+      "id": 246,
+      "name": "LARVITAR",
+      "types": [
+        "ROCK",
+        "GROUND"
+      ],
+      "ability": "GUTS",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
         "BRICK BREAK",
-        "ROCK TOMB",
-        "GIGA DRAIN"
+        "TOXIC"
       ],
-      "win": 30,
-      "viability": -0.22
+      "win": 24,
+      "viability": -0.23
     },
     {
       "id": 335,
@@ -4115,26 +4135,10 @@
       "moves": [
         "FOCUS PUNCH",
         "ROCK SLIDE",
-        "SEISMIC TOSS",
+        "EARTHQUAKE",
         "TOXIC"
       ],
-      "win": 30,
-      "viability": -0.14
-    },
-    {
-      "id": 351,
-      "name": "SPOINK",
-      "types": [
-        "PSYCHC"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "PSYCHIC",
-        "SHOCK WAVE",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 30,
+      "win": 24,
       "viability": -0.15
     },
     {
@@ -4151,8 +4155,8 @@
         "ICE BEAM",
         "SING"
       ],
-      "win": 30,
-      "viability": -0.19
+      "win": 24,
+      "viability": -0.22
     },
     {
       "id": 373,
@@ -4167,139 +4171,40 @@
         "DOUBLE-EDGE",
         "IRON DEFENSE"
       ],
-      "win": 30,
-      "viability": -0.14
-    },
-    {
-      "id": 20,
-      "name": "RATICATE",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "RUN AWAY",
-      "moves": [
-        "DOUBLE-EDGE",
-        "SUPER FANG",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 29,
-      "viability": 0.11
-    },
-    {
-      "id": 33,
-      "name": "NIDORINO",
-      "types": [
-        "POISON"
-      ],
-      "ability": "POISON POINT",
-      "moves": [
-        "SLUDGE BOMB",
-        "ICE BEAM",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 29,
-      "viability": -0.14
-    },
-    {
-      "id": 56,
-      "name": "MANKEY",
-      "types": [
-        "FIGHT"
-      ],
-      "ability": "VITAL SPIRIT",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "OVERHEAT",
-        "TOXIC"
-      ],
-      "win": 29,
-      "viability": -0.13
-    },
-    {
-      "id": 72,
-      "name": "TENTACOOL",
-      "types": [
-        "WATER",
-        "POISON"
-      ],
-      "ability": "CLEAR BODY",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "GIGA DRAIN",
-        "TOXIC"
-      ],
-      "win": 29,
+      "win": 24,
       "viability": -0.15
     },
     {
-      "id": 74,
-      "name": "GEODUDE",
+      "id": 27,
+      "name": "SANDSHREW",
       "types": [
-        "ROCK",
         "GROUND"
       ],
-      "ability": "ROCK HEAD",
+      "ability": "SAND VEIL",
       "moves": [
-        "ROCK BLAST",
         "FOCUS PUNCH",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 29,
-      "viability": -0.19
-    },
-    {
-      "id": 95,
-      "name": "ONIX",
-      "types": [
-        "ROCK",
-        "GROUND"
-      ],
-      "ability": "ROCK HEAD",
-      "moves": [
         "ROCK SLIDE",
         "EARTHQUAKE",
-        "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 29,
-      "viability": -0.17
+      "win": 23,
+      "viability": -0.21
     },
     {
-      "id": 109,
-      "name": "KOFFING",
+      "id": 88,
+      "name": "GRIMER",
       "types": [
         "POISON"
       ],
-      "ability": "LEVITATE",
+      "ability": "STENCH",
       "moves": [
         "SLUDGE BOMB",
         "FIRE BLAST",
-        "THUNDERBOLT",
+        "ROCK TOMB",
         "TOXIC"
       ],
-      "win": 29,
-      "viability": -0.17
-    },
-    {
-      "id": 147,
-      "name": "DRATINI",
-      "types": [
-        "DRAGON"
-      ],
-      "ability": "SHED SKIN",
-      "moves": [
-        "OUTRAGE",
-        "ICE BEAM",
-        "FIRE BLAST",
-        "THUNDER WAVE"
-      ],
-      "win": 29,
-      "viability": -0.24
+      "win": 23,
+      "viability": -0.15
     },
     {
       "id": 179,
@@ -4314,25 +4219,8 @@
         "DOUBLE-EDGE",
         "THUNDER WAVE"
       ],
-      "win": 29,
-      "viability": -0.26
-    },
-    {
-      "id": 188,
-      "name": "SKIPLOOM",
-      "types": [
-        "GRASS",
-        "FLYING"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "AERIAL ACE",
-        "GIGA DRAIN",
-        "HIDDEN POWER",
-        "STUN SPORE"
-      ],
-      "win": 29,
-      "viability": -0.24
+      "win": 23,
+      "viability": -0.28
     },
     {
       "id": 213,
@@ -4348,8 +4236,8 @@
         "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 29,
-      "viability": -0.23
+      "win": 23,
+      "viability": -0.26
     },
     {
       "id": 218,
@@ -4364,297 +4252,7 @@
         "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 29,
-      "viability": -0.17
-    },
-    {
-      "id": 240,
-      "name": "MAGBY",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "FLAME BODY",
-      "moves": [
-        "FOCUS PUNCH",
-        "FIRE BLAST",
-        "PSYCHIC",
-        "TOXIC"
-      ],
-      "win": 29,
-      "viability": -0.13
-    },
-    {
-      "id": 337,
-      "name": "ELECTRIKE",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "STATIC",
-      "moves": [
-        "THUNDERBOLT",
-        "CRUNCH",
-        "IRON TAIL",
-        "THUNDER WAVE"
-      ],
-      "win": 29,
-      "viability": -0.25
-    },
-    {
-      "id": 361,
-      "name": "DUSKULL",
-      "types": [
-        "GHOST"
-      ],
-      "ability": "LEVITATE",
-      "moves": [
-        "DOUBLE-EDGE",
-        "SHADOW PUNCH",
-        "ICE BEAM",
-        "HYPNOSIS"
-      ],
-      "win": 29,
-      "viability": -0.22
-    },
-    {
-      "id": 371,
-      "name": "LOUDRED",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "SOUNDPROOF",
-      "moves": [
-        "DOUBLE-EDGE",
-        "OVERHEAT",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 29,
-      "viability": -0.1
-    },
-    {
-      "id": 377,
-      "name": "SHUPPET",
-      "types": [
-        "GHOST"
-      ],
-      "ability": "INSOMNIA",
-      "moves": [
-        "DOUBLE-EDGE",
-        "SHADOW BALL",
-        "THUNDERBOLT",
-        "THUNDER WAVE"
-      ],
-      "win": 29,
-      "viability": -0.22
-    },
-    {
-      "id": 4,
-      "name": "CHARMANDER",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "BLAZE",
-      "moves": [
-        "OVERHEAT",
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.19
-    },
-    {
-      "id": 7,
-      "name": "SQUIRTLE",
-      "types": [
-        "WATER"
-      ],
-      "ability": "TORRENT",
-      "moves": [
-        "HYDRO PUMP",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.16
-    },
-    {
-      "id": 25,
-      "name": "PIKACHU",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "STATIC",
-      "moves": [
-        "THUNDERBOLT",
-        "FOCUS PUNCH",
-        "SURF",
-        "THUNDER WAVE"
-      ],
-      "win": 28,
-      "viability": -0.16
-    },
-    {
-      "id": 27,
-      "name": "SANDSHREW",
-      "types": [
-        "GROUND"
-      ],
-      "ability": "SAND VEIL",
-      "moves": [
-        "FOCUS PUNCH",
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.17
-    },
-    {
-      "id": 37,
-      "name": "VULPIX",
-      "types": [
-        "FIRE"
-      ],
-      "ability": "FLASH FIRE",
-      "moves": [
-        "OVERHEAT",
-        "DOUBLE-EDGE",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.19
-    },
-    {
-      "id": 39,
-      "name": "JIGGLYPUFF",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "CUTE CHARM",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FOCUS PUNCH",
-        "FIRE BLAST",
-        "SING"
-      ],
-      "win": 28,
-      "viability": -0.26
-    },
-    {
-      "id": 54,
-      "name": "PSYDUCK",
-      "types": [
-        "WATER"
-      ],
-      "ability": "DAMP",
-      "moves": [
-        "HYDRO PUMP",
-        "FOCUS PUNCH",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.15
-    },
-    {
-      "id": 116,
-      "name": "HORSEA",
-      "types": [
-        "WATER"
-      ],
-      "ability": "SWIFT SWIM",
-      "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "TWISTER",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.22
-    },
-    {
-      "id": 118,
-      "name": "GOLDEEN",
-      "types": [
-        "WATER"
-      ],
-      "ability": "SWIFT SWIM",
-      "moves": [
-        "DRILL PECK",
-        "DOUBLE-EDGE",
-        "HYDRO PUMP",
-        "MEGAHORN"
-      ],
-      "win": 28,
-      "viability": -0.16
-    },
-    {
-      "id": 138,
-      "name": "OMANYTE",
-      "types": [
-        "ROCK",
-        "WATER"
-      ],
-      "ability": "SWIFT SWIM",
-      "moves": [
-        "ICE BEAM",
-        "SURF",
-        "ROCK SLIDE",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.15
-    },
-    {
-      "id": 209,
-      "name": "SNUBBULL",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "INTIMIDATE",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FOCUS PUNCH",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.13
-    },
-    {
-      "id": 216,
-      "name": "TEDDIURSA",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "PICKUP",
-      "moves": [
-        "FOCUS PUNCH",
-        "DOUBLE-EDGE",
-        "LICK",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.09
-    },
-    {
-      "id": 246,
-      "name": "LARVITAR",
-      "types": [
-        "ROCK",
-        "GROUND"
-      ],
-      "ability": "GUTS",
-      "moves": [
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "BRICK BREAK",
-        "TOXIC"
-      ],
-      "win": 28,
+      "win": 23,
       "viability": -0.19
     },
     {
@@ -4667,27 +4265,11 @@
       "moves": [
         "OVERHEAT",
         "ROCK SLIDE",
-        "SEISMIC TOSS",
+        "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 28,
-      "viability": -0.19
-    },
-    {
-      "id": 283,
-      "name": "MUDKIP",
-      "types": [
-        "WATER"
-      ],
-      "ability": "TORRENT",
-      "moves": [
-        "HYDRO PUMP",
-        "ROCK TOMB",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.24
+      "win": 23,
+      "viability": -0.26
     },
     {
       "id": 318,
@@ -4703,24 +4285,8 @@
         "PSYCHIC",
         "ICE BEAM"
       ],
-      "win": 28,
-      "viability": -0.19
-    },
-    {
-      "id": 332,
-      "name": "TRAPINCH",
-      "types": [
-        "GROUND"
-      ],
-      "ability": "HYPER CUTTER",
-      "moves": [
-        "ROCK SLIDE",
-        "EARTHQUAKE",
-        "ROCK SMASH",
-        "TOXIC"
-      ],
-      "win": 28,
-      "viability": -0.2
+      "win": 23,
+      "viability": -0.23
     },
     {
       "id": 382,
@@ -4736,89 +4302,219 @@
         "EARTHQUAKE",
         "TOXIC"
       ],
-      "win": 28,
-      "viability": -0.17
+      "win": 23,
+      "viability": -0.19
     },
     {
-      "id": 79,
-      "name": "SLOWPOKE",
+      "id": 20,
+      "name": "RATICATE",
       "types": [
-        "WATER",
-        "PSYCHC"
+        "NORMAL"
       ],
-      "ability": "OBLIVIOUS",
+      "ability": "RUN AWAY",
       "moves": [
         "DOUBLE-EDGE",
-        "PSYCHIC",
-        "EARTHQUAKE",
-        "ICE BEAM"
-      ],
-      "win": 27,
-      "viability": -0.16
-    },
-    {
-      "id": 86,
-      "name": "SEEL",
-      "types": [
-        "WATER"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "SURF",
-        "ICE BEAM",
-        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 27,
-      "viability": -0.16
+      "win": 22,
+      "viability": 0.05
     },
     {
-      "id": 101,
-      "name": "ELECTRODE",
+      "id": 39,
+      "name": "JIGGLYPUFF",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "CUTE CHARM",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FOCUS PUNCH",
+        "FIRE BLAST",
+        "SING"
+      ],
+      "win": 22,
+      "viability": -0.26
+    },
+    {
+      "id": 83,
+      "name": "FARFETCH’D",
+      "types": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "ability": "KEEN EYE",
+      "moves": [
+        "DOUBLE-EDGE",
+        "AIR CUTTER",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 22,
+      "viability": -0.05
+    },
+    {
+      "id": 100,
+      "name": "VOLTORB",
       "types": [
         "ELECTR"
       ],
       "ability": "SOUNDPROOF",
       "moves": [
-        "VOLT TACKLE",
+        "THUNDERBOLT",
         "THIEF",
-        "EXPLOSION",
-        "TOXIC"
+        "SELFDESTRUCT",
+        "THUNDER WAVE"
       ],
-      "win": 27,
-      "viability": 0.18
+      "win": 22,
+      "viability": -0.13
     },
     {
-      "id": 104,
-      "name": "CUBONE",
+      "id": 188,
+      "name": "SKIPLOOM",
       "types": [
+        "GRASS",
+        "FLYING"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "AERIAL ACE",
+        "GIGA DRAIN",
+        "HIDDEN POWER",
+        "STUN SPORE"
+      ],
+      "win": 22,
+      "viability": -0.31
+    },
+    {
+      "id": 240,
+      "name": "MAGBY",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "FLAME BODY",
+      "moves": [
+        "FOCUS PUNCH",
+        "FIRE BLAST",
+        "PSYCHIC",
+        "TOXIC"
+      ],
+      "win": 22,
+      "viability": -0.12
+    },
+    {
+      "id": 332,
+      "name": "TRAPINCH",
+      "types": [
+        "GROUND"
+      ],
+      "ability": "HYPER CUTTER",
+      "moves": [
+        "ROCK SLIDE",
+        "EARTHQUAKE",
+        "ROCK SMASH",
+        "TOXIC"
+      ],
+      "win": 22,
+      "viability": -0.22
+    },
+    {
+      "id": 4,
+      "name": "CHARMANDER",
+      "types": [
+        "FIRE"
+      ],
+      "ability": "BLAZE",
+      "moves": [
+        "OVERHEAT",
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 21,
+      "viability": -0.21
+    },
+    {
+      "id": 25,
+      "name": "PIKACHU",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "STATIC",
+      "moves": [
+        "FOCUS PUNCH",
+        "THUNDERBOLT",
+        "SURF",
+        "THUNDER WAVE"
+      ],
+      "win": 21,
+      "viability": -0.17
+    },
+    {
+      "id": 30,
+      "name": "NIDORINA",
+      "types": [
+        "POISON"
+      ],
+      "ability": "POISON POINT",
+      "moves": [
+        "SLUDGE BOMB",
+        "ICE BEAM",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 21,
+      "viability": -0.18
+    },
+    {
+      "id": 72,
+      "name": "TENTACOOL",
+      "types": [
+        "WATER",
+        "POISON"
+      ],
+      "ability": "CLEAR BODY",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "GIGA DRAIN",
+        "TOXIC"
+      ],
+      "win": 21,
+      "viability": -0.2
+    },
+    {
+      "id": 95,
+      "name": "ONIX",
+      "types": [
+        "ROCK",
         "GROUND"
       ],
       "ability": "ROCK HEAD",
       "moves": [
-        "FOCUS PUNCH",
         "ROCK SLIDE",
         "EARTHQUAKE",
+        "IRON TAIL",
         "TOXIC"
       ],
-      "win": 27,
-      "viability": -0.2
+      "win": 21,
+      "viability": -0.21
     },
     {
-      "id": 140,
-      "name": "KABUTO",
+      "id": 118,
+      "name": "GOLDEEN",
       "types": [
-        "ROCK",
         "WATER"
       ],
       "ability": "SWIFT SWIM",
       "moves": [
-        "ROCK SLIDE",
-        "SURF",
+        "DRILL PECK",
         "DOUBLE-EDGE",
-        "TOXIC"
+        "HYDRO PUMP",
+        "MEGAHORN"
       ],
-      "win": 27,
+      "win": 21,
       "viability": -0.18
     },
     {
@@ -4835,137 +4531,89 @@
         "ROCK SLIDE",
         "TOXIC"
       ],
-      "win": 27,
-      "viability": -0.17
+      "win": 21,
+      "viability": -0.19
     },
     {
-      "id": 231,
-      "name": "PHANPY",
+      "id": 361,
+      "name": "DUSKULL",
+      "types": [
+        "GHOST"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "DOUBLE-EDGE",
+        "SHADOW PUNCH",
+        "ICE BEAM",
+        "HYPNOSIS"
+      ],
+      "win": 21,
+      "viability": -0.23
+    },
+    {
+      "id": 371,
+      "name": "LOUDRED",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "SOUNDPROOF",
+      "moves": [
+        "DOUBLE-EDGE",
+        "OVERHEAT",
+        "ROCK SLIDE",
+        "TOXIC"
+      ],
+      "win": 21,
+      "viability": -0.07
+    },
+    {
+      "id": 7,
+      "name": "SQUIRTLE",
+      "types": [
+        "WATER"
+      ],
+      "ability": "TORRENT",
+      "moves": [
+        "HYDRO PUMP",
+        "FOCUS PUNCH",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 20,
+      "viability": -0.16
+    },
+    {
+      "id": 79,
+      "name": "SLOWPOKE",
+      "types": [
+        "WATER",
+        "PSYCHC"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "DOUBLE-EDGE",
+        "PSYCHIC",
+        "EARTHQUAKE",
+        "ICE BEAM"
+      ],
+      "win": 20,
+      "viability": -0.18
+    },
+    {
+      "id": 104,
+      "name": "CUBONE",
       "types": [
         "GROUND"
       ],
-      "ability": "PICKUP",
+      "ability": "ROCK HEAD",
       "moves": [
-        "DOUBLE-EDGE",
-        "EARTHQUAKE",
-        "ROCK TOMB",
-        "TOXIC"
-      ],
-      "win": 27,
-      "viability": -0.18
-    },
-    {
-      "id": 239,
-      "name": "ELEKID",
-      "types": [
-        "ELECTR"
-      ],
-      "ability": "STATIC",
-      "moves": [
-        "THUNDERBOLT",
         "FOCUS PUNCH",
-        "PSYCHIC",
+        "ROCK SLIDE",
+        "EARTHQUAKE",
         "TOXIC"
       ],
-      "win": 27,
-      "viability": -0.09
-    },
-    {
-      "id": 346,
-      "name": "SNORUNT",
-      "types": [
-        "ICE"
-      ],
-      "ability": "INNER FOCUS",
-      "moves": [
-        "ICE BEAM",
-        "SHADOW BALL",
-        "DOUBLE-EDGE",
-        "TOXIC"
-      ],
-      "win": 27,
-      "viability": -0.18
-    },
-    {
-      "id": 367,
-      "name": "GULPIN",
-      "types": [
-        "POISON"
-      ],
-      "ability": "LIQUID OOZE",
-      "moves": [
-        "SLUDGE BOMB",
-        "ICE BEAM",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 27,
-      "viability": -0.22
-    },
-    {
-      "id": 46,
-      "name": "PARAS",
-      "types": [
-        "BUG",
-        "GRASS"
-      ],
-      "ability": "EFFECT SPORE",
-      "moves": [
-        "TWINEEDLE",
-        "SLUDGE BOMB",
-        "GIGA DRAIN",
-        "AERIAL ACE"
-      ],
-      "win": 26,
-      "viability": -0.29
-    },
-    {
-      "id": 90,
-      "name": "SHELLDER",
-      "types": [
-        "WATER"
-      ],
-      "ability": "SHELL ARMOR",
-      "moves": [
-        "DOUBLE-EDGE",
-        "SURF",
-        "ICE BEAM",
-        "REST"
-      ],
-      "win": 26,
-      "viability": -0.24
-    },
-    {
-      "id": 98,
-      "name": "KRABBY",
-      "types": [
-        "WATER"
-      ],
-      "ability": "HYPER CUTTER",
-      "moves": [
-        "ROCK TOMB",
-        "ROCK SMASH",
-        "CRABHAMMER",
-        "TOXIC"
-      ],
-      "win": 26,
-      "viability": -0.27
-    },
-    {
-      "id": 152,
-      "name": "CHIKORITA",
-      "types": [
-        "GRASS"
-      ],
-      "ability": "OVERGROW",
-      "moves": [
-        "DOUBLE-EDGE",
-        "GIGA DRAIN",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 26,
-      "viability": -0.26
+      "win": 20,
+      "viability": -0.21
     },
     {
       "id": 158,
@@ -4980,172 +4628,120 @@
         "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 26,
-      "viability": -0.16
+      "win": 20,
+      "viability": -0.15
     },
     {
-      "id": 177,
-      "name": "NATU",
+      "id": 239,
+      "name": "ELEKID",
       "types": [
-        "PSYCHC",
-        "FLYING"
+        "ELECTR"
       ],
-      "ability": "SYNCHRONIZE",
+      "ability": "STATIC",
       "moves": [
+        "THUNDERBOLT",
+        "FOCUS PUNCH",
         "PSYCHIC",
-        "DRILL PECK",
-        "GIGA DRAIN",
         "TOXIC"
       ],
-      "win": 26,
-      "viability": -0.19
+      "win": 20,
+      "viability": -0.04
     },
     {
-      "id": 183,
-      "name": "MARILL",
+      "id": 351,
+      "name": "SPOINK",
       "types": [
-        "WATER"
+        "PSYCHC"
       ],
       "ability": "THICK FAT",
       "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "FOCUS PUNCH",
+        "PSYCHIC",
+        "SHOCK WAVE",
+        "IRON TAIL",
         "TOXIC"
       ],
-      "win": 26,
-      "viability": -0.22
+      "win": 20,
+      "viability": -0.15
     },
     {
-      "id": 223,
-      "name": "REMORAID",
+      "id": 33,
+      "name": "NIDORINO",
       "types": [
-        "WATER"
+        "POISON"
       ],
-      "ability": "HUSTLE",
+      "ability": "POISON POINT",
       "moves": [
-        "SURF",
+        "SLUDGE BOMB",
         "ICE BEAM",
-        "FIRE BLAST",
+        "IRON TAIL",
         "TOXIC"
       ],
-      "win": 26,
-      "viability": -0.26
-    },
-    {
-      "id": 323,
-      "name": "BARBOACH",
-      "types": [
-        "WATER",
-        "GROUND"
-      ],
-      "ability": "OBLIVIOUS",
-      "moves": [
-        "SURF",
-        "EARTHQUAKE",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 26,
+      "win": 19,
       "viability": -0.17
     },
     {
-      "id": 330,
-      "name": "CARVANHA",
+      "id": 37,
+      "name": "VULPIX",
       "types": [
-        "WATER",
-        "DARK"
+        "FIRE"
       ],
-      "ability": "ROUGH SKIN",
+      "ability": "FLASH FIRE",
       "moves": [
-        "HYDRO PUMP",
-        "ICE BEAM",
-        "CRUNCH",
+        "OVERHEAT",
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
         "TOXIC"
       ],
-      "win": 26,
-      "viability": -0.22
-    },
-    {
-      "id": 341,
-      "name": "SPHEAL",
-      "types": [
-        "ICE",
-        "WATER"
-      ],
-      "ability": "THICK FAT",
-      "moves": [
-        "ICE BEAM",
-        "HYDRO PUMP",
-        "EARTHQUAKE",
-        "TOXIC"
-      ],
-      "win": 26,
-      "viability": -0.21
-    },
-    {
-      "id": 344,
-      "name": "CACNEA",
-      "types": [
-        "GRASS"
-      ],
-      "ability": "SAND VEIL",
-      "moves": [
-        "FOCUS PUNCH",
-        "NEEDLE ARM",
-        "FAINT ATTACK",
-        "TOXIC"
-      ],
-      "win": 26,
+      "win": 19,
       "viability": -0.24
     },
     {
-      "id": 364,
-      "name": "SLAKOTH",
+      "id": 54,
+      "name": "PSYDUCK",
       "types": [
-        "NORMAL"
+        "WATER"
       ],
-      "ability": "TRUANT",
+      "ability": "DAMP",
       "moves": [
+        "HYDRO PUMP",
         "FOCUS PUNCH",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 19,
+      "viability": -0.16
+    },
+    {
+      "id": 109,
+      "name": "KOFFING",
+      "types": [
+        "POISON"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "SLUDGE BOMB",
+        "FIRE BLAST",
+        "THUNDERBOLT",
+        "TOXIC"
+      ],
+      "win": 19,
+      "viability": -0.2
+    },
+    {
+      "id": 140,
+      "name": "KABUTO",
+      "types": [
+        "ROCK",
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
         "ROCK SLIDE",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 26,
-      "viability": -0.23
-    },
-    {
-      "id": 84,
-      "name": "DODUO",
-      "types": [
-        "NORMAL",
-        "FLYING"
-      ],
-      "ability": "RUN AWAY",
-      "moves": [
-        "DRILL PECK",
+        "HYDRO PUMP",
         "DOUBLE-EDGE",
-        "JUMP KICK",
         "TOXIC"
       ],
-      "win": 25,
-      "viability": -0.14
-    },
-    {
-      "id": 133,
-      "name": "EEVEE",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "RUN AWAY",
-      "moves": [
-        "TAKE DOWN",
-        "SHADOW BALL",
-        "DOUBLE KICK",
-        "TOXIC"
-      ],
-      "win": 25,
+      "win": 19,
       "viability": -0.22
     },
     {
@@ -5161,170 +4757,235 @@
         "DIG",
         "TOXIC"
       ],
-      "win": 25,
-      "viability": -0.24
+      "win": 19,
+      "viability": -0.28
     },
     {
-      "id": 277,
-      "name": "TREECKO",
-      "types": [
-        "GRASS"
-      ],
-      "ability": "OVERGROW",
-      "moves": [
-        "FOCUS PUNCH",
-        "THUNDERPUNCH",
-        "GIGA DRAIN",
-        "TOXIC"
-      ],
-      "win": 25,
-      "viability": -0.24
-    },
-    {
-      "id": 315,
-      "name": "SKITTY",
+      "id": 209,
+      "name": "SNUBBULL",
       "types": [
         "NORMAL"
       ],
-      "ability": "CUTE CHARM",
+      "ability": "INTIMIDATE",
       "moves": [
         "DOUBLE-EDGE",
+        "FOCUS PUNCH",
         "SHADOW BALL",
-        "ICE BEAM",
-        "SING"
+        "TOXIC"
       ],
-      "win": 25,
+      "win": 19,
+      "viability": -0.1
+    },
+    {
+      "id": 231,
+      "name": "PHANPY",
+      "types": [
+        "GROUND"
+      ],
+      "ability": "PICKUP",
+      "moves": [
+        "DOUBLE-EDGE",
+        "EARTHQUAKE",
+        "ROCK TOMB",
+        "TOXIC"
+      ],
+      "win": 19,
+      "viability": -0.2
+    },
+    {
+      "id": 337,
+      "name": "ELECTRIKE",
+      "types": [
+        "ELECTR"
+      ],
+      "ability": "STATIC",
+      "moves": [
+        "THUNDERBOLT",
+        "CRUNCH",
+        "IRON TAIL",
+        "THUNDER WAVE"
+      ],
+      "win": 19,
+      "viability": -0.31
+    },
+    {
+      "id": 90,
+      "name": "SHELLDER",
+      "types": [
+        "WATER"
+      ],
+      "ability": "SHELL ARMOR",
+      "moves": [
+        "DOUBLE-EDGE",
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "REST"
+      ],
+      "win": 18,
+      "viability": -0.28
+    },
+    {
+      "id": 147,
+      "name": "DRATINI",
+      "types": [
+        "DRAGON"
+      ],
+      "ability": "SHED SKIN",
+      "moves": [
+        "OUTRAGE",
+        "ICE BEAM",
+        "DOUBLE-EDGE",
+        "FIRE BLAST"
+      ],
+      "win": 18,
+      "viability": -0.27
+    },
+    {
+      "id": 216,
+      "name": "TEDDIURSA",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "PICKUP",
+      "moves": [
+        "FOCUS PUNCH",
+        "DOUBLE-EDGE",
+        "LICK",
+        "TOXIC"
+      ],
+      "win": 18,
+      "viability": -0.05
+    },
+    {
+      "id": 344,
+      "name": "CACNEA",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "SAND VEIL",
+      "moves": [
+        "FOCUS PUNCH",
+        "NEEDLE ARM",
+        "FAINT ATTACK",
+        "TOXIC"
+      ],
+      "win": 18,
+      "viability": -0.27
+    },
+    {
+      "id": 46,
+      "name": "PARAS",
+      "types": [
+        "BUG",
+        "GRASS"
+      ],
+      "ability": "EFFECT SPORE",
+      "moves": [
+        "TWINEEDLE",
+        "SLUDGE BOMB",
+        "GIGA DRAIN",
+        "AERIAL ACE"
+      ],
+      "win": 17,
+      "viability": -0.37
+    },
+    {
+      "id": 323,
+      "name": "BARBOACH",
+      "types": [
+        "WATER",
+        "GROUND"
+      ],
+      "ability": "OBLIVIOUS",
+      "moves": [
+        "SURF",
+        "EARTHQUAKE",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 17,
+      "viability": -0.2
+    },
+    {
+      "id": 367,
+      "name": "GULPIN",
+      "types": [
+        "POISON"
+      ],
+      "ability": "LIQUID OOZE",
+      "moves": [
+        "SLUDGE BOMB",
+        "ICE BEAM",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 17,
+      "viability": -0.27
+    },
+    {
+      "id": 116,
+      "name": "HORSEA",
+      "types": [
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "TWISTER",
+        "TOXIC"
+      ],
+      "win": 16,
       "viability": -0.29
     },
     {
-      "id": 326,
-      "name": "CORPHISH",
+      "id": 283,
+      "name": "MUDKIP",
+      "types": [
+        "WATER"
+      ],
+      "ability": "TORRENT",
+      "moves": [
+        "HYDRO PUMP",
+        "ROCK TOMB",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 16,
+      "viability": -0.27
+    },
+    {
+      "id": 84,
+      "name": "DODUO",
+      "types": [
+        "NORMAL",
+        "FLYING"
+      ],
+      "ability": "RUN AWAY",
+      "moves": [
+        "DRILL PECK",
+        "DOUBLE-EDGE",
+        "JUMP KICK",
+        "TOXIC"
+      ],
+      "win": 15,
+      "viability": -0.17
+    },
+    {
+      "id": 98,
+      "name": "KRABBY",
       "types": [
         "WATER"
       ],
       "ability": "HYPER CUTTER",
       "moves": [
+        "ROCK TOMB",
+        "ROCK SMASH",
         "CRABHAMMER",
-        "DOUBLE-EDGE",
-        "BRICK BREAK",
         "TOXIC"
       ],
-      "win": 25,
-      "viability": -0.2
-    },
-    {
-      "id": 17,
-      "name": "PIDGEOTTO",
-      "types": [
-        "NORMAL",
-        "FLYING"
-      ],
-      "ability": "KEEN EYE",
-      "moves": [
-        "WING ATTACK",
-        "FACADE",
-        "STEEL WING",
-        "TOXIC"
-      ],
-      "win": 24,
-      "viability": -0.24
-    },
-    {
-      "id": 173,
-      "name": "CLEFFA",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "CUTE CHARM",
-      "moves": [
-        "FLAMETHROWER",
-        "PSYCHIC",
-        "SHOCK WAVE",
-        "SING"
-      ],
-      "win": 24,
-      "viability": -0.39
-    },
-    {
-      "id": 174,
-      "name": "IGGLYBUFF",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "CUTE CHARM",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FLAMETHROWER",
-        "SEISMIC TOSS",
-        "SING"
-      ],
-      "win": 24,
+      "win": 15,
       "viability": -0.34
-    },
-    {
-      "id": 175,
-      "name": "TOGEPI",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "HUSTLE",
-      "moves": [
-        "FLAMETHROWER",
-        "DOUBLE-EDGE",
-        "PSYCHIC",
-        "THUNDER WAVE"
-      ],
-      "win": 24,
-      "viability": -0.33
-    },
-    {
-      "id": 309,
-      "name": "WINGULL",
-      "types": [
-        "WATER",
-        "FLYING"
-      ],
-      "ability": "KEEN EYE",
-      "moves": [
-        "ICE BEAM",
-        "SURF",
-        "AIR CUTTER",
-        "TOXIC"
-      ],
-      "win": 24,
-      "viability": -0.26
-    },
-    {
-      "id": 29,
-      "name": "NIDORAN♀",
-      "types": [
-        "POISON"
-      ],
-      "ability": "POISON POINT",
-      "moves": [
-        "SLUDGE BOMB",
-        "ICE BEAM",
-        "IRON TAIL",
-        "TOXIC"
-      ],
-      "win": 23,
-      "viability": -0.3
-    },
-    {
-      "id": 32,
-      "name": "NIDORAN♂",
-      "types": [
-        "POISON"
-      ],
-      "ability": "POISON POINT",
-      "moves": [
-        "SLUDGE BOMB",
-        "IRON TAIL",
-        "ICE BEAM",
-        "TOXIC"
-      ],
-      "win": 23,
-      "viability": -0.3
     },
     {
       "id": 163,
@@ -5340,72 +5001,185 @@
         "WING ATTACK",
         "HYPNOSIS"
       ],
-      "win": 23,
-      "viability": -0.35
+      "win": 15,
+      "viability": -0.42
     },
     {
-      "id": 194,
-      "name": "WOOPER",
+      "id": 183,
+      "name": "MARILL",
       "types": [
-        "WATER",
-        "GROUND"
+        "WATER"
       ],
-      "ability": "DAMP",
+      "ability": "THICK FAT",
       "moves": [
-        "EARTHQUAKE",
+        "HYDRO PUMP",
         "ICE BEAM",
-        "SURF",
+        "FOCUS PUNCH",
         "TOXIC"
       ],
-      "win": 23,
-      "viability": -0.29
+      "win": 15,
+      "viability": -0.23
     },
     {
-      "id": 201,
-      "name": "UNOWN",
+      "id": 326,
+      "name": "CORPHISH",
       "types": [
-        "PSYCHC"
+        "WATER"
       ],
-      "ability": "LEVITATE",
+      "ability": "HYPER CUTTER",
       "moves": [
-        "ANCIENTPOWER",
-        "HEADBUTT",
-        "HIDDEN POWER"
+        "CRABHAMMER",
+        "DOUBLE-EDGE",
+        "BRICK BREAK",
+        "TOXIC"
       ],
-      "win": 23,
-      "viability": -0.35
+      "win": 15,
+      "viability": -0.26
     },
     {
-      "id": 370,
-      "name": "WHISMUR",
+      "id": 346,
+      "name": "SNORUNT",
+      "types": [
+        "ICE"
+      ],
+      "ability": "INNER FOCUS",
+      "moves": [
+        "ICE BEAM",
+        "SHADOW BALL",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 15,
+      "viability": -0.2
+    },
+    {
+      "id": 364,
+      "name": "SLAKOTH",
       "types": [
         "NORMAL"
       ],
-      "ability": "SOUNDPROOF",
+      "ability": "TRUANT",
       "moves": [
-        "HYPER VOICE",
-        "ICE BEAM",
-        "FIRE BLAST",
+        "FOCUS PUNCH",
+        "ROCK SLIDE",
+        "SHADOW BALL",
         "TOXIC"
       ],
-      "win": 23,
-      "viability": -0.35
+      "win": 15,
+      "viability": -0.23
     },
     {
-      "id": 165,
-      "name": "LEDYBA",
+      "id": 377,
+      "name": "SHUPPET",
       "types": [
-        "BUG",
+        "GHOST"
+      ],
+      "ability": "INSOMNIA",
+      "moves": [
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "THUNDERBOLT",
+        "THUNDER WAVE"
+      ],
+      "win": 15,
+      "viability": -0.31
+    },
+    {
+      "id": 17,
+      "name": "PIDGEOTTO",
+      "types": [
+        "NORMAL",
         "FLYING"
       ],
-      "ability": "SWARM",
+      "ability": "KEEN EYE",
       "moves": [
-        "ICE PUNCH",
-        "FOCUS PUNCH",
-        "SIGNAL BEAM",
+        "WING ATTACK",
+        "FACADE",
+        "STEEL WING",
         "TOXIC"
       ],
-      "win": 22,
+      "win": 14,
+      "viability": -0.26
+    },
+    {
+      "id": 86,
+      "name": "SEEL",
+      "types": [
+        "WATER"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "SURF",
+        "ICE BEAM",
+        "DOUBLE-EDGE",
+        "TOXIC"
+      ],
+      "win": 14,
+      "viability": -0.19
+    },
+    {
+      "id": 152,
+      "name": "CHIKORITA",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "OVERGROW",
+      "moves": [
+        "DOUBLE-EDGE",
+        "GIGA DRAIN",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 14,
+      "viability": -0.33
+    },
+    {
+      "id": 177,
+      "name": "NATU",
+      "types": [
+        "PSYCHC",
+        "FLYING"
+      ],
+      "ability": "SYNCHRONIZE",
+      "moves": [
+        "PSYCHIC",
+        "DRILL PECK",
+        "GIGA DRAIN",
+        "TOXIC"
+      ],
+      "win": 14,
+      "viability": -0.24
+    },
+    {
+      "id": 277,
+      "name": "TREECKO",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "OVERGROW",
+      "moves": [
+        "FOCUS PUNCH",
+        "THUNDERPUNCH",
+        "GIGA DRAIN",
+        "TOXIC"
+      ],
+      "win": 14,
+      "viability": -0.3
+    },
+    {
+      "id": 315,
+      "name": "SKITTY",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "CUTE CHARM",
+      "moves": [
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "SOLARBEAM",
+        "SING"
+      ],
+      "win": 14,
       "viability": -0.35
     },
     {
@@ -5422,8 +5196,8 @@
         "PSYCHIC",
         "TOXIC"
       ],
-      "win": 22,
-      "viability": -0.3
+      "win": 13,
+      "viability": -0.38
     },
     {
       "id": 311,
@@ -5439,57 +5213,107 @@
         "GIGA DRAIN",
         "TOXIC"
       ],
-      "win": 22,
-      "viability": -0.25
+      "win": 13,
+      "viability": -0.31
     },
     {
-      "id": 41,
-      "name": "ZUBAT",
+      "id": 330,
+      "name": "CARVANHA",
       "types": [
-        "POISON",
-        "FLYING"
+        "WATER",
+        "DARK"
       ],
-      "ability": "INNER FOCUS",
+      "ability": "ROUGH SKIN",
       "moves": [
-        "AIR CUTTER",
-        "SLUDGE BOMB",
-        "SHADOW BALL",
+        "HYDRO PUMP",
+        "ICE BEAM",
+        "CRUNCH",
         "TOXIC"
       ],
-      "win": 21,
-      "viability": -0.34
+      "win": 13,
+      "viability": -0.29
     },
     {
-      "id": 52,
-      "name": "MEOWTH",
+      "id": 133,
+      "name": "EEVEE",
       "types": [
         "NORMAL"
       ],
-      "ability": "PICKUP",
+      "ability": "RUN AWAY",
       "moves": [
-        "DOUBLE-EDGE",
+        "TAKE DOWN",
         "SHADOW BALL",
-        "THUNDERBOLT",
+        "DOUBLE KICK",
         "TOXIC"
       ],
-      "win": 21,
-      "viability": -0.27
+      "win": 12,
+      "viability": -0.24
     },
     {
-      "id": 172,
-      "name": "PICHU",
+      "id": 173,
+      "name": "CLEFFA",
       "types": [
-        "ELECTR"
+        "NORMAL"
       ],
-      "ability": "STATIC",
+      "ability": "CUTE CHARM",
       "moves": [
-        "THUNDERBOLT",
-        "IRON TAIL",
-        "SURF",
-        "THUNDER WAVE"
+        "FLAMETHROWER",
+        "PSYCHIC",
+        "SHOCK WAVE",
+        "SING"
       ],
-      "win": 21,
-      "viability": -0.4
+      "win": 12,
+      "viability": -0.46
+    },
+    {
+      "id": 309,
+      "name": "WINGULL",
+      "types": [
+        "WATER",
+        "FLYING"
+      ],
+      "ability": "KEEN EYE",
+      "moves": [
+        "ICE BEAM",
+        "SURF",
+        "AIR CUTTER",
+        "TOXIC"
+      ],
+      "win": 12,
+      "viability": -0.31
+    },
+    {
+      "id": 341,
+      "name": "SPHEAL",
+      "types": [
+        "ICE",
+        "WATER"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "ICE BEAM",
+        "HYDRO PUMP",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 12,
+      "viability": -0.25
+    },
+    {
+      "id": 29,
+      "name": "NIDORAN♀",
+      "types": [
+        "POISON"
+      ],
+      "ability": "POISON POINT",
+      "moves": [
+        "SLUDGE BOMB",
+        "ICE BEAM",
+        "IRON TAIL",
+        "TOXIC"
+      ],
+      "win": 11,
+      "viability": -0.35
     },
     {
       "id": 204,
@@ -5504,24 +5328,24 @@
         "DOUBLE-EDGE",
         "TOXIC"
       ],
-      "win": 21,
-      "viability": -0.25
+      "win": 11,
+      "viability": -0.31
     },
     {
-      "id": 236,
-      "name": "TYROGUE",
+      "id": 223,
+      "name": "REMORAID",
       "types": [
-        "FIGHT"
+        "WATER"
       ],
-      "ability": "GUTS",
+      "ability": "HUSTLE",
       "moves": [
-        "ROCK SLIDE",
-        "BRICK BREAK",
-        "EARTHQUAKE",
+        "SURF",
+        "ICE BEAM",
+        "FIRE BLAST",
         "TOXIC"
       ],
-      "win": 21,
-      "viability": -0.41
+      "win": 11,
+      "viability": -0.35
     },
     {
       "id": 21,
@@ -5537,40 +5361,57 @@
         "FACADE",
         "TOXIC"
       ],
-      "win": 20,
-      "viability": -0.32
+      "win": 10,
+      "viability": -0.39
     },
     {
-      "id": 50,
-      "name": "DIGLETT",
+      "id": 41,
+      "name": "ZUBAT",
       "types": [
-        "GROUND"
+        "POISON",
+        "FLYING"
       ],
-      "ability": "SAND VEIL",
+      "ability": "INNER FOCUS",
       "moves": [
-        "DOUBLE-EDGE",
-        "EARTHQUAKE",
-        "ROCK TOMB",
-        "TOXIC"
-      ],
-      "win": 20,
-      "viability": -0.27
-    },
-    {
-      "id": 161,
-      "name": "SENTRET",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "RUN AWAY",
-      "moves": [
-        "DOUBLE-EDGE",
-        "FOCUS PUNCH",
+        "AIR CUTTER",
+        "SLUDGE BOMB",
         "SHADOW BALL",
         "TOXIC"
       ],
-      "win": 20,
-      "viability": -0.32
+      "win": 10,
+      "viability": -0.42
+    },
+    {
+      "id": 174,
+      "name": "IGGLYBUFF",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "CUTE CHARM",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FLAMETHROWER",
+        "PSYCHIC",
+        "SING"
+      ],
+      "win": 10,
+      "viability": -0.5
+    },
+    {
+      "id": 175,
+      "name": "TOGEPI",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "HUSTLE",
+      "moves": [
+        "FLAMETHROWER",
+        "DOUBLE-EDGE",
+        "PSYCHIC",
+        "THUNDER WAVE"
+      ],
+      "win": 10,
+      "viability": -0.35
     },
     {
       "id": 187,
@@ -5586,8 +5427,73 @@
         "HIDDEN POWER",
         "STUN SPORE"
       ],
-      "win": 20,
+      "win": 10,
+      "viability": -0.49
+    },
+    {
+      "id": 194,
+      "name": "WOOPER",
+      "types": [
+        "WATER",
+        "GROUND"
+      ],
+      "ability": "DAMP",
+      "moves": [
+        "EARTHQUAKE",
+        "ICE BEAM",
+        "SURF",
+        "TOXIC"
+      ],
+      "win": 10,
+      "viability": -0.38
+    },
+    {
+      "id": 201,
+      "name": "UNOWN",
+      "types": [
+        "PSYCHC"
+      ],
+      "ability": "LEVITATE",
+      "moves": [
+        "ANCIENTPOWER",
+        "HEADBUTT",
+        "HIDDEN POWER"
+      ],
+      "win": 10,
+      "viability": -0.41
+    },
+    {
+      "id": 32,
+      "name": "NIDORAN♂",
+      "types": [
+        "POISON"
+      ],
+      "ability": "POISON POINT",
+      "moves": [
+        "SLUDGE BOMB",
+        "IRON TAIL",
+        "ICE BEAM",
+        "TOXIC"
+      ],
+      "win": 9,
       "viability": -0.37
+    },
+    {
+      "id": 165,
+      "name": "LEDYBA",
+      "types": [
+        "BUG",
+        "FLYING"
+      ],
+      "ability": "SWARM",
+      "moves": [
+        "ICE PUNCH",
+        "FOCUS PUNCH",
+        "SIGNAL BEAM",
+        "TOXIC"
+      ],
+      "win": 9,
+      "viability": -0.44
     },
     {
       "id": 295,
@@ -5603,24 +5509,8 @@
         "GIGA DRAIN",
         "TOXIC"
       ],
-      "win": 20,
-      "viability": -0.32
-    },
-    {
-      "id": 298,
-      "name": "SEEDOT",
-      "types": [
-        "GRASS"
-      ],
-      "ability": "CHLOROPHYLL",
-      "moves": [
-        "GIGA DRAIN",
-        "SHADOW BALL",
-        "ROCK SMASH",
-        "TOXIC"
-      ],
-      "win": 20,
-      "viability": -0.43
+      "win": 9,
+      "viability": -0.39
     },
     {
       "id": 304,
@@ -5636,8 +5526,24 @@
         "STEEL WING",
         "TOXIC"
       ],
-      "win": 20,
-      "viability": -0.26
+      "win": 9,
+      "viability": -0.31
+    },
+    {
+      "id": 370,
+      "name": "WHISMUR",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "SOUNDPROOF",
+      "moves": [
+        "HYPER VOICE",
+        "ICE BEAM",
+        "FIRE BLAST",
+        "TOXIC"
+      ],
+      "win": 9,
+      "viability": -0.45
     },
     {
       "id": 132,
@@ -5649,24 +5555,8 @@
       "moves": [
         "HEADBUTT"
       ],
-      "win": 19,
-      "viability": -0.43
-    },
-    {
-      "id": 288,
-      "name": "ZIGZAGOON",
-      "types": [
-        "NORMAL"
-      ],
-      "ability": "PICKUP",
-      "moves": [
-        "DOUBLE-EDGE",
-        "ICE BEAM",
-        "SHADOW BALL",
-        "TOXIC"
-      ],
-      "win": 19,
-      "viability": -0.34
+      "win": 8,
+      "viability": -0.48
     },
     {
       "id": 16,
@@ -5682,8 +5572,104 @@
         "STEEL WING",
         "TOXIC"
       ],
-      "win": 18,
-      "viability": -0.32
+      "win": 7,
+      "viability": -0.41
+    },
+    {
+      "id": 52,
+      "name": "MEOWTH",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "PICKUP",
+      "moves": [
+        "DOUBLE-EDGE",
+        "SHADOW BALL",
+        "THUNDERBOLT",
+        "TOXIC"
+      ],
+      "win": 7,
+      "viability": -0.3
+    },
+    {
+      "id": 161,
+      "name": "SENTRET",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "RUN AWAY",
+      "moves": [
+        "DOUBLE-EDGE",
+        "FOCUS PUNCH",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 7,
+      "viability": -0.39
+    },
+    {
+      "id": 236,
+      "name": "TYROGUE",
+      "types": [
+        "FIGHT"
+      ],
+      "ability": "GUTS",
+      "moves": [
+        "ROCK SLIDE",
+        "BRICK BREAK",
+        "EARTHQUAKE",
+        "TOXIC"
+      ],
+      "win": 7,
+      "viability": -0.51
+    },
+    {
+      "id": 288,
+      "name": "ZIGZAGOON",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "PICKUP",
+      "moves": [
+        "DOUBLE-EDGE",
+        "ICE BEAM",
+        "SHADOW BALL",
+        "TOXIC"
+      ],
+      "win": 7,
+      "viability": -0.43
+    },
+    {
+      "id": 298,
+      "name": "SEEDOT",
+      "types": [
+        "GRASS"
+      ],
+      "ability": "CHLOROPHYLL",
+      "moves": [
+        "GIGA DRAIN",
+        "SHADOW BALL",
+        "ROCK SMASH",
+        "TOXIC"
+      ],
+      "win": 7,
+      "viability": -0.54
+    },
+    {
+      "id": 350,
+      "name": "AZURILL",
+      "types": [
+        "NORMAL"
+      ],
+      "ability": "THICK FAT",
+      "moves": [
+        "DOUBLE-EDGE",
+        "ICE BEAM",
+        "SURF",
+        "TOXIC"
+      ],
+      "win": 7,
+      "viability": -0.44
     },
     {
       "id": 19,
@@ -5694,12 +5680,28 @@
       "ability": "RUN AWAY",
       "moves": [
         "DOUBLE-EDGE",
-        "SUPER FANG",
         "SHADOW BALL",
+        "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 18,
-      "viability": -0.14
+      "win": 6,
+      "viability": -0.36
+    },
+    {
+      "id": 50,
+      "name": "DIGLETT",
+      "types": [
+        "GROUND"
+      ],
+      "ability": "SAND VEIL",
+      "moves": [
+        "DOUBLE-EDGE",
+        "EARTHQUAKE",
+        "ROCK TOMB",
+        "TOXIC"
+      ],
+      "win": 6,
+      "viability": -0.34
     },
     {
       "id": 191,
@@ -5714,8 +5716,8 @@
         "HIDDEN POWER",
         "GRASSWHISTLE"
       ],
-      "win": 18,
-      "viability": -0.47
+      "win": 6,
+      "viability": -0.6
     },
     {
       "id": 301,
@@ -5731,24 +5733,24 @@
         "GIGA DRAIN",
         "TOXIC"
       ],
-      "win": 18,
-      "viability": -0.38
+      "win": 6,
+      "viability": -0.47
     },
     {
-      "id": 350,
-      "name": "AZURILL",
+      "id": 172,
+      "name": "PICHU",
       "types": [
-        "NORMAL"
+        "ELECTR"
       ],
-      "ability": "THICK FAT",
+      "ability": "STATIC",
       "moves": [
-        "DOUBLE-EDGE",
-        "ICE BEAM",
+        "THUNDERBOLT",
+        "IRON TAIL",
         "SURF",
-        "TOXIC"
+        "THUNDER WAVE"
       ],
-      "win": 18,
-      "viability": -0.39
+      "win": 5,
+      "viability": -0.52
     },
     {
       "id": 286,
@@ -5759,28 +5761,25 @@
       "ability": "RUN AWAY",
       "moves": [
         "TAKE DOWN",
-        "SUPER FANG",
         "SHADOW BALL",
+        "ROCK SMASH",
         "TOXIC"
       ],
-      "win": 16,
-      "viability": -0.21
+      "win": 5,
+      "viability": -0.52
     },
     {
-      "id": 328,
-      "name": "FEEBAS",
+      "id": 235,
+      "name": "SMEARGLE",
       "types": [
-        "WATER"
+        "NORMAL"
       ],
-      "ability": "SWIFT SWIM",
+      "ability": "OWN TEMPO",
       "moves": [
-        "SURF",
-        "ICE BEAM",
-        "FACADE",
-        "REST"
+        "HEADBUTT"
       ],
-      "win": 16,
-      "viability": -0.51
+      "win": 4,
+      "viability": -0.61
     },
     {
       "id": 13,
@@ -5795,8 +5794,8 @@
         "POISON STING",
         "STRING SHOT"
       ],
-      "win": 15,
-      "viability": -0.59
+      "win": 3,
+      "viability": -0.73
     },
     {
       "id": 290,
@@ -5810,36 +5809,24 @@
         "POISON STING",
         "STRING SHOT"
       ],
-      "win": 15,
-      "viability": -0.58
+      "win": 3,
+      "viability": -0.72
     },
     {
-      "id": 235,
-      "name": "SMEARGLE",
+      "id": 328,
+      "name": "FEEBAS",
       "types": [
-        "NORMAL"
+        "WATER"
       ],
-      "ability": "OWN TEMPO",
+      "ability": "SWIFT SWIM",
       "moves": [
-        "HEADBUTT"
+        "SURF",
+        "ICE BEAM",
+        "FACADE",
+        "REST"
       ],
-      "win": 13,
-      "viability": -0.53
-    },
-    {
-      "id": 291,
-      "name": "SILCOON",
-      "types": [
-        "BUG"
-      ],
-      "ability": "SHED SKIN",
-      "moves": [
-        "HEADBUTT",
-        "POISON STING",
-        "HARDEN"
-      ],
-      "win": 12,
-      "viability": -0.59
+      "win": 3,
+      "viability": -0.64
     },
     {
       "id": 14,
@@ -5853,21 +5840,51 @@
         "HEADBUTT",
         "HARDEN"
       ],
-      "win": 11,
-      "viability": -0.63
+      "win": 2,
+      "viability": -0.74
     },
     {
-      "id": 129,
-      "name": "MAGIKARP",
+      "id": 291,
+      "name": "SILCOON",
       "types": [
-        "WATER"
+        "BUG"
       ],
-      "ability": "SWIFT SWIM",
+      "ability": "SHED SKIN",
       "moves": [
-        "HEADBUTT"
+        "HEADBUTT",
+        "POISON STING",
+        "HARDEN"
       ],
-      "win": 11,
-      "viability": -0.7
+      "win": 2,
+      "viability": -0.72
+    },
+    {
+      "id": 11,
+      "name": "METAPOD",
+      "types": [
+        "BUG"
+      ],
+      "ability": "SHED SKIN",
+      "moves": [
+        "HEADBUTT",
+        "HARDEN"
+      ],
+      "win": 1,
+      "viability": -0.77
+    },
+    {
+      "id": 202,
+      "name": "WOBBUFFET",
+      "types": [
+        "PSYCHC"
+      ],
+      "ability": "SHADOW TAG",
+      "moves": [
+        "MIRROR COAT",
+        "COUNTER"
+      ],
+      "win": 1,
+      "viability": -0.83
     },
     {
       "id": 293,
@@ -5881,50 +5898,8 @@
         "POISON STING",
         "HARDEN"
       ],
-      "win": 11,
-      "viability": -0.67
-    },
-    {
-      "id": 11,
-      "name": "METAPOD",
-      "types": [
-        "BUG"
-      ],
-      "ability": "SHED SKIN",
-      "moves": [
-        "HEADBUTT",
-        "HARDEN"
-      ],
-      "win": 10,
-      "viability": -0.65
-    },
-    {
-      "id": 10,
-      "name": "CATERPIE",
-      "types": [
-        "BUG"
-      ],
-      "ability": "SHIELD DUST",
-      "moves": [
-        "TACKLE",
-        "STRING SHOT"
-      ],
-      "win": 9,
-      "viability": -0.72
-    },
-    {
-      "id": 202,
-      "name": "WOBBUFFET",
-      "types": [
-        "PSYCHC"
-      ],
-      "ability": "SHADOW TAG",
-      "moves": [
-        "MIRROR COAT",
-        "COUNTER"
-      ],
-      "win": 9,
-      "viability": -0.73
+      "win": 1,
+      "viability": -0.82
     },
     {
       "id": 360,
@@ -5938,8 +5913,35 @@
         "COUNTER",
         "CHARM"
       ],
-      "win": 4,
-      "viability": -0.8
+      "win": 1,
+      "viability": -0.89
+    },
+    {
+      "id": 10,
+      "name": "CATERPIE",
+      "types": [
+        "BUG"
+      ],
+      "ability": "SHIELD DUST",
+      "moves": [
+        "TACKLE",
+        "STRING SHOT"
+      ],
+      "win": 0,
+      "viability": -0.85
+    },
+    {
+      "id": 129,
+      "name": "MAGIKARP",
+      "types": [
+        "WATER"
+      ],
+      "ability": "SWIFT SWIM",
+      "moves": [
+        "HEADBUTT"
+      ],
+      "win": 0,
+      "viability": -0.82
     }
   ]
 }

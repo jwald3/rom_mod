@@ -22,7 +22,9 @@ interface Entry {
 }
 interface Data {
   rom: string
-  level: number
+  levelModel: string
+  levelLo: number
+  levelHi: number
   sims: number
   seed: number
   cohort: string[]
@@ -58,11 +60,11 @@ const typeLabel = (t: string) => ({ FIGHT: 'Fighting', PSYCHC: 'Psychic', ELECTR
 // ── tiers by win-rate band ──
 interface Tier { key: string; label: string; min: number; blurb: string; color: string }
 const TIERS: Tier[] = [
-  { key: 'S', label: 'S', min: 58, color: '#e05a8a', blurb: 'Carries a run. Sweeps the gauntlet — legendaries and the best sleepers/attackers.' },
-  { key: 'A', label: 'A', min: 50, color: '#e6602f', blurb: 'Strong picks. A solid backbone for any team.' },
-  { key: 'B', label: 'B', min: 42, color: '#e0b62c', blurb: 'Serviceable. Pulls its weight with the right coverage.' },
-  { key: 'C', label: 'C', min: 32, color: '#4a9d52', blurb: 'Situational. Fine early, fades against the back half.' },
-  { key: 'D', label: 'D', min: 22, color: '#3d8bd4', blurb: 'Struggles. Needs support to contribute.' },
+  { key: 'S', label: 'S', min: 68, color: '#e05a8a', blurb: 'Carries a run. Sweeps the gauntlet even at parity — legendaries and the top-stat monsters.' },
+  { key: 'A', label: 'A', min: 55, color: '#e6602f', blurb: 'Strong picks. A reliable backbone for any team, start to finish.' },
+  { key: 'B', label: 'B', min: 45, color: '#e0b62c', blurb: 'Serviceable. Pulls its weight with the right coverage.' },
+  { key: 'C', label: 'C', min: 35, color: '#4a9d52', blurb: 'Situational. Contributes, but wants support against the back half.' },
+  { key: 'D', label: 'D', min: 22, color: '#3d8bd4', blurb: 'Struggles. A stat or movepool shortfall shows even at level parity.' },
   { key: 'F', label: 'F', min: 0, color: '#5a5250', blurb: 'Route filler and unevolved forms — little to offer a serious team.' },
 ]
 const tierOf = (win: number) => TIERS.find((t) => win >= t.min)!
@@ -120,8 +122,8 @@ const cohortList = d.cohort.join(', ')
 
 const section = `  <section id="tierlist" class="chapter">
     <div class="chapter-head"><span class="ch-mark">§★</span><h2>Tier List</h2></div>
-    <p class="lead">Every obtainable Pokémon ranked by how it actually performs — not by base stats, but by simulated battles against this build's real bosses. Each one is given its best level-up-plus-TM/tutor moveset and run through <strong>${d.sims} battles per opponent</strong> against all ${d.cohort.length} benchmark fights (${esc(cohortList)}) at their in-game levels. The number is its mean win rate across that gauntlet at <strong>Lv ${d.level}</strong>.</p>
-    <div class="callout fact"><div class="c-label"><span class="c-ico">◆</span>How this was made</div><p>Produced by the repo's balance harness (<code>scripts/balance.mts</code>) driving the same Gen-3 damage engine the editor uses — seeded, so the ranking is reproducible from the ROM. It models damage, stats, status, crits, PP and Struggle, plus the abilities and items the bosses carry; it does <em>not</em> model weather, screens, switching or team synergy, so read a single-number ranking as a strong signal, not gospel. Mean win rate across the dex is <strong>${d.meanWin}%</strong> — think of that as the "average teammate" line.</p></div>
+    <p class="lead">Every obtainable Pokémon ranked by how it actually performs — not by base stats, but by simulated battles against this build's real bosses. Each one is given its best level-up-plus-TM/tutor moveset and run through <strong>${d.sims} battles per opponent</strong> against all ${d.cohort.length} benchmark fights (${esc(cohortList)}). Crucially, it faces each boss <strong>at that boss's own level</strong> — Falkner around Lv ${d.levelLo}, Red up near Lv ${d.levelHi} — the way your ace keeps pace with the badges in a real run, rather than at one flat level that would punish a legendary for being "under-levelled" against endgame Red. The number is its mean win rate across that gauntlet.</p>
+    <div class="callout fact"><div class="c-label"><span class="c-ico">◆</span>How this was made</div><p>Produced by the repo's balance harness (<code>scripts/balance.mts</code>) driving the same Gen-3 damage engine the editor uses — seeded, so the ranking is reproducible from the ROM. It models damage, stats, status, crits, PP and Struggle, plus the abilities and items the bosses carry; it does <em>not</em> model weather, screens, switching, team synergy, or once-a-turn drawbacks like Truant, so read a single-number ranking as a strong signal, not gospel. Because every mon fights at level parity, this measures the <em>kit and stats</em> — a raw-stat monster rises to the top where a flat level would have hidden it. Mean win rate across the dex is <strong>${d.meanWin}%</strong>.</p></div>
 
     <div class="tl-tiers">
 ${tierRows}

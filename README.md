@@ -75,8 +75,11 @@ The engine (`src/sim/`) is pure — no filesystem, no argv, no console — so th
 React editor can drive it later.
 
 The same harness backs the guide's **Tier List** chapter, which ranks the whole
-reachable dex by simulated win rate against the benchmark cohort. Regenerate it
-with `npx tsx scripts/gen-tierlist-data.mts <rom>` (ROM → `tierlist-data.json`)
+reachable dex by simulated win rate against the benchmark cohort. Each mon fights
+every boss **at that boss's own level** (level parity, Falkner ~L8 … Red ~L93),
+so the ranking measures kit and stats rather than a flat level that would punish
+a legendary as "under-levelled" vs endgame Red. Regenerate with
+`npx tsx scripts/gen-tierlist-data.mts <rom>` (ROM → `tierlist-data.json`)
 → `gen-tierlist-html.mts` → `node scripts/splice-tierlist.mjs`.
  It models the Gen-3 damage formula with the
 engine's integer truncation, stat stages, status, crits, accuracy, PP and
