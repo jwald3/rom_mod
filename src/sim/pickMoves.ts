@@ -67,7 +67,7 @@ export function pickBestMovesBySim(
   opts: SimPickOptions = {},
 ): number[] {
   const slots = opts.slots ?? 4
-  const shortlist = opts.shortlist ?? 8
+  const shortlist = opts.shortlist ?? 9
   const utilitySlots = opts.utilitySlots ?? 2
   const coarseSims = opts.coarseSims ?? 8
   const fineSims = opts.fineSims ?? 40
@@ -82,10 +82,21 @@ export function pickBestMovesBySim(
   // top few utility moves (sleep/paralysis etc.) separately, since a strong
   // status can beat a fourth attack.
   const bare = buildCombatant(ctx, species, { level: subjectLevel, moves: [], source: { kind: 'tested' } })
-  const damaging = moves
+  const damagingAll = moves
     .filter((m) => isDamaging(m.sim))
-    .map((m) => ({ id: m.id, score: opponents.reduce((a, f) => a + expectedDamage(ctx, bare, f, m.sim), 0) }))
+    .map((m) => ({ id: m.id, sim: m.sim, score: opponents.reduce((a, f) => a + expectedDamage(ctx, bare, f, m.sim), 0) }))
     .sort((a, b) => b.score - a.score)
+  // Collapse functionally-identical attacks — same type AND same effect kind, so
+  // Return/Frustration/Strength (all Normal plain-hits) count as one shortlist
+  // entry, not three. Keeps the best-scoring of each; a recoil or charge variant
+  // has a different effect kind, so it stays as its own option to compare.
+  const seenKind = new Set<string>()
+  const damaging = damagingAll.filter((m) => {
+    const key = `${m.sim.type}:${m.sim.effect.kind}`
+    if (seenKind.has(key)) return false
+    seenKind.add(key)
+    return true
+  })
   const utility = moves
     .filter((m) => !isDamaging(m.sim) && utilityScore(m.sim) > 0)
     .map((m) => ({ id: m.id, score: utilityScore(m.sim) }))

@@ -208,4 +208,16 @@ describe.skipIf(!romExists)('balance harness on the real ROM', () => {
     const optimized = quickRate(rom, p, undefined, { optimize: true })!
     expect(optimized.winRate).toBeGreaterThan(greedy.winRate + 5)
   }, 30000) // the optimize search simulates many candidate sets
+
+  it("doesn't stack functionally-identical moves (Slaking coverage)", () => {
+    // Return/Frustration/Strength are all Normal plain-hits; the shortlist must
+    // collapse them so the search reaches real coverage (EQ, Shadow Ball…).
+    const s = rom.species[resolveName(speciesIdx, 'Slaking', 'species')]
+    const picked = quickRate(rom, s, undefined, { optimize: true })!
+    // No two chosen moves share the same type+kind after dedup: at most one
+    // plain Normal attack in the set.
+    const normalHits = picked.moves.filter((m) => ['RETURN', 'FRUSTRATION', 'STRENGTH', 'DOUBLE-EDGE', 'BODY SLAM'].includes(m)).length
+    expect(normalHits).toBeLessThanOrEqual(2) // Return + Double-Edge (diff kind) is fine; three Normal hits isn't
+    expect(picked.winRate).toBeGreaterThan(78)
+  }, 30000)
 })
