@@ -1,0 +1,37 @@
+
+/* ── Tier List ── */
+.tl-tiers{display:flex;flex-direction:column;gap:10px;margin:18px 0 8px}
+.tl-row{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:stretch;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.tl-badge{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  background:color-mix(in srgb,var(--tier) 22%,var(--panel-2));border-right:1px solid var(--line)}
+.tl-letter{font-family:var(--sans);font-weight:900;font-size:26px;line-height:1;color:var(--tier)}
+.tl-range{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--muted)}
+.tl-body{padding:10px 12px;min-width:0}
+.tl-blurb{font-family:var(--sans);font-size:12.5px;color:var(--muted);margin:0 0 8px;line-height:1.5}
+.tl-count{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text);
+  background:var(--panel-2);border:1px solid var(--line);border-radius:100px;padding:1px 7px;margin-left:4px}
+.tl-mons{display:flex;flex-wrap:wrap;gap:6px}
+.tl-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 2px;border-radius:100px;
+  background:var(--panel-2);border:1px solid var(--line);position:relative}
+.tl-chip::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:100px 0 0 100px;background:var(--edge)}
+.tl-spr{width:30px;height:30px;flex:none;image-rendering:pixelated;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+.tl-noimg{display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--tc);
+  color:#fff;font-family:var(--sans);font-weight:800;font-size:9px;text-transform:uppercase}
+.tl-cn{font-family:var(--sans);font-weight:700;font-size:12px;color:var(--text);white-space:nowrap}
+.tl-tablewrap{overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:12px}
+.tl-table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:12.5px;min-width:640px}
+.tl-table thead th{position:sticky;top:0;background:var(--panel-2);text-align:left;padding:8px 10px;
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+.tl-table td{padding:6px 10px;border-bottom:1px solid color-mix(in srgb,var(--line) 55%,transparent);vertical-align:middle}
+.tl-table tbody tr:last-child td{border-bottom:none}
+.tl-rank{font-family:var(--mono);color:var(--muted);font-size:11px}
+.tl-tbadge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:6px;
+  font-family:var(--sans);font-weight:900;font-size:11px;color:#fff;background:var(--tier)}
+.tl-win{font-family:var(--mono);font-weight:700;color:var(--text)}
+.tl-dexno{font-family:var(--mono);color:var(--muted);font-size:11px}
+.tl-name{font-weight:700;color:var(--text);white-space:nowrap}
+.tl-types{white-space:nowrap}
+.tl-type{display:inline-block;font-family:var(--sans);font-size:9px;font-weight:800;letter-spacing:.04em;
+  text-transform:uppercase;color:#fff;background:var(--tc);padding:1px 6px;border-radius:100px;margin-right:3px}
+.tl-moves{color:var(--muted);font-size:11.5px;min-width:220px}
