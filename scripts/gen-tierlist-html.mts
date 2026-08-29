@@ -60,7 +60,7 @@ const typeLabel = (t: string) => ({ FIGHT: 'Fighting', PSYCHC: 'Psychic', ELECTR
 // ── tiers by win-rate band ──
 interface Tier { key: string; label: string; min: number; blurb: string; color: string }
 const TIERS: Tier[] = [
-  { key: 'S', label: 'S', min: 75, color: '#e05a8a', blurb: 'Carries a run. Sweeps the gauntlet even at parity — legendaries and the top-stat monsters.' },
+  { key: 'S', label: 'S', min: 77, color: '#e05a8a', blurb: 'Carries a run. Sweeps the gauntlet even at parity — legendaries and the top-stat monsters.' },
   { key: 'A', label: 'A', min: 63, color: '#e6602f', blurb: 'Strong picks. A reliable backbone for any team, start to finish.' },
   { key: 'B', label: 'B', min: 52, color: '#e0b62c', blurb: 'Serviceable. Pulls its weight with the right coverage.' },
   { key: 'C', label: 'C', min: 40, color: '#4a9d52', blurb: 'Situational. Contributes, but wants support against the back half.' },
