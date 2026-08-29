@@ -1,7 +1,10 @@
 /**
- * Populate Kanto's ROCK TUNNEL 1F with its canonical trainer roster, ported from
- * FireRed (the GPT_Mods BPRE ROM) into Heart & Soul (BPEE) — replacing the old
- * one-off BRUNO placeholder. Built on the reusable map-events layer
+ * Populate Kanto's ROCK TUNNEL (1F and B1F) with its canonical trainer roster,
+ * ported from FireRed (the GPT_Mods BPRE ROM) into Heart & Soul (BPEE) —
+ * replacing the old one-off BRUNO placeholder. Pick a floor with
+ * `--floor=1f` (default) or `--floor=b1f`; each floor's map ids, free trainer
+ * slots, and off-map relocations live in the FLOORS table. Built on the
+ * reusable map-events layer
  * (src/rom/tables/mapEvents.ts, see memory/hs-map-events-recon.md).
  *
  * The port is data-driven: it READS FireRed's Rock Tunnel 1F at runtime and
@@ -34,6 +37,7 @@
 import * as fs from 'node:fs'
 import { loadRom } from '../src/rom/loadRom'
 import { RomBuffer } from '../src/rom/buffer'
+import { FreeSpaceAllocator } from '../src/rom/freespace'
 import {
   readTrainer, readTrainerClassNames, serializeParty, serializeTrainerRecord,
   partyGbaPointer, type TrainerEdit, type TrainerMon,
@@ -48,29 +52,65 @@ const FR_TOML = 'C:/Users/Jordan/Downloads/20260426__GPT_Mods.toml'
 const DEFAULT_HS = 'C:/Users/Jordan/Downloads/Pokemon H&S/Pokemon Heart & Soul.gba'
 const FREE_FLOOR = 0x15788dc
 
-// H&S Rock Tunnel 1F = bank 24 map 59; FireRed = bank 3 map 32.
-const HS_BANK = 24, HS_MAP = 59
-const FR_BANK = 3, FR_MAP = 32
-
-// Empty H&S trainer slots to claim (from the 379 free; #11 reclaimed from BRUNO).
-const FREE_SLOTS = [11, 30, 31, 35, 39, 40, 41, 42, 43, 57, 60]
-
-// Relocations for trainers whose FireRed y falls outside H&S's 58×40 map.
-// Keyed by FireRed trainer record id; verified walkable + unoccupied.
-const RELOCATE: Record<number, { x: number; y: number }> = {
-  304: { x: 30, y: 30 }, // BENNY (was 18,47)
-  487: { x: 32, y: 30 }, // TWINS KIRI & JAN (was 12–13,51) — second twin bumped +1 x below
-}
-
 // Level-scaling (identical to apply-kanto-level-scale.mts).
 const IN_LO = 2, IN_HI = 34, OUT_LO = 45, OUT_HI = 58
 const LEVEL_METHODS = new Set([4, 18])
 const POST_GEN4 = new Set([439, 440, 444, 449, 450, 451, 452, 453, 454, 455])
 
+interface FloorConfig {
+  hsHeader: number
+  hsMap: [bank: number, map: number]
+  frMap: [bank: number, map: number]
+  baseObjectCount: number
+  /** Empty H&S trainer slots to claim — must not overlap other floors' slots. */
+  slots: number[]
+  /**
+   * Placement overrides keyed by FireRed record id, for trainers whose FireRed
+   * coords fall off-map / on a wall in H&S. All verified walkable + unoccupied.
+   * A shared record (twins/crush-kin) with two objects puts the 2nd at x+1.
+   */
+  relocate: Record<number, { x: number; y: number }>
+}
+
+// Rock Tunnel 1F: H&S 24.59 (58×40) ← FireRed 3.32. 13 base objects (pre-BRUNO).
+// B1F: H&S 24.60 (48×50) ← FireRed 3.33. FireRed's B1F is far wider, so 8 of 11
+// trainers are relocated into H&S's differently-shaped cave (see hs-map-events-recon).
+const FLOORS: Record<string, FloorConfig> = {
+  '1f': {
+    hsHeader: 0xf34754, hsMap: [24, 59], frMap: [3, 32], baseObjectCount: 13,
+    slots: [11, 30, 31, 35, 39, 40, 41, 42, 43, 57, 60],
+    relocate: {
+      304: { x: 30, y: 30 }, // BENNY (was 18,47 — off the 40-tall map)
+      487: { x: 32, y: 30 }, // TWINS KIRI & JAN (was 12–13,51)
+    },
+  },
+  'b1f': {
+    hsHeader: 0, hsMap: [24, 60], frMap: [3, 33], baseObjectCount: 16,
+    slots: [61, 62, 63, 64, 67, 68, 69, 70, 78, 82, 84],
+    relocate: {
+      305: { x: 3, y: 20 },  // EDWIN   (was 31,12 — on a wall)
+      481: { x: 4, y: 23 },  // CELIA   (was 28,6 — on a wall)
+      274: { x: 8, y: 40 },  // OLIVIA  (was 50,12 — x off the 48-wide map)
+      198: { x: 10, y: 46 }, // ALEX    (was 59,12)
+      197: { x: 20, y: 22 }, // ERNEST  (was 63,13)
+      480: { x: 24, y: 14 }, // BECKY   (was 52,8)
+      273: { x: 40, y: 13 }, // GRACE   (was 54,12)
+      488: { x: 43, y: 22 }, // CRUSH KIN RON & MYA (was 39–40,7)
+    },
+  },
+}
+
 // ------------------------------------------------------------------ arg parse
 const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
+const floorArg = (args.find((s) => s.startsWith('--floor=')) ?? '--floor=1f').split('=')[1].toLowerCase()
+const floor = FLOORS[floorArg]
+if (!floor) throw new Error(`unknown --floor=${floorArg} (expected 1f or b1f)`)
 const hsPath = args.filter((s) => !s.startsWith('--'))[0] ?? DEFAULT_HS
+const [HS_BANK, HS_MAP] = floor.hsMap
+const [FR_BANK, FR_MAP] = floor.frMap
+const FREE_SLOTS = floor.slots
+const RELOCATE = floor.relocate
 
 // ------------------------------------------------------------------ load ROMs
 const frBytes = new Uint8Array(fs.readFileSync(FR_ROM))
@@ -114,9 +154,18 @@ function mapMove(id: number): number {
   if (h === undefined) throw new Error(`move "${frMv(id)}" not found in H&S`)
   return h
 }
+// FireRed classes with no same-name H&S class → nearest H&S equivalent by flavor.
+const CLASS_SUBSTITUTE: Record<string, string> = {
+  'CRUSHKIN': 'SIS AND BRO', // brother+sister fighting pair; H&S has no CRUSH KIN
+}
 function mapClass(cls: number): number {
-  const h = hsClassByName.get(norm(frClasses[cls] ?? ''))
-  if (h === undefined) throw new Error(`class "${frClasses[cls]}" not found in H&S`)
+  const raw = frClasses[cls] ?? ''
+  let h = hsClassByName.get(norm(raw))
+  if (h === undefined) {
+    const sub = CLASS_SUBSTITUTE[norm(raw)]
+    if (sub) h = hsClassByName.get(norm(sub))
+  }
+  if (h === undefined) throw new Error(`class "${raw}" not found in H&S (and no substitute)`)
   return h
 }
 function scaleLevel(level: number): number {
@@ -215,20 +264,22 @@ for (const o of frTrainerObjs) {
 // FireRed items are rare on these trainers, but map any that appear by name.
 function mapItem(id: number): number {
   if (id === 0) return 0
-  const nm = fr.items[id]?.name
+  const nm = fr.itemNames[id]
   if (!nm) return 0
-  const hsId = hs.items.findIndex((it) => it?.name && norm(it.name) === norm(nm))
+  const hsId = hs.itemNames.findIndex((n) => n && norm(n) === norm(nm))
   return hsId > 0 ? hsId : 0
 }
 
 // ------------------------------------------------------------- free-space alloc
-let freeCursor = FREE_FLOOR
+// Scan the ORIGINAL bytes for 0xFF runs (so already-ported data on another floor
+// is seen as occupied and skipped). Floor at the known tail run.
+const allocator = new FreeSpaceAllocator(original, FREE_FLOOR)
+let firstAlloc = -1
+let lastAlloc = FREE_FLOOR
 function alloc(len: number): number {
-  const off = (freeCursor + 3) & ~3
-  for (let i = 0; i < len; i++) {
-    if (original[off + i] !== 0xff) throw new Error(`free-space ${hex(off)}+${i} not 0xFF (${hex(original[off + i])})`)
-  }
-  freeCursor = off + len
+  const off = allocator.allocate(len)
+  if (firstAlloc < 0) firstAlloc = off
+  lastAlloc = off + len
   return off
 }
 function place(bytes: Uint8Array): number {
@@ -240,10 +291,13 @@ function apply(p: Patch) { out.set(p.bytes, p.offset) }
 
 // ------------------------------------------------- write records, parties, scripts, objects
 const hsHeader = resolveMapHeader(srcRom, anchors, HS_BANK, HS_MAP)
-if (hsHeader !== 0xf34754) throw new Error(`H&S 1F header ${hex(hsHeader)} != 0xf34754`)
+if (floor.hsHeader && hsHeader !== floor.hsHeader) throw new Error(`H&S ${floorArg} header ${hex(hsHeader)} != ${hex(floor.hsHeader)}`)
 const hsEvents = readEvents(srcRom, hsHeader)
-if (hsEvents.objectCount !== 13) {
-  throw new Error(`H&S 1F has ${hsEvents.objectCount} objects, expected 13 — base ROM must be pre-BRUNO (use the .pre-rocktunnel backup)`)
+if (hsEvents.objectCount !== floor.baseObjectCount) {
+  throw new Error(
+    `H&S ${floorArg} has ${hsEvents.objectCount} objects, expected ${floor.baseObjectCount} (base count). ` +
+    `If this floor was already ported, that's why — start from a base ROM without this floor's trainers.`,
+  )
 }
 
 const writtenRecords = new Set<number>()
@@ -301,30 +355,31 @@ grown.patches.forEach(apply)
 
 // ------------------------------------------------------------------- report
 console.log(`Source: FireRed ${FR_BANK}.${FR_MAP}  →  H&S ${HS_BANK}.${HS_MAP} (header ${hex(hsHeader)})`)
-console.log(`Rock Tunnel 1F: ${hsEvents.objectCount} → ${hsEvents.objectCount + newObjects.length} objects (${newObjects.length} trainers, ${writtenRecords.size} records)\n`)
+console.log(`Rock Tunnel ${floorArg.toUpperCase()}: ${hsEvents.objectCount} → ${hsEvents.objectCount + newObjects.length} objects (${newObjects.length} trainers, ${writtenRecords.size} records)\n`)
 for (const p of ported) {
   const slot = recordByFrId.get(p.frId)!
   const team = p.edit.party.map((m) => `L${m.level} ${hs.species[m.species].name}`).join(', ')
   console.log(`  #${slot} ${hsClasses[p.edit.cls]} "${p.edit.name}" @(${p.obj.x},${p.obj.y})  ${team}`)
 }
-console.log(`\n  free-space: ${hex(FREE_FLOOR)} → ${hex(freeCursor)} (${freeCursor - FREE_FLOOR} B)`)
+console.log(`\n  free-space: ${hex(firstAlloc)} → ${hex(lastAlloc)} (${lastAlloc - firstAlloc} B)`)
 
 // =================================================================== VERIFY
 const rom2 = new RomBuffer(out)
 let problems = 0
 const check = (c: boolean, m: string) => { if (!c) { console.error('  ✗ ' + m); problems++ } }
 
+const base = hsEvents.objectCount
 const ev2 = readEvents(rom2, hsHeader)
-check(ev2.objectCount === 13 + newObjects.length, `objectCount ${ev2.objectCount} != ${13 + newObjects.length}`)
-// original 13 byte-identical
+check(ev2.objectCount === base + newObjects.length, `objectCount ${ev2.objectCount} != ${base + newObjects.length}`)
+// original objects byte-identical
 let identical = true
-for (let i = 0; i < 13 * OBJECT_EVENT_LEN; i++) {
+for (let i = 0; i < base * OBJECT_EVENT_LEN; i++) {
   if (out[newArrOff + i] !== original[hsEvents.objectArrayOffset! + i]) identical = false
 }
-check(identical, 'original 13 objects not byte-identical')
+check(identical, `original ${base} objects not byte-identical`)
 // each new object is a trainer pointing at a valid trainerbattle
 for (let k = 0; k < newObjects.length; k++) {
-  const o = ev2.objects[13 + k]
+  const o = ev2.objects[base + k]
   check(o.trainerType === 1, `new obj ${k} trainerType != 1`)
   check(o.scriptOffset !== null && rom2.u8(o.scriptOffset) === 0x5c, `new obj ${k} script not trainerbattle`)
   const slot = rom2.u16(o.scriptOffset! + 2)
@@ -350,5 +405,5 @@ fs.copyFileSync(hsPath, backup)
 fs.writeFileSync(hsPath, out)
 let diff = 0
 for (let i = 0; i < out.length; i++) if (out[i] !== original[i]) diff++
-console.log(`\n✅ Rock Tunnel 1F roster ported — ${diff} bytes changed.`)
+console.log(`\n✅ Rock Tunnel ${floorArg.toUpperCase()} roster ported — ${diff} bytes changed.`)
 console.log(`   backup: ${backup.split(/[\\/]/).pop()}`)
