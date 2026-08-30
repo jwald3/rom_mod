@@ -294,6 +294,21 @@ const FLOORS: Record<string, FloorConfig> = {
     slots: [373, 377, 385, 386, 388, 389, 390, 391, 392, 393],
     relocate: {},
   },
+  // Route 6 (H&S 0.46, 54×40 — narrow, wall-heavy) ← FireRed 3.24. Ricky/Jeff
+  // already ported (to Route 24) → skipped, leaving 4 novel. FireRed's coords
+  // hit H&S's walls (left third is solid), so all 4 are placed in the open
+  // right-side body (verified walkable+free). Added alongside H&S's 2 existing.
+  'route6': {
+    hsHeader: 0xf32518, hsMap: [0, 46], frMap: [3, 24], baseObjectCount: 10,
+    skipFrIds: [145, 146], // RICKY, JEFF (already in H&S Route 24)
+    slots: [424, 425, 434, 437],
+    relocate: {
+      111: { x: 34, y: 20 }, // BUG CATCHER KEIGO
+      151: { x: 40, y: 22 }, // PICNICKER NANCY
+      112: { x: 36, y: 13 }, // BUG CATCHER ELIJAH
+      152: { x: 48, y: 20 }, // PICNICKER ISABELLE
+    },
+  },
   // Route 8 (H&S 0.48, 68×20) ← FireRed 3.26. That FR map reuses several trainer
   // records already ported to other H&S routes (Julia/Rich/Glenn/Megan/Stan) —
   // those are skipped, leaving 8 novel objects / 7 records (Twins Eli & Anne
