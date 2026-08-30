@@ -151,6 +151,29 @@ const FLOORS: Record<string, FloorConfig> = {
       { frId: 355, x: 7,  y: 5,  gfxId: 0x35, sight: 3, intro: 'This cave belongs to ROCKET now!', defeat: 'You haven’t seen the last of us!' },
     ],
   },
+  // Route 3 (H&S 0.43, 84×20) ← FireRed 3.21. Map-object port (clean tType=1
+  // source). H&S already has 4 endgame trainers here; these 8 are ADDED
+  // alongside. Relocations avoid H&S's occupied tiles (verified walkable).
+  'route3': {
+    hsHeader: 0xf324c4, hsMap: [0, 43], frMap: [3, 21], baseObjectCount: 10,
+    slots: [113, 119, 124, 125, 133, 134, 135, 136],
+    relocate: {
+      117: { x: 29, y: 3 }, // LASS SALLY (FR 30,3 is occupied by H&S's WARREN)
+    },
+  },
+  // Viridian Forest (H&S 24.56, 74×69) ← FireRed 0.5. 5 Bug Catchers added
+  // alongside H&S's 3 Old Couples. H&S's forest layout differs, so 4 of 5
+  // relocate to verified walkable+free tiles.
+  'viridian-forest': {
+    hsHeader: 0xf34700, hsMap: [24, 56], frMap: [0, 5], baseObjectCount: 19,
+    slots: [137, 138, 139, 140, 141],
+    relocate: {
+      102: { x: 46, y: 44 }, // RICK    (FR 47,45 blocked)
+      103: { x: 46, y: 29 }, // DOUG    (FR 47,29 blocked)
+      104: { x: 6,  y: 22 }, // SAMMY   (FR 7,22 occupied)
+      532: { x: 14, y: 9 },  // CHARLIE (FR 16,5 blocked)
+    },
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
