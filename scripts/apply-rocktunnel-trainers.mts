@@ -75,6 +75,9 @@ interface FloorConfig {
   hsMap: [bank: number, map: number]
   /** FireRed source map to read trainer objects from (omit for a manual roster). */
   frMap?: [bank: number, map: number]
+  /** Multiple FireRed source maps merged into one H&S map (e.g. Route 21's
+   * North+South halves). Trainers from all listed maps are ported together. */
+  frMaps?: Array<[bank: number, map: number]>
   baseObjectCount: number
   /** Empty H&S trainer slots to claim — must not overlap other floors' slots. */
   slots: number[]
@@ -287,6 +290,16 @@ const FLOORS: Record<string, FloorConfig> = {
     slots: [373, 377, 385, 386, 388, 389, 390, 391, 392, 393],
     relocate: {},
   },
+  // Route 21 (H&S 0.61, 24×100) ← FireRed's TWO halves (North 3.39 + South 3.40)
+  // merged into the single tall H&S map. 10 objects / 9 records (Sis and Bro
+  // share one). Only Wade relocates. Added alongside H&S's 3 existing.
+  'route21': {
+    hsHeader: 0xf326bc, hsMap: [0, 61], frMaps: [[3, 39], [3, 40]], baseObjectCount: 7,
+    slots: [394, 395, 396, 403, 406, 409, 410, 411, 412],
+    relocate: {
+      231: { x: 15, y: 25 }, // FISHERMAN WADE (FR 16,26 occupied)
+    },
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
@@ -444,38 +457,39 @@ if (floor.manualRoster) {
     }
   }
 } else {
-  // Read trainer objects straight from the FireRed source map (Rock Tunnel-style).
-  if (!floor.frMap) throw new Error(`floor ${floorArg} has neither frMap nor manualRoster`)
-  const [FR_BANK, FR_MAP] = floor.frMap
-  const frHeader = resolveMapHeader(frRom, fr.anchors, FR_BANK, FR_MAP)
-  const frEvents = readEvents(frRom, frHeader)
-  const frTrainerObjs = frEvents.objects.filter(
-    (o) => o.trainerType !== 0 && o.scriptOffset !== null && frRom.u8(o.scriptOffset) === 0x5c,
-  )
-  for (const o of frTrainerObjs) {
-    const s = o.scriptOffset!
-    const frId = frRom.u16(s + 2)
+  // Read trainer objects straight from the FireRed source map(s) (Rock Tunnel-style).
+  const sources = floor.frMaps ?? (floor.frMap ? [floor.frMap] : null)
+  if (!sources) throw new Error(`floor ${floorArg} has neither frMap/frMaps nor manualRoster`)
+  for (const [FR_BANK, FR_MAP] of sources) {
+    const frHeader = resolveMapHeader(frRom, fr.anchors, FR_BANK, FR_MAP)
+    const frTrainerObjs = readEvents(frRom, frHeader).objects.filter(
+      (o) => o.trainerType !== 0 && o.scriptOffset !== null && frRom.u8(o.scriptOffset) === 0x5c,
+    )
+    for (const o of frTrainerObjs) {
+      const s = o.scriptOffset!
+      const frId = frRom.u16(s + 2)
 
-    // Position: relocate if off-map, else keep FireRed coords. Shared record's 2nd object sits beside the first.
-    let x = o.x, y = o.y
-    const reloc = RELOCATE[frId]
-    if (reloc) {
-      x = reloc.x + (recordByFrId.has(frId) ? 1 : 0)
-      y = reloc.y
-    }
+      // Position: relocate if off-map, else keep FireRed coords. Shared record's 2nd object sits beside the first.
+      let x = o.x, y = o.y
+      const reloc = RELOCATE[frId]
+      if (reloc) {
+        x = reloc.x + (recordByFrId.has(frId) ? 1 : 0)
+        y = reloc.y
+      }
 
-    ported.push({
-      frId, edit: buildEdit(frId),
-      obj: { x, y, sight: o.sight, gfxId: o.gfxId, movementType: o.movementType },
-      intro: copyDialogue(frRom, frRom.pointer(s + 6)),
-      defeat: copyDialogue(frRom, frRom.pointer(s + 10)),
-      after: copyDialogue(frRom, frRom.pointer(s + 16)),
-    })
+      ported.push({
+        frId, edit: buildEdit(frId),
+        obj: { x, y, sight: o.sight, gfxId: o.gfxId, movementType: o.movementType },
+        intro: copyDialogue(frRom, frRom.pointer(s + 6)),
+        defeat: copyDialogue(frRom, frRom.pointer(s + 10)),
+        after: copyDialogue(frRom, frRom.pointer(s + 16)),
+      })
 
-    // Assign an H&S record slot (shared record reuses the same one).
-    if (!recordByFrId.has(frId)) {
-      if (slotCursor >= FREE_SLOTS.length) throw new Error(`not enough free slots (${FREE_SLOTS.length}) for the roster`)
-      recordByFrId.set(frId, FREE_SLOTS[slotCursor++])
+      // Assign an H&S record slot (shared record reuses the same one).
+      if (!recordByFrId.has(frId)) {
+        if (slotCursor >= FREE_SLOTS.length) throw new Error(`not enough free slots (${FREE_SLOTS.length}) for the roster`)
+        recordByFrId.set(frId, FREE_SLOTS[slotCursor++])
+      }
     }
   }
 }
@@ -583,7 +597,9 @@ out.set(grown.array, newArrOff)
 grown.patches.forEach(apply)
 
 // ------------------------------------------------------------------- report
-const srcLabel = floor.manualRoster ? 'hand-built roster (FireRed records)' : `FireRed ${floor.frMap![0]}.${floor.frMap![1]}`
+const srcLabel = floor.manualRoster
+  ? 'hand-built roster (FireRed records)'
+  : (floor.frMaps ? `FireRed ${floor.frMaps.map((m) => m.join('.')).join('+')}` : `FireRed ${floor.frMap![0]}.${floor.frMap![1]}`)
 console.log(`Source: ${srcLabel}  →  H&S ${HS_BANK}.${HS_MAP} (header ${hex(hsHeader)})`)
 console.log(`Rock Tunnel ${floorArg.toUpperCase()}: ${hsEvents.objectCount} → ${hsEvents.objectCount + newObjects.length} objects (${newObjects.length} trainers, ${writtenRecords.size} records)\n`)
 for (const p of ported) {
