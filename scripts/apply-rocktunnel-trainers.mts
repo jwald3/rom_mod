@@ -251,6 +251,20 @@ const FLOORS: Record<string, FloorConfig> = {
       195: { x: 13, y: 7 },  // BIKER JARED   (FR 14,8 blocked)
     },
   },
+  // Route 16 (H&S 0.56, 48×20) ← FireRed 3.34. GENUINELY EMPTY in H&S. 7 records
+  // (YOUNG COUPLE LEA & JED share one). CUE BALL → BLACK BELT. All coords fit.
+  'route16': {
+    hsHeader: 0xf32630, hsMap: [0, 56], frMap: [3, 34], baseObjectCount: 5,
+    slots: [296, 297, 298, 300, 307, 308, 309],
+    relocate: {},
+  },
+  // Route 17 (H&S 0.57, 24×160 — the long Cycling-Road-style route) ← FireRed
+  // 3.35. 10 trainers, all fit. Bikers + Cue Balls (→ BLACK BELT).
+  'route17': {
+    hsHeader: 0xf3264c, hsMap: [0, 57], frMap: [3, 35], baseObjectCount: 7,
+    slots: [310, 311, 312, 313, 314, 315, 316, 317, 324, 325],
+    relocate: {},
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
@@ -319,6 +333,7 @@ const CLASS_SUBSTITUTE: Record<string, string> = {
   'TEAMROCKET': 'ROCKET',     // H&S names the grunt class just "ROCKET"
   'GAMER': 'POKéMANIAC',      // H&S has no GAMER; POKéMANIAC is the nearest hobbyist class
   'ROCKER': 'GUITARIST',      // H&S has no ROCKER; GUITARIST is the musician equivalent
+  'CUEBALL': 'BLACK BELT',    // H&S has no CUE BALL; their pure-Fighting teams fit BLACK BELT
 }
 function mapClass(cls: number): number {
   const raw = frClasses[cls] ?? ''
