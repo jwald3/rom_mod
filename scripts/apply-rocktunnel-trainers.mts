@@ -232,6 +232,25 @@ const FLOORS: Record<string, FloorConfig> = {
       261: { x: 50, y: 6 },  // GAMER DARIAN (FR 50,4 blocked)
     },
   },
+  // Route 12 (H&S 0.52, 38×119 — long fishing route) ← FireRed 3.30. 8 records
+  // (YOUNG COUPLE GIA & JES share one), all fit FireRed coords. ROCKER → GUITARIST.
+  'route12': {
+    hsHeader: 0xf325c0, hsMap: [0, 52], frMap: [3, 30], baseObjectCount: 12,
+    slots: [267, 269, 270, 271, 272, 280, 283, 284],
+    relocate: {},
+  },
+  // Route 13 (H&S 0.53, 76×26) ← FireRed 3.31. 10 trainers; 4 relocate off
+  // H&S's occupied/blocked tiles.
+  'route13': {
+    hsHeader: 0xf325dc, hsMap: [0, 53], frMap: [3, 31], baseObjectCount: 11,
+    slots: [285, 286, 287, 288, 289, 290, 291, 292, 293, 295],
+    relocate: {
+      269: { x: 41, y: 7 },  // BEAUTY SHEILA (FR 42,7 occupied)
+      268: { x: 42, y: 8 },  // BEAUTY LOLA   (FR 43,7 blocked)
+      302: { x: 9,  y: 13 }, // BIRD KEEPER ROBERT (FR 9,14 blocked)
+      195: { x: 13, y: 7 },  // BIKER JARED   (FR 14,8 blocked)
+    },
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
@@ -299,6 +318,7 @@ const CLASS_SUBSTITUTE: Record<string, string> = {
   'HIKER': 'RUIN MANIAC',     // H&S has no HIKER; RUIN MANIAC is the rugged-cave class
   'TEAMROCKET': 'ROCKET',     // H&S names the grunt class just "ROCKET"
   'GAMER': 'POKéMANIAC',      // H&S has no GAMER; POKéMANIAC is the nearest hobbyist class
+  'ROCKER': 'GUITARIST',      // H&S has no ROCKER; GUITARIST is the musician equivalent
 }
 function mapClass(cls: number): number {
   const raw = frClasses[cls] ?? ''
