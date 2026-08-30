@@ -174,6 +174,37 @@ const FLOORS: Record<string, FloorConfig> = {
       532: { x: 14, y: 9 },  // CHARLIE (FR 16,5 blocked)
     },
   },
+  // Route 4 (H&S 0.44, 108×20) ← FireRed 3.22. Just Lass Crissy (FR's Route 4
+  // has one trainer); added alongside H&S's 3 existing.
+  'route4': {
+    hsHeader: 0xf324e0, hsMap: [0, 44], frMap: [3, 22], baseObjectCount: 11,
+    slots: [142],
+    relocate: {},
+  },
+  // Route 24 (H&S 0.65, 24×40) ← FireRed 3.43 (Nugget Bridge). GENUINELY EMPTY
+  // in H&S. 6 trainers; ALI relocated off an occupied tile.
+  'route24': {
+    hsHeader: 0xf3272c, hsMap: [0, 65], frMap: [3, 43], baseObjectCount: 7,
+    slots: [143, 144, 147, 148, 149, 150],
+    relocate: {
+      123: { x: 10, y: 29 }, // LASS ALI (FR 10,28 occupied)
+    },
+  },
+  // Route 25 (H&S 0.66, 82×30) ← FireRed 3.44. H&S's layout differs near the top,
+  // so 7 of 9 relocate to verified walkable+free tiles. Hikers → RUIN MANIAC.
+  'route25': {
+    hsHeader: 0xf32748, hsMap: [0, 66], frMap: [3, 44], baseObjectCount: 20,
+    slots: [151, 155, 157, 161, 168, 175, 176, 177, 178],
+    relocate: {
+      182: { x: 12, y: 6 },  // HIKER FRANKLIN (FR 11,4 blocked)
+      93:  { x: 14, y: 6 },  // YOUNGSTER JOEY (FR 18,2 blocked)
+      94:  { x: 20, y: 6 },  // YOUNGSTER DAN  (FR 22,4 blocked)
+      183: { x: 26, y: 8 },  // HIKER NOB      (FR 27,9 blocked)
+      471: { x: 26, y: 6 },  // CAMPER FLINT   (FR 28,4 blocked)
+      95:  { x: 34, y: 6 },  // YOUNGSTER CHAD (FR 36,4 blocked)
+      125: { x: 41, y: 6 },  // LASS HALEY     (FR 42,5 blocked)
+    },
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
