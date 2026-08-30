@@ -205,6 +205,33 @@ const FLOORS: Record<string, FloorConfig> = {
       125: { x: 41, y: 6 },  // LASS HALEY     (FR 42,5 blocked)
     },
   },
+  // Route 9 (H&S 0.49, 72×20) ← FireRed 3.27. 9 trainers, all fit FireRed coords.
+  // Hikers → RUIN MANIAC. Added alongside H&S's 6 existing.
+  'route9': {
+    hsHeader: 0xf3256c, hsMap: [0, 49], frMap: [3, 27], baseObjectCount: 11,
+    slots: [179, 182, 183, 184, 185, 186, 187, 188, 201],
+    relocate: {},
+  },
+  // Route 10 (H&S 0.50, 32×80 — tall & narrow) ← FireRed 3.28. 6 trainers; 4
+  // relocate off FireRed's x=4-9 spots that hit H&S walls in the narrower map.
+  'route10': {
+    hsHeader: 0xf32588, hsMap: [0, 50], frMap: [3, 28], baseObjectCount: 14,
+    slots: [205, 218, 225, 230, 246, 247],
+    relocate: {
+      157: { x: 10, y: 62 }, // PICNICKER CAROL (FR 7,60 blocked)
+      187: { x: 10, y: 63 }, // HIKER CLARK     (FR 4,62 blocked)
+      188: { x: 10, y: 64 }, // HIKER TRENT     (FR 4,68 blocked)
+      156: { x: 10, y: 26 }, // PICNICKER HEIDI (FR 9,27 blocked)
+    },
+  },
+  // Route 11 (H&S 0.51, 72×40) ← FireRed 3.29. 10 trainers; only Darian relocates.
+  'route11': {
+    hsHeader: 0xf325a4, hsMap: [0, 51], frMap: [3, 29], baseObjectCount: 15,
+    slots: [254, 255, 257, 258, 259, 260, 262, 263, 264, 265],
+    relocate: {
+      261: { x: 50, y: 6 },  // GAMER DARIAN (FR 50,4 blocked)
+    },
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
@@ -237,12 +264,18 @@ const hex = (n: number) => '0x' + (n >>> 0).toString(16)
 
 // ------------------------------------------------- name→id lookups (H&S side)
 const norm = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, '')
-function lookup(names: { name: string }[]): Map<string, number> {
+// Species matching MUST preserve the ♂/♀ markers — otherwise NIDORAN♂ and
+// NIDORAN♀ (and the ♂/♀ Nidoran evolutions) collapse to the same key and the
+// male line silently maps to the female species. Map the symbols to _M/_F
+// before stripping other punctuation.
+const normSpecies = (s: string) =>
+  s.replace(/♂/g, '_M_').replace(/♀/g, '_F_').toUpperCase().replace(/[^A-Z0-9_]/g, '')
+function lookup(names: { name: string }[], key: (s: string) => string = norm): Map<string, number> {
   const m = new Map<string, number>()
-  names.forEach((n, i) => { if (n?.name && !m.has(norm(n.name))) m.set(norm(n.name), i) })
+  names.forEach((n, i) => { if (n?.name && !m.has(key(n.name))) m.set(key(n.name), i) })
   return m
 }
-const hsSpecies = lookup(hs.species)
+const hsSpecies = lookup(hs.species, normSpecies)
 const hsMoves = lookup(hs.moves)
 const hsClassByName = new Map<string, number>()
 hsClasses.forEach((c, i) => { if (c && !hsClassByName.has(norm(c))) hsClassByName.set(norm(c), i) })
@@ -250,7 +283,7 @@ hsClasses.forEach((c, i) => { if (c && !hsClassByName.has(norm(c))) hsClassByNam
 const frSp = (id: number) => fr.species[id]?.name ?? `#${id}`
 const frMv = (id: number) => fr.moves[id]?.name ?? `#${id}`
 function mapSpecies(id: number): number {
-  const h = hsSpecies.get(norm(frSp(id)))
+  const h = hsSpecies.get(normSpecies(frSp(id)))
   if (h === undefined) throw new Error(`species "${frSp(id)}" not found in H&S`)
   return h
 }
@@ -265,6 +298,7 @@ const CLASS_SUBSTITUTE: Record<string, string> = {
   'CRUSHKIN': 'SIS AND BRO',  // brother+sister fighting pair; H&S has no CRUSH KIN
   'HIKER': 'RUIN MANIAC',     // H&S has no HIKER; RUIN MANIAC is the rugged-cave class
   'TEAMROCKET': 'ROCKET',     // H&S names the grunt class just "ROCKET"
+  'GAMER': 'POKéMANIAC',      // H&S has no GAMER; POKéMANIAC is the nearest hobbyist class
 }
 function mapClass(cls: number): number {
   const raw = frClasses[cls] ?? ''
