@@ -38,6 +38,7 @@ import * as fs from 'node:fs'
 import { loadRom } from '../src/rom/loadRom'
 import { RomBuffer } from '../src/rom/buffer'
 import { FreeSpaceAllocator } from '../src/rom/freespace'
+import { encode } from '../src/rom/charmap'
 import {
   readTrainer, readTrainerClassNames, serializeParty, serializeTrainerRecord,
   partyGbaPointer, type TrainerEdit, type TrainerMon,
@@ -57,10 +58,23 @@ const IN_LO = 2, IN_HI = 34, OUT_LO = 45, OUT_HI = 58
 const LEVEL_METHODS = new Set([4, 18])
 const POST_GEN4 = new Set([439, 440, 444, 449, 450, 451, 452, 453, 454, 455])
 
+/** One hand-placed trainer for a manual roster: a FireRed trainer record id to
+ * read the team from, an H&S overworld sprite, and where to stand it. */
+interface ManualTrainer {
+  frId: number
+  x: number
+  y: number
+  gfxId: number
+  sight: number
+  intro: string
+  defeat: string
+}
+
 interface FloorConfig {
   hsHeader: number
   hsMap: [bank: number, map: number]
-  frMap: [bank: number, map: number]
+  /** FireRed source map to read trainer objects from (omit for a manual roster). */
+  frMap?: [bank: number, map: number]
   baseObjectCount: number
   /** Empty H&S trainer slots to claim — must not overlap other floors' slots. */
   slots: number[]
@@ -70,6 +84,13 @@ interface FloorConfig {
    * A shared record (twins/crush-kin) with two objects puts the 2nd at x+1.
    */
   relocate: Record<number, { x: number; y: number }>
+  /**
+   * Hand-built roster: explicit FireRed trainer record ids + placements, used
+   * when the FireRed map itself has no readable trainer objects (e.g. Mt. Moon,
+   * whose trainers are script-driven — see hs-mtmoon-script-trainers). The
+   * teams are still read from the real FireRed records and scaled/remapped.
+   */
+  manualRoster?: ManualTrainer[]
 }
 
 // Rock Tunnel 1F: H&S 24.59 (58×40) ← FireRed 3.32. 13 base objects (pre-BRUNO).
@@ -98,6 +119,38 @@ const FLOORS: Record<string, FloorConfig> = {
       488: { x: 43, y: 22 }, // CRUSH KIN RON & MYA (was 39–40,7)
     },
   },
+  // Mt. Moon — HAND-BUILT (FireRed's Mt. Moon has no readable trainer objects,
+  // its battles are script-driven; see hs-mtmoon-script-trainers). Teams are read
+  // from the real FireRed trainer RECORDS by id, then scaled/remapped/placed.
+  // Overworld sprites use ONLY gfx ids confirmed present on this build's Kanto
+  // cave maps (0x1a young-trainer, 0x1d female, 0x35 biker/rugged, 0x11 hiker,
+  // 0x2e tough-guy) so no trainer renders as a glitch/rock/wild-mon sprite.
+  'mtmoon-1f': {
+    hsHeader: 0xf3471c, hsMap: [24, 57], baseObjectCount: 15,
+    slots: [85, 86, 87, 93, 105, 106, 107],
+    relocate: {},
+    manualRoster: [
+      { frId: 104, x: 13, y: 10, gfxId: 0x1a, sight: 3, intro: 'Bug POKéMON are the best!', defeat: 'Aww, my bugs…' },
+      { frId: 108, x: 17, y: 15, gfxId: 0x1a, sight: 3, intro: 'I catch bugs in this cave!', defeat: 'You squashed me!' },
+      { frId: 120, x: 30, y: 15, gfxId: 0x1d, sight: 2, intro: 'Look at my cute POKéMON!', defeat: 'Oh, no!' },
+      { frId: 121, x: 33, y: 29, gfxId: 0x1d, sight: 3, intro: 'A CLEFAIRY lives here, you know.', defeat: 'You’re strong!' },
+      { frId: 169, x: 16, y: 37, gfxId: 0x2e, sight: 3, intro: 'My machines never lose!', defeat: 'It does not compute!' },
+      { frId: 91,  x: 34, y: 15, gfxId: 0x1a, sight: 2, intro: 'Wanna battle in the dark?', defeat: 'You got me!' },
+      { frId: 181, x: 10, y: 8,  gfxId: 0x11, sight: 3, intro: 'I dig rocks in MT. MOON!', defeat: 'Rock solid, you are!' },
+    ],
+  },
+  'mtmoon-b2f': {
+    hsHeader: 0xf34738, hsMap: [24, 58], baseObjectCount: 14,
+    slots: [108, 109, 110, 111, 112],
+    relocate: {},
+    manualRoster: [
+      { frId: 170, x: 11, y: 11, gfxId: 0x2e, sight: 3, intro: 'The fossils are ours!', defeat: 'Tch, meddling kid!' },
+      { frId: 352, x: 13, y: 16, gfxId: 0x35, sight: 3, intro: 'TEAM ROCKET takes what it wants!', defeat: 'Curses!' },
+      { frId: 353, x: 10, y: 20, gfxId: 0x35, sight: 3, intro: 'Get lost, kid!', defeat: 'How dare you!' },
+      { frId: 354, x: 24, y: 19, gfxId: 0x35, sight: 4, intro: 'You’ll regret crossing ROCKET!', defeat: 'Impossible!' },
+      { frId: 355, x: 7,  y: 5,  gfxId: 0x35, sight: 3, intro: 'This cave belongs to ROCKET now!', defeat: 'You haven’t seen the last of us!' },
+    ],
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
@@ -105,10 +158,9 @@ const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
 const floorArg = (args.find((s) => s.startsWith('--floor=')) ?? '--floor=1f').split('=')[1].toLowerCase()
 const floor = FLOORS[floorArg]
-if (!floor) throw new Error(`unknown --floor=${floorArg} (expected 1f or b1f)`)
+if (!floor) throw new Error(`unknown --floor=${floorArg} (expected: ${Object.keys(FLOORS).join(', ')})`)
 const hsPath = args.filter((s) => !s.startsWith('--'))[0] ?? DEFAULT_HS
 const [HS_BANK, HS_MAP] = floor.hsMap
-const [FR_BANK, FR_MAP] = floor.frMap
 const FREE_SLOTS = floor.slots
 const RELOCATE = floor.relocate
 
@@ -156,7 +208,9 @@ function mapMove(id: number): number {
 }
 // FireRed classes with no same-name H&S class → nearest H&S equivalent by flavor.
 const CLASS_SUBSTITUTE: Record<string, string> = {
-  'CRUSHKIN': 'SIS AND BRO', // brother+sister fighting pair; H&S has no CRUSH KIN
+  'CRUSHKIN': 'SIS AND BRO',  // brother+sister fighting pair; H&S has no CRUSH KIN
+  'HIKER': 'RUIN MANIAC',     // H&S has no HIKER; RUIN MANIAC is the rugged-cave class
+  'TEAMROCKET': 'ROCKET',     // H&S names the grunt class just "ROCKET"
 }
 function mapClass(cls: number): number {
   const raw = frClasses[cls] ?? ''
@@ -184,13 +238,6 @@ function promote(species: number, level: number): number {
   return cur
 }
 
-// ------------------------------------------------- read FireRed 1F trainer objects
-const frHeader = resolveMapHeader(frRom, fr.anchors, FR_BANK, FR_MAP)
-const frEvents = readEvents(frRom, frHeader)
-const frTrainerObjs = frEvents.objects.filter(
-  (o) => o.trainerType !== 0 && o.scriptOffset !== null && frRom.u8(o.scriptOffset) === 0x5c,
-)
-
 interface Ported {
   frId: number
   edit: TrainerEdit
@@ -211,54 +258,91 @@ function copyDialogue(rom: RomBuffer, off: number | null): Uint8Array {
   return rom.bytes.slice(off, end + 1) // include the 0xFF
 }
 
-const ported: Ported[] = []
-const recordByFrId = new Map<number, number>() // FR record id → H&S slot (twins share)
-let slotCursor = 0
-
-for (const o of frTrainerObjs) {
-  const s = o.scriptOffset!
-  const frId = frRom.u16(s + 2)
+/** Read a FireRed trainer record by id and remap+scale it into an H&S TrainerEdit. */
+function buildEdit(frId: number): TrainerEdit {
   const t = readTrainer(frRom, fr.anchors, frId)
-
   const party: TrainerMon[] = (t.party as TrainerMon[]).map((m) => {
     const newLvl = scaleLevel(m.level)
-    const species = promote(mapSpecies(m.species), newLvl)
     return {
       iv: m.iv,
       level: newLvl,
-      species,
+      species: promote(mapSpecies(m.species), newLvl),
       heldItem: t.hasItems ? mapItem(m.heldItem) : 0,
       moves: t.hasMoves ? m.moves.map(mapMove) : [0, 0, 0, 0],
     }
   })
-
-  const edit: TrainerEdit = {
+  return {
     name: t.name, cls: mapClass(t.cls), gender: t.gender, music: t.music, sprite: t.sprite,
     items: t.items.map(mapItem), doubleBattle: t.doubleBattle, aiFlags: t.aiFlags,
     hasMoves: t.hasMoves, hasItems: t.hasItems, party,
   }
+}
 
-  // Position: relocate if off-map, else keep FireRed coords. Second twin sits beside the first.
-  let x = o.x, y = o.y
-  const reloc = RELOCATE[frId]
-  if (reloc) {
-    x = reloc.x + (recordByFrId.has(frId) ? 1 : 0)
-    y = reloc.y
+const ported: Ported[] = []
+const recordByFrId = new Map<number, number>() // FR record id → H&S slot (shared for twins/pairs)
+let slotCursor = 0
+
+if (floor.manualRoster) {
+  // Hand-built roster: teams from real FireRed records, placement/sprite/dialogue supplied.
+  for (const mt of floor.manualRoster) {
+    ported.push({
+      frId: mt.frId,
+      edit: buildEdit(mt.frId),
+      obj: { x: mt.x, y: mt.y, sight: mt.sight, gfxId: mt.gfxId, movementType: 0x08 /* face down */ },
+      intro: encodeManual(mt.intro),
+      defeat: encodeManual(mt.defeat),
+      after: encodeManual(''),
+    })
+    if (!recordByFrId.has(mt.frId)) {
+      if (slotCursor >= FREE_SLOTS.length) throw new Error(`not enough free slots (${FREE_SLOTS.length}) for the roster`)
+      recordByFrId.set(mt.frId, FREE_SLOTS[slotCursor++])
+    }
   }
+} else {
+  // Read trainer objects straight from the FireRed source map (Rock Tunnel-style).
+  if (!floor.frMap) throw new Error(`floor ${floorArg} has neither frMap nor manualRoster`)
+  const [FR_BANK, FR_MAP] = floor.frMap
+  const frHeader = resolveMapHeader(frRom, fr.anchors, FR_BANK, FR_MAP)
+  const frEvents = readEvents(frRom, frHeader)
+  const frTrainerObjs = frEvents.objects.filter(
+    (o) => o.trainerType !== 0 && o.scriptOffset !== null && frRom.u8(o.scriptOffset) === 0x5c,
+  )
+  for (const o of frTrainerObjs) {
+    const s = o.scriptOffset!
+    const frId = frRom.u16(s + 2)
 
-  ported.push({
-    frId, edit,
-    obj: { x, y, sight: o.sight, gfxId: o.gfxId, movementType: o.movementType },
-    intro: copyDialogue(frRom, frRom.pointer(s + 6)),
-    defeat: copyDialogue(frRom, frRom.pointer(s + 10)),
-    after: copyDialogue(frRom, frRom.pointer(s + 16)),
-  })
+    // Position: relocate if off-map, else keep FireRed coords. Shared record's 2nd object sits beside the first.
+    let x = o.x, y = o.y
+    const reloc = RELOCATE[frId]
+    if (reloc) {
+      x = reloc.x + (recordByFrId.has(frId) ? 1 : 0)
+      y = reloc.y
+    }
 
-  // Assign an H&S record slot (twins reuse the same one).
-  if (!recordByFrId.has(frId)) {
-    if (slotCursor >= FREE_SLOTS.length) throw new Error(`not enough free slots (${FREE_SLOTS.length}) for the roster`)
-    recordByFrId.set(frId, FREE_SLOTS[slotCursor++])
+    ported.push({
+      frId, edit: buildEdit(frId),
+      obj: { x, y, sight: o.sight, gfxId: o.gfxId, movementType: o.movementType },
+      intro: copyDialogue(frRom, frRom.pointer(s + 6)),
+      defeat: copyDialogue(frRom, frRom.pointer(s + 10)),
+      after: copyDialogue(frRom, frRom.pointer(s + 16)),
+    })
+
+    // Assign an H&S record slot (shared record reuses the same one).
+    if (!recordByFrId.has(frId)) {
+      if (slotCursor >= FREE_SLOTS.length) throw new Error(`not enough free slots (${FREE_SLOTS.length}) for the roster`)
+      recordByFrId.set(frId, FREE_SLOTS[slotCursor++])
+    }
   }
+}
+
+/** Encode hand-authored dialogue (H&S charmap) with a 0xFF terminator. Empty → single space. */
+function encodeManual(text: string): Uint8Array {
+  if (!text) return Uint8Array.of(0x00, 0xff)
+  const parts = text.split('\n')
+  const bytes: number[] = []
+  parts.forEach((p, i) => { if (i > 0) bytes.push(0xfe); for (const b of encode(p)) bytes.push(b) })
+  bytes.push(0xff)
+  return Uint8Array.from(bytes)
 }
 
 // FireRed items are rare on these trainers, but map any that appear by name.
@@ -354,7 +438,8 @@ out.set(grown.array, newArrOff)
 grown.patches.forEach(apply)
 
 // ------------------------------------------------------------------- report
-console.log(`Source: FireRed ${FR_BANK}.${FR_MAP}  →  H&S ${HS_BANK}.${HS_MAP} (header ${hex(hsHeader)})`)
+const srcLabel = floor.manualRoster ? 'hand-built roster (FireRed records)' : `FireRed ${floor.frMap![0]}.${floor.frMap![1]}`
+console.log(`Source: ${srcLabel}  →  H&S ${HS_BANK}.${HS_MAP} (header ${hex(hsHeader)})`)
 console.log(`Rock Tunnel ${floorArg.toUpperCase()}: ${hsEvents.objectCount} → ${hsEvents.objectCount + newObjects.length} objects (${newObjects.length} trainers, ${writtenRecords.size} records)\n`)
 for (const p of ported) {
   const slot = recordByFrId.get(p.frId)!
