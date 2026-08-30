@@ -78,6 +78,10 @@ interface FloorConfig {
   /** Multiple FireRed source maps merged into one H&S map (e.g. Route 21's
    * North+South halves). Trainers from all listed maps are ported together. */
   frMaps?: Array<[bank: number, map: number]>
+  /** FireRed trainer record ids to skip when reading the source map — used when
+   * some of that map's trainers were already ported to a different H&S map (the
+   * GPT_Mods ROM reuses trainer records across maps). */
+  skipFrIds?: number[]
   baseObjectCount: number
   /** Empty H&S trainer slots to claim — must not overlap other floors' slots. */
   slots: number[]
@@ -290,6 +294,16 @@ const FLOORS: Record<string, FloorConfig> = {
     slots: [373, 377, 385, 386, 388, 389, 390, 391, 392, 393],
     relocate: {},
   },
+  // Route 8 (H&S 0.48, 68×20) ← FireRed 3.26. That FR map reuses several trainer
+  // records already ported to other H&S routes (Julia/Rich/Glenn/Megan/Stan) —
+  // those are skipped, leaving 8 novel objects / 7 records (Twins Eli & Anne
+  // share one). Added alongside H&S's 5 existing. All coords fit.
+  'route8': {
+    hsHeader: 0xf32550, hsMap: [0, 48], frMap: [3, 26], baseObjectCount: 12,
+    skipFrIds: [131, 264, 172, 130, 262], // JULIA, RICH, GLENN, MEGAN, STAN (already in H&S)
+    slots: [415, 416, 418, 419, 421, 422, 423],
+    relocate: {},
+  },
   // Route 21 (H&S 0.61, 24×100) ← FireRed's TWO halves (North 3.39 + South 3.40)
   // merged into the single tall H&S map. 10 objects / 9 records (Sis and Bro
   // share one). Only Wade relocates. Added alongside H&S's 3 existing.
@@ -465,9 +479,11 @@ if (floor.manualRoster) {
     const frTrainerObjs = readEvents(frRom, frHeader).objects.filter(
       (o) => o.trainerType !== 0 && o.scriptOffset !== null && frRom.u8(o.scriptOffset) === 0x5c,
     )
+    const skip = new Set(floor.skipFrIds ?? [])
     for (const o of frTrainerObjs) {
       const s = o.scriptOffset!
       const frId = frRom.u16(s + 2)
+      if (skip.has(frId)) continue // already ported to another H&S map
 
       // Position: relocate if off-map, else keep FireRed coords. Shared record's 2nd object sits beside the first.
       let x = o.x, y = o.y
