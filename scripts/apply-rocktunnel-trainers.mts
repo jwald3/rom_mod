@@ -265,6 +265,28 @@ const FLOORS: Record<string, FloorConfig> = {
     slots: [310, 311, 312, 313, 314, 315, 316, 317, 324, 325],
     relocate: {},
   },
+  // Route 18 (H&S 0.58, 60×20) ← FireRed 3.36. 3 Bird Keepers, all fit.
+  'route18': {
+    hsHeader: 0xf32668, hsMap: [0, 58], frMap: [3, 36], baseObjectCount: 6,
+    slots: [334, 335, 338],
+    relocate: {},
+  },
+  // Route 19 (H&S 0.59, 24×60 — water route) ← FireRed 3.37. 11 records (Sis and
+  // Bro share one). Swimmers ♂/♀ preserved by the gendered normalizer.
+  'route19': {
+    hsHeader: 0xf32684, hsMap: [0, 59], frMap: [3, 37], baseObjectCount: 19,
+    slots: [342, 353, 354, 355, 356, 357, 359, 369, 370, 371, 372],
+    relocate: {
+      236: { x: 14, y: 9 }, // SWIMMER♂ REECE (FR 15,10 occupied)
+    },
+  },
+  // Route 20 (H&S 0.60, 120×20 — long Seafoam approach) ← FireRed 3.38. 10
+  // Swimmers/Picnickers/Bird Keeper, all fit.
+  'route20': {
+    hsHeader: 0xf326a0, hsMap: [0, 60], frMap: [3, 38], baseObjectCount: 17,
+    slots: [373, 377, 385, 386, 388, 389, 390, 391, 392, 393],
+    relocate: {},
+  },
 }
 
 // ------------------------------------------------------------------ arg parse
@@ -297,26 +319,26 @@ const hex = (n: number) => '0x' + (n >>> 0).toString(16)
 
 // ------------------------------------------------- name→id lookups (H&S side)
 const norm = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, '')
-// Species matching MUST preserve the ♂/♀ markers — otherwise NIDORAN♂ and
-// NIDORAN♀ (and the ♂/♀ Nidoran evolutions) collapse to the same key and the
-// male line silently maps to the female species. Map the symbols to _M/_F
-// before stripping other punctuation.
-const normSpecies = (s: string) =>
+// Name matching MUST preserve the ♂/♀ markers — otherwise NIDORAN♂/NIDORAN♀ and
+// SWIMMER♂/SWIMMER♀ collapse to the same key and the ♀ variant silently maps to
+// the ♂ one (species AND trainer classes both have gendered names). Map the
+// symbols to _M_/_F_ before stripping other punctuation.
+const normGendered = (s: string) =>
   s.replace(/♂/g, '_M_').replace(/♀/g, '_F_').toUpperCase().replace(/[^A-Z0-9_]/g, '')
 function lookup(names: { name: string }[], key: (s: string) => string = norm): Map<string, number> {
   const m = new Map<string, number>()
   names.forEach((n, i) => { if (n?.name && !m.has(key(n.name))) m.set(key(n.name), i) })
   return m
 }
-const hsSpecies = lookup(hs.species, normSpecies)
+const hsSpecies = lookup(hs.species, normGendered)
 const hsMoves = lookup(hs.moves)
 const hsClassByName = new Map<string, number>()
-hsClasses.forEach((c, i) => { if (c && !hsClassByName.has(norm(c))) hsClassByName.set(norm(c), i) })
+hsClasses.forEach((c, i) => { if (c && !hsClassByName.has(normGendered(c))) hsClassByName.set(normGendered(c), i) })
 
 const frSp = (id: number) => fr.species[id]?.name ?? `#${id}`
 const frMv = (id: number) => fr.moves[id]?.name ?? `#${id}`
 function mapSpecies(id: number): number {
-  const h = hsSpecies.get(normSpecies(frSp(id)))
+  const h = hsSpecies.get(normGendered(frSp(id)))
   if (h === undefined) throw new Error(`species "${frSp(id)}" not found in H&S`)
   return h
 }
@@ -337,10 +359,10 @@ const CLASS_SUBSTITUTE: Record<string, string> = {
 }
 function mapClass(cls: number): number {
   const raw = frClasses[cls] ?? ''
-  let h = hsClassByName.get(norm(raw))
+  let h = hsClassByName.get(normGendered(raw)) // gender-preserving: SWIMMER♀ ≠ SWIMMER♂
   if (h === undefined) {
-    const sub = CLASS_SUBSTITUTE[norm(raw)]
-    if (sub) h = hsClassByName.get(norm(sub))
+    const sub = CLASS_SUBSTITUTE[norm(raw)] // substitute keys are gender-free class names
+    if (sub) h = hsClassByName.get(normGendered(sub))
   }
   if (h === undefined) throw new Error(`class "${raw}" not found in H&S (and no substitute)`)
   return h
